@@ -7,14 +7,42 @@ pipeline {
             }
         }
         stage('Test') {
+                dir ('lib') {
+                    git branch: "master", credentialsId: "2cfb403c-be21-4fac-94d7-c8cd5c531feb", url: "https://gitlab.dicelab.net/JAC-IDM/python-lib.git"
+                }
+                dir ('elastic_lib') {
+                    git branch: "master", credentialsId: "2cfb403c-be21-4fac-94d7-c8cd5c531feb", url: "https://gitlab.dicelab.net/JAC-IDM/elastic-lib.git"
+                }
+                dir ('elastic_lib/lib') {
+                    git branch: "master", credentialsId: "2cfb403c-be21-4fac-94d7-c8cd5c531feb", url: "https://gitlab.dicelab.net/JAC-IDM/python-lib.git"
+                }
+                dir ('elastic_lib/requests_lib') {
+                    git branch: "master", credentialsId: "2cfb403c-be21-4fac-94d7-c8cd5c531feb", url: "https://gitlab.dicelab.net/JAC-IDM/requests-lib.git"
+                }
             steps {
                 sh """
+                virtualenv test_env
+                source test_env/bin/activate
                 pip2 install mock --user
+                pip2 install elasticsearch --user
+                ./test/unit/elastic_db_dump/help_message.py
+                ./test/unit/elastic_db_dump/print_failures.py
+                ./test/unit/elastic_db_dump/list_repos.py
+                ./test/unit/elastic_db_dump/list_dumps.py
+                ./test/unit/elastic_db_dump/initate_dump.py
+                ./test/unit/elastic_db_dump/create_repo.py
+                ./test/unit/elastic_db_dump/run_program.py
+                ./test/unit/elastic_db_dump/main.py
+                deactivate
+                rm -rf test_env
                 """
             }
         }
         stage('SonarQube analysis') {
             steps {
+                sh './test/unit/sonarqube_code_coverage.sh'
+                sh 'rm -rf lib'
+                sh 'rm -rf elastic_lib'
                 script {
                     scannerHome = tool 'sonar-scanner';
                 }
