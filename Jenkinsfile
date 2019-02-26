@@ -7,6 +7,7 @@ pipeline {
             }
         }
         stage('Test') {
+            steps {
                 dir ('lib') {
                     git branch: "master", credentialsId: "2cfb403c-be21-4fac-94d7-c8cd5c531feb", url: "https://gitlab.dicelab.net/JAC-IDM/python-lib.git"
                 }
@@ -19,7 +20,6 @@ pipeline {
                 dir ('elastic_lib/requests_lib') {
                     git branch: "master", credentialsId: "2cfb403c-be21-4fac-94d7-c8cd5c531feb", url: "https://gitlab.dicelab.net/JAC-IDM/requests-lib.git"
                 }
-            steps {
                 sh """
                 virtualenv test_env
                 source test_env/bin/activate
