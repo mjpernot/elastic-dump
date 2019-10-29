@@ -176,8 +176,6 @@ def list_dumps(es, **kwargs):
 
     Arguments:
         (input) es -> Elasticsearch class instance.
-        (input) **kwargs:
-            args_array -> Dict of command line options and values.
 
     """
 
@@ -196,13 +194,10 @@ def list_repos(es, **kwargs):
 
     Arguments:
         (input) es -> Elasticsearch class instance.
-        (input) **kwargs:
-            args_array -> Dict of command line options and values.
 
     """
 
     er = elastic_class.ElasticSearchRepo(es.hosts, es.port)
-
     elastic_libs.list_repos2(er.repo_dict)
 
 
