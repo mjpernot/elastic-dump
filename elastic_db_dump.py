@@ -274,12 +274,12 @@ def main():
     args_array = arg_parser.arg_parse2(sys.argv, opt_val_list, opt_val=opt_val,
                                        multi_val=opt_multi_list)
 
-    if not gen_libs.help_func(args_array, __version__, help_message):
-        if not arg_parser.arg_require(args_array, opt_req_list) \
-           and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
-           and arg_parser.arg_cond_req_or(args_array, opt_con_req_dict) \
-           and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list):
-            run_program(args_array, func_dict)
+    if not gen_libs.help_func(args_array, __version__, help_message) \
+       and not arg_parser.arg_require(args_array, opt_req_list) \
+       and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
+       and arg_parser.arg_cond_req_or(args_array, opt_con_req_dict) \
+       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list):
+        run_program(args_array, func_dict)
 
 
 if __name__ == "__main__":
