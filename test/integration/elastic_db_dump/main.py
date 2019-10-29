@@ -96,10 +96,6 @@ class UnitTest(unittest.TestCase):
 
         es = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port)
 
-        # Capture the first database/indice name in Elasticsearch.
-        dbs = [str([x.split()
-                    for x in es.es.cat.indices().splitlines()][0][2])]
-
         self.argv_list.append("-D")
         self.argv_list.append(self.cfg.repo_name)
         self.argv_list.append("-i")
