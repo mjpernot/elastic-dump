@@ -9,7 +9,6 @@
         test/integration/elastic_db_dump/main.py
 
     Arguments:
-        None
 
 """
 
@@ -34,7 +33,6 @@ import lib.gen_libs as gen_libs
 import elastic_lib.elastic_class as elastic_class
 import version
 
-# Version
 __version__ = version.__version__
 
 
@@ -43,10 +41,6 @@ class UnitTest(unittest.TestCase):
     """Class:  UnitTest
 
     Description:  Class which is a representation of a unit testing.
-
-    Super-Class:  unittest.TestCase
-
-    Sub-Classes:  None
 
     Methods:
         setUp -> Unit testing initilization.
@@ -70,7 +64,6 @@ class UnitTest(unittest.TestCase):
         Description:  Initialization for unit testing.
 
         Arguments:
-            None
 
         """
 
@@ -98,7 +91,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test initiate dump call -i option.
 
         Arguments:
-            None
 
         """
 
@@ -140,7 +132,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test help call.
 
         Arguments:
-            None
 
         """
 
@@ -157,7 +148,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test arg require call.
 
         Arguments:
-            None
 
         """
 
@@ -175,7 +165,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test arg xor dict call.
 
         Arguments:
-            None
 
         """
 
@@ -193,7 +182,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test arg cond req or call.
 
         Arguments:
-            None
 
         """
 
@@ -211,7 +199,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test arg dir chk crt call.
 
         Arguments:
-            None
 
         """
         self.argv_list.remove(self.config_path)
@@ -228,7 +215,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test create repo call.
 
         Arguments:
-            None
 
         """
 
@@ -258,7 +244,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test list dumps call.
 
         Arguments:
-            None
 
         """
 
@@ -281,7 +266,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test list repos call.
 
         Arguments:
-            None
 
         """
 
@@ -303,7 +287,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test initiate dump call.
 
         Arguments:
-            None
 
         """
 
@@ -336,7 +319,6 @@ class UnitTest(unittest.TestCase):
         Description:  Clean up of integration testing.
 
         Arguments:
-            None
 
         """
 

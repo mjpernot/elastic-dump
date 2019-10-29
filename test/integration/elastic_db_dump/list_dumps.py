@@ -9,7 +9,6 @@
         test/integration/elastic_db_dump/list_dumps.py
 
     Arguments:
-        None
 
 """
 
@@ -33,7 +32,6 @@ import lib.gen_libs as gen_libs
 import elastic_lib.elastic_class as elastic_class
 import version
 
-# Version
 __version__ = version.__version__
 
 
@@ -42,10 +40,6 @@ class UnitTest(unittest.TestCase):
     """Class:  UnitTest
 
     Description:  Class which is a representation of a unit testing.
-
-    Super-Class:  unittest.TestCase
-
-    Sub-Classes:  None
 
     Methods:
         setUp -> Unit testing initilization.
@@ -61,7 +55,6 @@ class UnitTest(unittest.TestCase):
         Description:  Initialization for unit testing.
 
         Arguments:
-            None
 
         """
 
@@ -90,7 +83,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test listing of dumps.
 
         Arguments:
-            None
 
         """
 
@@ -104,7 +96,6 @@ class UnitTest(unittest.TestCase):
         Description:  Clean up of integration testing.
 
         Arguments:
-            None
 
         """
 
