@@ -108,7 +108,7 @@ def create_repo(es, **kwargs):
             print("Reason: '%s'" % (msg))
 
 
-def print_failures(ES, **kwargs):
+def print_failures(es, **kwargs):
 
     """Function:  print_failures
 
@@ -119,8 +119,8 @@ def print_failures(ES, **kwargs):
 
     """
 
-    print("Failed to dump on %s shards" % (ES.failed_shards))
-    print("Detected failures: %s" % (ES.failures))
+    print("Failed to dump on %s shards" % (es.failed_shards))
+    print("Detected failures: %s" % (es.failures))
 
 
 def initate_dump(ES, dbs_list=None, **kwargs):
