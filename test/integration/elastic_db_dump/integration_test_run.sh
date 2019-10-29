@@ -5,26 +5,11 @@
 #   is located at.
 
 echo ""
-echo "Integration test:  create_repo"
+echo "Integration test:"
 test/integration/elastic_db_dump/create_repo.py
-
-echo ""
-echo "Integration test:  initate_dump"
 test/integration/elastic_db_dump/initate_dump.py
-
-echo ""
-echo "Integration test:  list_dumps"
 test/integration/elastic_db_dump/list_dumps.py
-
-echo ""
-echo "Integration test:  list_repos"
 test/integration/elastic_db_dump/list_repos.py
-
-echo ""
-echo "Integration test:  run_program"
 test/integration/elastic_db_dump/run_program.py
-
-echo ""
-echo "Integration test:  main"
 test/integration/elastic_db_dump/main.py
 
