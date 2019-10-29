@@ -60,7 +60,6 @@ import elastic_lib.elastic_class as elastic_class
 import elastic_lib.elastic_libs as elastic_libs
 import version
 
-# Version
 __version__ = version.__version__
 
 
@@ -72,8 +71,6 @@ def help_message(**kwargs):
         message when -h option is selected.
 
     Arguments:
-        (input) **kwargs:
-            None
 
     """
 
@@ -119,8 +116,6 @@ def print_failures(ES, **kwargs):
 
     Arguments:
         (input) ES -> Elasticsearch class instance.
-        (input) **kwargs:
-            None
 
     """
 
@@ -221,8 +216,6 @@ def run_program(args_array, func_dict, **kwargs):
     Arguments:
         (input) args_array -> Dict of command line options and values.
         (input) func_dict -> Dictionary list of functions and options.
-        (input) **kwargs:
-            None
 
     """
 
