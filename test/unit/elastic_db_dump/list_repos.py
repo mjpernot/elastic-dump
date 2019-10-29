@@ -80,7 +80,7 @@ class UnitTest(unittest.TestCase):
                 self.hosts = ["Server1"]
                 self.port = 9000
 
-        self.ES = ElasticSearchDump()
+        self.es = ElasticSearchDump()
 
         class ElasticSearchRepo(object):
 
@@ -105,7 +105,7 @@ class UnitTest(unittest.TestCase):
 
                 self.repo_dict = {}
 
-        self.ER = ElasticSearchRepo()
+        self.er = ElasticSearchRepo()
 
     @mock.patch("elastic_db_dump.elastic_libs.list_repos2")
     @mock.patch("elastic_db_dump.elastic_class.ElasticSearchRepo")
@@ -119,10 +119,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_er.return_value = self.ER
+        mock_er.return_value = self.er
         mock_list.return_value = True
 
-        self.assertFalse(elastic_db_dump.list_repos(self.ES))
+        self.assertFalse(elastic_db_dump.list_repos(self.es))
 
 
 if __name__ == "__main__":

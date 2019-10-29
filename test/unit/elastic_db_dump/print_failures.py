@@ -80,7 +80,7 @@ class UnitTest(unittest.TestCase):
                 self.failed_shards = 2
                 self.failures = ["Test_Shard_1", "Test_Shard_2"]
 
-        self.ES = ElasticSearchDump()
+        self.es = ElasticSearchDump()
 
     def test_print_failures(self):
 
@@ -93,7 +93,7 @@ class UnitTest(unittest.TestCase):
         """
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.print_failures(self.ES))
+            self.assertFalse(elastic_db_dump.print_failures(self.es))
 
 
 if __name__ == "__main__":
