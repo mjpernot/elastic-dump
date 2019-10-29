@@ -5,6 +5,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [1.0.2] - 2019-10-28
+### Fixed
+- run_program:  Fixed mutable list/dictionary argument issue.
+
 ### Changed
 - main:  Refactored "if" statements.
 - run_program:  Changed variables to standard naming convention.
