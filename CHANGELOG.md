@@ -6,6 +6,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [1.0.2] - 2019-10-28
 ### Changed
+- initate_dump:  Changed variables to standard naming convention.
 - print_failures:  Changed variables to standard naming convention.
 - create_repo:  Changed variables to standard naming convention.
 - Documentation updates.

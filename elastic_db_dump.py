@@ -115,7 +115,7 @@ def print_failures(es, **kwargs):
     Description:  Prints out failures detected within the class.
 
     Arguments:
-        (input) ES -> Elasticsearch class instance.
+        (input) es -> Elasticsearch class instance.
 
     """
 
@@ -123,7 +123,7 @@ def print_failures(es, **kwargs):
     print("Detected failures: %s" % (es.failures))
 
 
-def initate_dump(ES, dbs_list=None, **kwargs):
+def initate_dump(es, dbs_list=None, **kwargs):
 
     """Function:  initate_dump
 
@@ -131,7 +131,7 @@ def initate_dump(ES, dbs_list=None, **kwargs):
         the return status of the database dump.
 
     Arguments:
-        (input) ES -> Elasticsearch class instance.
+        (input) es -> Elasticsearch class instance.
         (input) dbs_list -> String of comma-delimited indice names to dump.
         (input) **kwargs:
             args_array -> Dict of command line options and values.
@@ -141,30 +141,30 @@ def initate_dump(ES, dbs_list=None, **kwargs):
     if "-i" in kwargs.get("args_array"):
         dbs_list = ','.join(kwargs.get("args_array").get("-i"))
 
-    err_flag, status_msg = ES.dump_db(dbs=dbs_list)
+    err_flag, status_msg = es.dump_db(dbs=dbs_list)
 
     # Failed to execute dump
     if err_flag:
-        print("Failed to execute dump on Cluster: %s" % (ES.cluster_name))
+        print("Failed to execute dump on Cluster: %s" % (es.cluster_name))
         print("Message:  %s" % (status_msg))
 
     # Check dump if anything other than success
-    elif ES.dump_status != "SUCCESS":
+    elif es.dump_status != "SUCCESS":
 
-        if ES.dump_status == "FAILED":
-            print("Dump failed to finish on %s" % (ES.cluster_name))
+        if es.dump_status == "FAILED":
+            print("Dump failed to finish on %s" % (es.cluster_name))
             print("Message:  %s" % (status_msg))
 
-        elif ES.dump_status == "PARTIAL":
-            print("Partial dump completed on %s" % (ES.cluster_name))
+        elif es.dump_status == "PARTIAL":
+            print("Partial dump completed on %s" % (es.cluster_name))
             print_failures
 
-        elif ES.dump_status == "INCOMPATIBLE":
+        elif es.dump_status == "INCOMPATIBLE":
             print("Older version of Elasticsearch in repo detected %s"
-                  % (ES.cluster_name))
+                  % (es.cluster_name))
 
         else:
-            print("Unknown error detected on %s" % (ES.cluster_name))
+            print("Unknown error detected on %s" % (es.cluster_name))
             print("Message:  %s" % (status_msg))
 
 
