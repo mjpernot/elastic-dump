@@ -9,7 +9,6 @@
         test/unit/elastic_db_dump/list_repos.py
 
     Arguments:
-        None
 
 """
 
@@ -32,7 +31,6 @@ sys.path.append(os.getcwd())
 import elastic_db_dump
 import version
 
-# Version
 __version__ = version.__version__
 
 
@@ -41,10 +39,6 @@ class UnitTest(unittest.TestCase):
     """Class:  UnitTest
 
     Description:  Class which is a representation of a unit testing.
-
-    Super-Class:  unittest.TestCase
-
-    Sub-Classes:  None
 
     Methods:
         setUp -> Unit testing initilization.
@@ -59,7 +53,6 @@ class UnitTest(unittest.TestCase):
         Description:  Initialization for unit testing.
 
         Arguments:
-            None
 
         """
 
@@ -68,10 +61,6 @@ class UnitTest(unittest.TestCase):
             """Class:  ElasticSearchDump
 
             Description:  Class representation of the ElasticSearchDump class.
-
-            Super-Class:  object
-
-            Sub-Classes:  None
 
             Methods:
                 __init__ -> Initialize configuration environment.
@@ -85,7 +74,6 @@ class UnitTest(unittest.TestCase):
                 Description:  Initialization instance of the class.
 
                 Arguments:
-                        None
 
                 """
 
@@ -100,10 +88,6 @@ class UnitTest(unittest.TestCase):
 
             Description:  Class representation of the ElasticSearchRepo class.
 
-            Super-Class:  object
-
-            Sub-Classes:  None
-
             Methods:
                 __init__ -> Initialize configuration environment.
 
@@ -116,7 +100,6 @@ class UnitTest(unittest.TestCase):
                 Description:  Initialization instance of the class.
 
                 Arguments:
-                        None
 
                 """
 
@@ -133,9 +116,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test the printing of respositories.
 
         Arguments:
-            mock_er -> Mock Ref:
-                elastic_db_dump.elastic_class.ElasticSearchRepo
-            mock_list -> Mock Ref:  elastic_db_dump.elastic_libs.list_repos2
 
         """
 

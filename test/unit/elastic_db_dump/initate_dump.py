@@ -9,7 +9,6 @@
         test/unit/elastic_db_dump/initate_dump.py
 
     Arguments:
-        None
 
 """
 
@@ -33,7 +32,6 @@ import elastic_db_dump
 import lib.gen_libs as gen_libs
 import version
 
-# Version
 __version__ = version.__version__
 
 
@@ -42,10 +40,6 @@ class UnitTest(unittest.TestCase):
     """Class:  UnitTest
 
     Description:  Class which is a representation of a unit testing.
-
-    Super-Class:  unittest.TestCase
-
-    Sub-Classes:  None
 
     Methods:
         setUp -> Unit testing initilization.
@@ -68,7 +62,6 @@ class UnitTest(unittest.TestCase):
         Description:  Initialization for unit testing.
 
         Arguments:
-            None
 
         """
 
@@ -77,10 +70,6 @@ class UnitTest(unittest.TestCase):
             """Class:  ElasticSearchDump
 
             Description:  Class representation of the ElasticSearchDump class.
-
-            Super-Class:  object
-
-            Sub-Classes:  None
 
             Methods:
                 __init__ -> Initialize configuration environment.
@@ -95,7 +84,6 @@ class UnitTest(unittest.TestCase):
                 Description:  Initialization instance of the class.
 
                 Arguments:
-                        None
 
                 """
 
@@ -110,8 +98,6 @@ class UnitTest(unittest.TestCase):
                 Description:  Simulates dumping a Elasticssearch database.
 
                 Arguments:
-                    (input)  **kwargs:
-                        None
                     (output) err_flag True|False -> Has errors been detected.
                     (output) status_msg -> Return dump status or error message.
 
@@ -136,7 +122,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test with -i option in args_array.
 
         Arguments:
-            None
 
         """
 
@@ -153,7 +138,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test with no -i option in args_array.
 
         Arguments:
-            None
 
         """
 
@@ -168,7 +152,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test error flag set to True.
 
         Arguments:
-            None
 
         """
 
@@ -185,7 +168,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test error flag set to False.
 
         Arguments:
-            None
 
         """
 
@@ -199,7 +181,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test dump status set to success.
 
         Arguments:
-            None
 
         """
 
@@ -213,7 +194,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test dump status set to unknown.
 
         Arguments:
-            None
 
         """
 
@@ -230,7 +210,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test dump status set to incompatible.
 
         Arguments:
-            None
 
         """
 
@@ -248,7 +227,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test dump status set to partial.
 
         Arguments:
-            mock_print -> Mock Ref:  elastic_db_dump.print_failures
 
         """
 
@@ -267,7 +245,6 @@ class UnitTest(unittest.TestCase):
         Description:  Test dump status set to failed.
 
         Arguments:
-            None
 
         """
 
