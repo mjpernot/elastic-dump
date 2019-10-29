@@ -222,16 +222,16 @@ def run_program(args_array, func_dict, **kwargs):
     cfg = gen_libs.load_module(args_array["-c"], args_array["-d"])
 
     try:
-        PROG_LOCK = gen_class.ProgramLock(sys.argv, cfg.host)
+        prog_lock = gen_class.ProgramLock(sys.argv, cfg.host)
 
         # Find which functions to call.
         for opt in set(args_array.keys()) & set(func_dict.keys()):
-            ES = elastic_class.ElasticSearchDump(cfg.host, cfg.port,
+            es = elastic_class.ElasticSearchDump(cfg.host, cfg.port,
                                                  args_array.get(opt, None),
                                                  **kwargs)
-            func_dict[opt](ES, args_array=args_array, **kwargs)
+            func_dict[opt](es, args_array=args_array, **kwargs)
 
-        del PROG_LOCK
+        del prog_lock
 
     except gen_class.SingleInstanceException:
         print("WARNING:  elastic_db_dump lock in place for: %s" % (cfg.host))
