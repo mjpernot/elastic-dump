@@ -75,14 +75,14 @@ class UnitTest(unittest.TestCase):
         self.argv_list = [os.path.join(self.base_dir, "main.py"),
                           "-c", "elastic", "-d", self.config_path]
 
-        ER = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port)
+        er = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port)
 
-        if ER.repo_dict:
+        if er.repo_dict:
             print("ERROR: Test environment not clean - repositories exist.")
             self.skipTest("Pre-conditions not met.")
 
         else:
-            self.ER = None
+            self.er = None
 
     def test_initate_dump_i_option(self):
 
@@ -94,27 +94,27 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        ES = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port)
+        es = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port)
 
         # Capture the first database/indice name in Elasticsearch.
         dbs = [str([x.split()
-                    for x in ES.es.cat.indices().splitlines()][0][2])]
+                    for x in es.es.cat.indices().splitlines()][0][2])]
 
         self.argv_list.append("-D")
         self.argv_list.append(self.cfg.repo_name)
         self.argv_list.append("-i")
         self.argv_list.append(str([x.split()
-            for x in ES.es.cat.indices().splitlines()][0][2]))
+            for x in es.es.cat.indices().splitlines()][0][2]))
         sys.argv = self.argv_list
 
-        self.ER = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port)
+        self.er = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port)
 
-        status, msg = self.ER.create_repo(self.cfg.repo_name,
+        status, msg = self.er.create_repo(self.cfg.repo_name,
                                           self.cfg.repo_dir)
 
         elastic_db_dump.main()
 
-        ES = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port,
+        es = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port,
                                              repo=self.cfg.repo_name)
 
         dir_path = os.path.join(self.cfg.repo_dir, "indices")
@@ -226,10 +226,10 @@ class UnitTest(unittest.TestCase):
 
         elastic_db_dump.main()
 
-        self.ER = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port,
+        self.er = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port,
                                                   repo=self.cfg.repo_name)
 
-        if self.cfg.repo_name in self.ER.repo_dict:
+        if self.cfg.repo_name in self.er.repo_dict:
             status = True
 
         else:
@@ -251,9 +251,9 @@ class UnitTest(unittest.TestCase):
         self.argv_list.append(self.cfg.repo_name)
         sys.argv = self.argv_list
 
-        self.ER = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port)
+        self.er = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port)
 
-        status, msg = self.ER.create_repo(self.cfg.repo_name,
+        status, msg = self.er.create_repo(self.cfg.repo_name,
                                           self.cfg.repo_dir)
 
         with gen_libs.no_std_out():
@@ -272,9 +272,9 @@ class UnitTest(unittest.TestCase):
         self.argv_list.append("-R")
         sys.argv = self.argv_list
 
-        self.ER = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port)
+        self.er = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port)
 
-        status, msg = self.ER.create_repo(self.cfg.repo_name,
+        status, msg = self.er.create_repo(self.cfg.repo_name,
                                           self.cfg.repo_dir)
 
         with gen_libs.no_std_out():
@@ -294,17 +294,17 @@ class UnitTest(unittest.TestCase):
         self.argv_list.append(self.cfg.repo_name)
         sys.argv = self.argv_list
 
-        self.ER = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port)
+        self.er = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port)
 
-        status, msg = self.ER.create_repo(self.cfg.repo_name,
+        status, msg = self.er.create_repo(self.cfg.repo_name,
                                           self.cfg.repo_dir)
 
         elastic_db_dump.main()
 
-        ES = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port,
+        es = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port,
                                              repo=self.cfg.repo_name)
 
-        if ES.dump_list:
+        if es.dump_list:
             status = True
 
         else:
@@ -322,10 +322,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        if self.ER and ("-C" in self.argv_list or "-L" in self.argv_list or
+        if self.er and ("-C" in self.argv_list or "-L" in self.argv_list or
                         "-R" in self.argv_list):
 
-            err_flag, status_msg = self.ER.delete_repo(self.cfg.repo_name)
+            err_flag, status_msg = self.er.delete_repo(self.cfg.repo_name)
 
             if err_flag:
                 print("Error: Failed to remove repository '%s'"
@@ -335,9 +335,9 @@ class UnitTest(unittest.TestCase):
             if os.path.isdir(self.cfg.repo_dir):
                 os.rmdir(self.cfg.repo_dir)
 
-        elif self.ER and "-D" in self.argv_list:
+        elif self.er and "-D" in self.argv_list:
 
-            err_flag, status_msg = self.ER.delete_repo(self.cfg.repo_name)
+            err_flag, status_msg = self.er.delete_repo(self.cfg.repo_name)
 
             if err_flag:
                 print("Error: Failed to remove repository '%s'"

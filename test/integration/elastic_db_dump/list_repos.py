@@ -62,7 +62,7 @@ class UnitTest(unittest.TestCase):
         self.config_path = os.path.join(self.test_path, "config")
         self.cfg = gen_libs.load_module("elastic", self.config_path)
 
-        self.ES = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port)
+        self.es = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port)
 
     def test_list_repos(self):
 
@@ -75,7 +75,7 @@ class UnitTest(unittest.TestCase):
         """
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.list_repos(self.ES))
+            self.assertFalse(elastic_db_dump.list_repos(self.es))
 
 
 if __name__ == "__main__":
