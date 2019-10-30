@@ -51,6 +51,7 @@
 
 # Standard
 import sys
+import os
 
 # Local
 import lib.arg_parser as arg_parser
@@ -60,7 +61,6 @@ import elastic_lib.elastic_class as elastic_class
 import elastic_lib.elastic_libs as elastic_libs
 import version
 
-# Version
 __version__ = version.__version__
 
 
@@ -72,38 +72,37 @@ def help_message(**kwargs):
         message when -h option is selected.
 
     Arguments:
-        (input) **kwargs:
-            None
 
     """
 
     print(__doc__)
 
 
-def create_repo(ES, **kwargs):
+def create_repo(es, **kwargs):
 
     """Function:  create_repo
 
     Description:  Create a repository for Elasticsearch database dumps.
 
     Arguments:
-        (input) ES -> ElasticSearch class instance.
+        (input) es -> ElasticSearch class instance.
         (input) **kwargs:
             args_array -> Dict of command line options and values.
 
     """
 
-    repo_name = kwargs.get("args_array").get("-C")
-    repo_dir = kwargs.get("args_array").get("-l")
+    args_array = dict(kwargs.get("args_array"))
+    repo_name = args_array.get("-C")
+    repo_dir = args_array.get("-l")
+    er = elastic_class.ElasticSearchRepo(es.hosts, es.port)
 
-    ER = elastic_class.ElasticSearchRepo(ES.hosts, ES.port)
-
-    if repo_name in ER.repo_dict:
+    if repo_name in er.repo_dict:
         print("ERROR:  '%s' repository already exists at: '%s'"
               % (repo_name, repo_dir))
 
     else:
-        err_flag, msg = ER.create_repo(repo_name, repo_dir)
+        err_flag, msg = er.create_repo(repo_name,
+                                       os.path.join(repo_dir, repo_name))
 
         if err_flag:
             print("Error detected for Repository: '%s' at '%s'"
@@ -111,24 +110,22 @@ def create_repo(ES, **kwargs):
             print("Reason: '%s'" % (msg))
 
 
-def print_failures(ES, **kwargs):
+def print_failures(es, **kwargs):
 
     """Function:  print_failures
 
     Description:  Prints out failures detected within the class.
 
     Arguments:
-        (input) ES -> Elasticsearch class instance.
-        (input) **kwargs:
-            None
+        (input) es -> Elasticsearch class instance.
 
     """
 
-    print("Failed to dump on %s shards" % (ES.failed_shards))
-    print("Detected failures: %s" % (ES.failures))
+    print("Failed to dump on %s shards" % (es.failed_shards))
+    print("Detected failures: %s" % (es.failures))
 
 
-def initate_dump(ES, dbs_list=None, **kwargs):
+def initate_dump(es, dbs_list=None, **kwargs):
 
     """Function:  initate_dump
 
@@ -136,7 +133,7 @@ def initate_dump(ES, dbs_list=None, **kwargs):
         the return status of the database dump.
 
     Arguments:
-        (input) ES -> Elasticsearch class instance.
+        (input) es -> Elasticsearch class instance.
         (input) dbs_list -> String of comma-delimited indice names to dump.
         (input) **kwargs:
             args_array -> Dict of command line options and values.
@@ -146,69 +143,64 @@ def initate_dump(ES, dbs_list=None, **kwargs):
     if "-i" in kwargs.get("args_array"):
         dbs_list = ','.join(kwargs.get("args_array").get("-i"))
 
-    err_flag, status_msg = ES.dump_db(dbs=dbs_list)
+    err_flag, status_msg = es.dump_db(dbs=dbs_list)
 
     # Failed to execute dump
     if err_flag:
-        print("Failed to execute dump on Cluster: %s" % (ES.cluster_name))
+        print("Failed to execute dump on Cluster: %s" % (es.cluster_name))
         print("Message:  %s" % (status_msg))
 
     # Check dump if anything other than success
-    elif ES.dump_status != "SUCCESS":
+    elif es.dump_status != "SUCCESS":
 
-        if ES.dump_status == "FAILED":
-            print("Dump failed to finish on %s" % (ES.cluster_name))
+        if es.dump_status == "FAILED":
+            print("Dump failed to finish on %s" % (es.cluster_name))
             print("Message:  %s" % (status_msg))
 
-        elif ES.dump_status == "PARTIAL":
-            print("Partial dump completed on %s" % (ES.cluster_name))
+        elif es.dump_status == "PARTIAL":
+            print("Partial dump completed on %s" % (es.cluster_name))
             print_failures
 
-        elif ES.dump_status == "INCOMPATIBLE":
+        elif es.dump_status == "INCOMPATIBLE":
             print("Older version of Elasticsearch in repo detected %s"
-                  % (ES.cluster_name))
+                  % (es.cluster_name))
 
         else:
-            print("Unknown error detected on %s" % (ES.cluster_name))
+            print("Unknown error detected on %s" % (es.cluster_name))
             print("Message:  %s" % (status_msg))
 
 
-def list_dumps(ES, **kwargs):
+def list_dumps(es, **kwargs):
 
     """Function:  list_dumps
 
     Description:  Lists the dumps in a repository.
 
     Arguments:
-        (input) ES -> Elasticsearch class instance.
-        (input) **kwargs:
-            args_array -> Dict of command line options and values.
+        (input) es -> Elasticsearch class instance.
 
     """
 
-    if ES.repo_name:
-        elastic_libs.list_dumps(ES.dump_list, **kwargs)
+    if es.repo_name:
+        elastic_libs.list_dumps(es.dump_list, **kwargs)
 
     else:
         print("WARNING:  Repository name not found or not passed.")
 
 
-def list_repos(ES, **kwargs):
+def list_repos(es, **kwargs):
 
     """Function:  list_repos
 
     Description:  Lists the repositories present.
 
     Arguments:
-        (input) ES -> Elasticsearch class instance.
-        (input) **kwargs:
-            args_array -> Dict of command line options and values.
+        (input) es -> Elasticsearch class instance.
 
     """
 
-    ER = elastic_class.ElasticSearchRepo(ES.hosts, ES.port)
-
-    elastic_libs.list_repos2(ER.repo_dict)
+    er = elastic_class.ElasticSearchRepo(es.hosts, es.port)
+    elastic_libs.list_repos2(er.repo_dict)
 
 
 def run_program(args_array, func_dict, **kwargs):
@@ -221,24 +213,24 @@ def run_program(args_array, func_dict, **kwargs):
     Arguments:
         (input) args_array -> Dict of command line options and values.
         (input) func_dict -> Dictionary list of functions and options.
-        (input) **kwargs:
-            None
 
     """
 
+    args_array = dict(args_array)
+    func_dict = dict(func_dict)
     cfg = gen_libs.load_module(args_array["-c"], args_array["-d"])
 
     try:
-        PROG_LOCK = gen_class.ProgramLock(sys.argv, cfg.host)
+        prog_lock = gen_class.ProgramLock(sys.argv, cfg.host)
 
         # Find which functions to call.
         for opt in set(args_array.keys()) & set(func_dict.keys()):
-            ES = elastic_class.ElasticSearchDump(cfg.host, cfg.port,
+            es = elastic_class.ElasticSearchDump(cfg.host, cfg.port,
                                                  args_array.get(opt, None),
                                                  **kwargs)
-            func_dict[opt](ES, args_array=args_array, **kwargs)
+            func_dict[opt](es, args_array=args_array, **kwargs)
 
-        del PROG_LOCK
+        del prog_lock
 
     except gen_class.SingleInstanceException:
         print("WARNING:  elastic_db_dump lock in place for: %s" % (cfg.host))
@@ -281,12 +273,12 @@ def main():
     args_array = arg_parser.arg_parse2(sys.argv, opt_val_list, opt_val=opt_val,
                                        multi_val=opt_multi_list)
 
-    if not gen_libs.help_func(args_array, __version__, help_message):
-        if not arg_parser.arg_require(args_array, opt_req_list) \
-           and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
-           and arg_parser.arg_cond_req_or(args_array, opt_con_req_dict) \
-           and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list):
-            run_program(args_array, func_dict)
+    if not gen_libs.help_func(args_array, __version__, help_message) \
+       and not arg_parser.arg_require(args_array, opt_req_list) \
+       and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
+       and arg_parser.arg_cond_req_or(args_array, opt_con_req_dict) \
+       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list):
+        run_program(args_array, func_dict)
 
 
 if __name__ == "__main__":

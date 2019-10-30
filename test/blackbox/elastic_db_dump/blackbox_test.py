@@ -9,7 +9,6 @@
         test/blackbox/elastic_db_dump/blackbox_test.py
 
     Arguments:
-        None
 
 """
 
@@ -29,7 +28,6 @@ import lib.arg_parser as arg_parser
 import elastic_lib.elastic_class as elastic_class
 import version
 
-# Version
 __version__ = version.__version__
 
 
@@ -41,8 +39,6 @@ def load_cfg(args_array, **kwargs):
 
     Arguments:
         (input) args_array -> Dict of command line options and values.
-                (input) **kwargs:
-            None
         (output) -> Server configuration settings.
 
     """
@@ -50,24 +46,22 @@ def load_cfg(args_array, **kwargs):
     return gen_libs.load_module(args_array["-c"], args_array["-d"])
 
 
-def chk_create_repo(ER, repo_name, **kwargs):
+def chk_create_repo(er, repo_name, **kwargs):
 
     """Function:  chk_create_repo
 
     Description:  Check for the existence of a repository.
 
     Arguments:
-        (input) ES -> Elasticsearch class instance.
+        (input) er -> Elasticsearch class instance.
         (input) repo_name -> Name of repository.
-        (input) **kwargs:
-            None
         (output) status -> True|False - Status of check.
 
     """
 
     status = True
 
-    if repo_name not in ER.repo_dict:
+    if repo_name not in er.repo_dict:
         status = False
 
     return status
@@ -83,8 +77,6 @@ def create_es_instance(cfg, instance, repo_name=None, **kwargs):
         (input) cfg -> Server configuration settings.
         (input) instance -> ElasticSearch instance name.
         (input) repo_name -> Name of repository.
-        (input) **kwargs:
-            None
         (output) -> ElasticSearch instance.
 
     """
@@ -92,25 +84,23 @@ def create_es_instance(cfg, instance, repo_name=None, **kwargs):
     return instance(cfg.host, cfg.port, repo=repo_name)
 
 
-def remove_repo(ER, repo_name, dump_loc, **kwargs):
+def remove_repo(er, repo_name, dump_loc, **kwargs):
 
     """Function:  remove_repo
 
     Description:  Remove repository and cleanup directory.
 
     Arguments:
-        (input) ER -> ElasticSearchRepo class instance.
+        (input) er -> ElasticSearchRepo class instance.
         (input) repo_name -> Name of repository being removed.
         (input) dump_loc -> Location of repository.
-        (input) **kwargs:
-            None
         (output) status -> True|False - Status of repository removal.
 
     """
 
     status = True
 
-    err_flag, msg = ER.delete_repo(repo_name=repo_name)
+    err_flag, msg = er.delete_repo(repo_name=repo_name)
 
     if err_flag:
         status = False
@@ -134,7 +124,6 @@ def main():
         opt_val_list -> contains options which require values.
 
     Arguments:
-        None
 
     """
 
@@ -143,32 +132,32 @@ def main():
     cfg = load_cfg(args_array)
 
     if "-C" in args_array:
-        ES = create_es_instance(cfg, elastic_class.ElasticSearchDump,
+        es = create_es_instance(cfg, elastic_class.ElasticSearchDump,
                                 args_array["-C"])
-        ER = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
+        er = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
                                 args_array["-C"])
 
-        if chk_create_repo(ER, args_array["-C"]):
+        if chk_create_repo(er, args_array["-C"]):
             print("\n\tTest Successful")
 
         else:
             print("\n\tTest Failure")
 
-        _ = remove_repo(ER, args_array["-C"], ES.dump_loc)
+        _ = remove_repo(er, args_array["-C"], es.dump_loc)
 
     elif "-R" in args_array:
-        ES = create_es_instance(cfg, elastic_class.ElasticSearchDump,
+        es = create_es_instance(cfg, elastic_class.ElasticSearchDump,
                                 args_array["-R"])
-        ER = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
+        er = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
                                 args_array["-R"])
-        _ = remove_repo(ER, args_array["-R"], ES.dump_loc)
+        _ = remove_repo(er, args_array["-R"], es.dump_loc)
 
     elif "-i" in args_array and "-D" in args_array:
-        ES = create_es_instance(cfg, elastic_class.ElasticSearchDump,
+        es = create_es_instance(cfg, elastic_class.ElasticSearchDump,
                                 args_array["-D"])
-        ER = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
+        er = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
                                 args_array["-D"])
-        dir_path = os.path.join(ES.dump_loc, "indices")
+        dir_path = os.path.join(es.dump_loc, "indices")
 
         # Count number of databases/indices dumped to repository.
         if len([name for name in os.listdir(dir_path)
@@ -179,26 +168,26 @@ def main():
         else:
             print("\n\tTest Failure")
 
-        _ = remove_repo(ER, args_array["-D"], ES.dump_loc)
+        _ = remove_repo(er, args_array["-D"], es.dump_loc)
 
     elif "-D" in args_array:
-        ES = create_es_instance(cfg, elastic_class.ElasticSearchDump,
+        es = create_es_instance(cfg, elastic_class.ElasticSearchDump,
                                 args_array["-D"])
-        ER = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
+        er = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
                                 args_array["-D"])
 
-        if ES.dump_list:
+        if es.dump_list:
             print("\n\tTest Successful")
 
         else:
             print("\n\tTest Failure")
 
-        _ = remove_repo(ER, args_array["-D"], ES.dump_loc)
+        _ = remove_repo(er, args_array["-D"], es.dump_loc)
 
     elif "-I" in args_array:
-        ES = create_es_instance(cfg, elastic_class.ElasticSearchDump)
+        es = create_es_instance(cfg, elastic_class.ElasticSearchDump)
 
-        print(str([x.split() for x in ES.es.cat.indices().splitlines()][0][2]))
+        print(str([x.split() for x in es.es.cat.indices().splitlines()][0][2]))
 
 
 if __name__ == "__main__":

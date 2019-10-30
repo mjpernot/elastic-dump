@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [1.0.2] - 2019-10-28
+### Fixed
+- create_repo:  Fixed mutable list/dictionary argument issue.
+- run_program:  Fixed mutable list/dictionary argument issue.
+
+### Changed
+- create_repo:  Repo_name will be joined to repo_dir to create new repository.
+- main:  Refactored "if" statements.
+- run_program:  Changed variables to standard naming convention.
+- list_repos:  Changed variables to standard naming convention.
+- list_dumps:  Changed variables to standard naming convention.
+- initate_dump:  Changed variables to standard naming convention.
+- print_failures:  Changed variables to standard naming convention.
+- create_repo:  Changed variables to standard naming convention.
+- Documentation updates.
+
+
 ## [1.0.1] - 2018-11-22
 ### Changed
 - Documentation updates.

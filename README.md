@@ -11,9 +11,7 @@
   * Prerequisites
   * Installation
   * Configuration
-  * Program Description
   * Program Help Function
-  * Help Message
   * Testing
     - Unit
     - Integration
@@ -87,11 +85,6 @@ sudo chown elasticsearch:elasticsearch elastic.py
 ```
 
 
-# Program Descriptions:
-### Program: elastic_db_dump.py
-##### Description: Execute a dump of an Elasticsearch database.
-
-
 # Program Help Function:
 
   All of the programs, except the command and class files, will have an -h (Help option) that will show display a help message for that particular program.  The help message will usually consist of a description, usage, arugments to the program, example, notes about the program, and any known bugs not yet fixed.  To run the help command:
@@ -100,54 +93,6 @@ sudo chown elasticsearch:elasticsearch elastic.py
 ```
 {Python_Project}/elastic-dump/elastic_db_dump.py -h
 ```
-
-
-# Help Message:
-  Below is the help message for the program the program.  Run the program with the -h option get the latest help message for the program.
-
-    Program:  elastic_db_dump.py
-
-    Description:  Execute a dump of an Elasticsearch database.
-
-    Usage:
-        elastic_db_dump.py -c file -d path {-R | -C repo_name -l rep_dir
-            | -D [repo_name] [-i index1 {index2 ...}] | -L [repo_name]}
-            [-v | -h]
-
-    Arguments:
-        -C repo_name => Create new repository name.  Requires -l option.
-        -D [repo_name] => Dump an Elasticsearch database.  repo_name is name
-            of repository to dump.  repo_name is required if multiple
-            repositories exist or if used in conjunction with -i option.
-        -L [repo_name] => List of database dumps for an Elasticsearch
-            database.  repo_name is name of repository to dump.  repo_name is
-            required if multiple repositories exist.
-        -R => List of repositories in the Elasticsearch database.
-        -c file => Elasticsearch configuration file.  Required argument.
-        -d dir path => Directory path for option '-c'.  Required argument.
-        -i index1 {index2 ...} => One or more indices to dump.  Used with the
-            -D option.  Can use wildcard searches in the index name.
-        -l path => Directory path name for repository.
-        -v => Display version of this program.
-        -h => Help and usage message.
-
-        NOTE 1:  -v or -h overrides all other options.
-        NOTE 2:  -C, -D, -L, and -R are XOR options.
-
-    Notes:
-        Elasticsearch configuration file format (elastic.py).  The
-        configuration file format for the Elasticsearch connection to a
-        database.
-
-            # Elasticsearch configuration file.
-            name = ["HOST_NAME1", "HOST_NAME2"]
-            port = PORT_NUMBER (default of Elasticsearch is 9200)
-
-        Configuration modules -> Name is runtime dependent as it can be used to
-        connect to different databases with different names.
-
-    Example:
-        elastic_db_dump.py -c elastic -d config -D backup
 
 
 # Testing:

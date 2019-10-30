@@ -9,7 +9,6 @@
         test/integration/elastic_db_dump/list_repos.py
 
     Arguments:
-        None
 
 """
 
@@ -33,7 +32,6 @@ import lib.gen_libs as gen_libs
 import elastic_lib.elastic_class as elastic_class
 import version
 
-# Version
 __version__ = version.__version__
 
 
@@ -42,10 +40,6 @@ class UnitTest(unittest.TestCase):
     """Class:  UnitTest
 
     Description:  Class which is a representation of a unit testing.
-
-    Super-Class:  unittest.TestCase
-
-    Sub-Classes:  None
 
     Methods:
         setUp -> Unit testing initilization.
@@ -60,7 +54,6 @@ class UnitTest(unittest.TestCase):
         Description:  Initialization for unit testing.
 
         Arguments:
-            None
 
         """
 
@@ -69,7 +62,7 @@ class UnitTest(unittest.TestCase):
         self.config_path = os.path.join(self.test_path, "config")
         self.cfg = gen_libs.load_module("elastic", self.config_path)
 
-        self.ES = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port)
+        self.es = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port)
 
     def test_list_repos(self):
 
@@ -78,12 +71,11 @@ class UnitTest(unittest.TestCase):
         Description:  Test listing of repositories.
 
         Arguments:
-            None
 
         """
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.list_repos(self.ES))
+            self.assertFalse(elastic_db_dump.list_repos(self.es))
 
 
 if __name__ == "__main__":
