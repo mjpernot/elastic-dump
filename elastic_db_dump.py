@@ -51,6 +51,7 @@
 
 # Standard
 import sys
+import os
 
 # Local
 import lib.arg_parser as arg_parser
@@ -100,7 +101,8 @@ def create_repo(es, **kwargs):
               % (repo_name, repo_dir))
 
     else:
-        err_flag, msg = er.create_repo(repo_name, repo_dir)
+        err_flag, msg = er.create_repo(repo_name,
+                                       os.path.join(repo_dir, repo_name))
 
         if err_flag:
             print("Error detected for Repository: '%s' at '%s'"
