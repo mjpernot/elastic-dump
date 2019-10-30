@@ -9,7 +9,6 @@
         test/integration/elastic_db_dump/initate_dump.py
 
     Arguments:
-        None
 
 """
 
@@ -34,7 +33,6 @@ import lib.gen_libs as gen_libs
 import elastic_lib.elastic_class as elastic_class
 import version
 
-# Version
 __version__ = version.__version__
 
 
@@ -43,10 +41,6 @@ class UnitTest(unittest.TestCase):
     """Class:  UnitTest
 
     Description:  Class which is a representation of a unit testing.
-
-    Super-Class:  unittest.TestCase
-
-    Sub-Classes:  None
 
     Methods:
         setUp -> Unit testing initilization.
@@ -66,7 +60,6 @@ class UnitTest(unittest.TestCase):
         Description:  Initialization for unit testing.
 
         Arguments:
-            None
 
         """
 
@@ -76,17 +69,17 @@ class UnitTest(unittest.TestCase):
         self.cfg = gen_libs.load_module("elastic", self.config_path)
         self.args_array = {}
 
-        self.ER = elastic_class.ElasticSearchRepo(self.cfg.host,
+        self.er = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                   self.cfg.port)
 
-        if self.ER.repo_dict:
+        if self.er.repo_dict:
             print("ERROR: Test environment not clean - repositories exist.")
             self.skipTest("Pre-conditions not met.")
 
         else:
-            _, _ = self.ER.create_repo(self.cfg.repo_name, self.cfg.repo_dir)
+            _, _ = self.er.create_repo(self.cfg.repo_name, self.cfg.repo_dir)
 
-            self.ES = elastic_class.ElasticSearchDump(self.cfg.host,
+            self.es = elastic_class.ElasticSearchDump(self.cfg.host,
                                                       self.cfg.port,
                                                       repo=self.cfg.repo_name)
 
@@ -97,24 +90,23 @@ class UnitTest(unittest.TestCase):
         Description:  Test database with multiple database names.
 
         Arguments:
-            None
 
         """
         # Capture 2 databases/indices name in Elasticsearch.
         dbs = [str(y[2])
                for y in [x.split()
-                         for x in self.ES.es.cat.indices().splitlines()]][0:2]
+                         for x in self.es.es.cat.indices().splitlines()]][0:2]
 
         self.args_array = {"-i": dbs}
 
-        elastic_db_dump.initate_dump(self.ES, args_array=self.args_array)
+        elastic_db_dump.initate_dump(self.es, args_array=self.args_array)
 
         dir_path = os.path.join(self.cfg.repo_dir, "indices")
 
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
                    if os.path.isdir(os.path.join(dir_path, name))])
-        
+
         self.assertEqual(cnt, 2)
 
     def test_i_option_one_db(self):
@@ -124,24 +116,23 @@ class UnitTest(unittest.TestCase):
         Description:  Test database with one database name.
 
         Arguments:
-            None
 
         """
 
         # Capture the first database/indice name in Elasticsearch.
         dbs = [str([x.split()
-                    for x in self.ES.es.cat.indices().splitlines()][0][2])]
+                    for x in self.es.es.cat.indices().splitlines()][0][2])]
 
         self.args_array = {"-i": dbs}
 
-        elastic_db_dump.initate_dump(self.ES, args_array=self.args_array)
+        elastic_db_dump.initate_dump(self.es, args_array=self.args_array)
 
         dir_path = os.path.join(self.cfg.repo_dir, "indices")
 
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
                    if os.path.isdir(os.path.join(dir_path, name))])
-        
+
         self.assertEqual(cnt, 1)
 
     def test_i_option_missing_db(self):
@@ -151,13 +142,12 @@ class UnitTest(unittest.TestCase):
         Description:  Test database with incorrect database name.
 
         Arguments:
-            None
 
         """
 
         self.args_array = {"-i": ["Incorrect_Database_Name"]}
 
-        elastic_db_dump.initate_dump(self.ES, args_array=self.args_array)
+        elastic_db_dump.initate_dump(self.es, args_array=self.args_array)
 
         # If index dump directory exists, then test is a failure.
         if os.path.isdir(os.path.join(self.cfg.repo_dir, "indices")):
@@ -175,13 +165,12 @@ class UnitTest(unittest.TestCase):
         Description:  Test database dump with no -i option.
 
         Arguments:
-            None
 
         """
 
-        elastic_db_dump.initate_dump(self.ES, args_array=self.args_array)
+        elastic_db_dump.initate_dump(self.es, args_array=self.args_array)
 
-        if self.ES.dump_list:
+        if self.es.dump_list:
             status = True
 
         else:
@@ -196,13 +185,12 @@ class UnitTest(unittest.TestCase):
         Description:  Test datbase dump is created.
 
         Arguments:
-            None
 
         """
 
-        elastic_db_dump.initate_dump(self.ES, args_array=self.args_array)
+        elastic_db_dump.initate_dump(self.es, args_array=self.args_array)
 
-        if self.ES.dump_list:
+        if self.es.dump_list:
             status = True
 
         else:
@@ -217,11 +205,10 @@ class UnitTest(unittest.TestCase):
         Description:  Clean up of integration testing.
 
         Arguments:
-            None
 
         """
 
-        err_flag, status_msg = self.ER.delete_repo(self.cfg.repo_name)
+        err_flag, status_msg = self.er.delete_repo(self.cfg.repo_name)
 
         if err_flag:
             print("Error: Failed to remove repository '%s'"

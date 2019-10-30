@@ -9,7 +9,6 @@
         test/unit/elastic_db_dump/list_dumps.py
 
     Arguments:
-        None
 
 """
 
@@ -33,7 +32,6 @@ import elastic_db_dump
 import lib.gen_libs as gen_libs
 import version
 
-# Version
 __version__ = version.__version__
 
 
@@ -42,10 +40,6 @@ class UnitTest(unittest.TestCase):
     """Class:  UnitTest
 
     Description:  Class which is a representation of a unit testing.
-
-    Super-Class:  unittest.TestCase
-
-    Sub-Classes:  None
 
     Methods:
         setUp -> Unit testing initilization.
@@ -61,7 +55,6 @@ class UnitTest(unittest.TestCase):
         Description:  Initialization for unit testing.
 
         Arguments:
-            None
 
         """
 
@@ -70,10 +63,6 @@ class UnitTest(unittest.TestCase):
             """Class:  ElasticSearchDump
 
             Description:  Class representation of the ElasticSearchDump class.
-
-            Super-Class:  object
-
-            Sub-Classes:  None
 
             Methods:
                 __init__ -> Initialize configuration environment.
@@ -87,14 +76,13 @@ class UnitTest(unittest.TestCase):
                 Description:  Initialization instance of the class.
 
                 Arguments:
-                        None
 
                 """
 
                 self.repo_name = "Test_Repo_Name"
                 self.dump_list = []
 
-        self.ES = ElasticSearchDump()
+        self.es = ElasticSearchDump()
 
     @mock.patch("elastic_db_dump.elastic_libs.list_dumps")
     def test_repo_name_true(self, mock_list):
@@ -104,13 +92,12 @@ class UnitTest(unittest.TestCase):
         Description:  Test repo name set to a name.
 
         Arguments:
-            mock_list -> Mock Ref:  elastic_db_dump.elastic_libs.list_dumps
 
         """
 
         mock_list.return_value = True
 
-        self.assertFalse(elastic_db_dump.list_dumps(self.ES))
+        self.assertFalse(elastic_db_dump.list_dumps(self.es))
 
     def test_repo_name_false(self):
 
@@ -119,14 +106,13 @@ class UnitTest(unittest.TestCase):
         Description:  Test repo name set to None.
 
         Arguments:
-            None
 
         """
 
-        self.ES.repo_name = None
+        self.es.repo_name = None
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.list_dumps(self.ES))
+            self.assertFalse(elastic_db_dump.list_dumps(self.es))
 
 
 if __name__ == "__main__":
