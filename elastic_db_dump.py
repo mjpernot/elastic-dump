@@ -90,9 +90,9 @@ def create_repo(es, **kwargs):
 
     """
 
-    repo_name = kwargs.get("args_array").get("-C")
-    repo_dir = kwargs.get("args_array").get("-l")
-
+    args_array = dict(kwargs.get("args_array"))
+    repo_name = args_array.get("-C")
+    repo_dir = args_array.get("-l")
     er = elastic_class.ElasticSearchRepo(es.hosts, es.port)
 
     if repo_name in er.repo_dict:
