@@ -6,6 +6,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [1.0.2] - 2019-10-28
 ### Fixed
+- create_repo:  Fixed mutable list/dictionary argument issue.
 - run_program:  Fixed mutable list/dictionary argument issue.
 
 ### Changed
