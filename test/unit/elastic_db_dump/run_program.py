@@ -173,7 +173,7 @@ class UnitTest(unittest.TestCase):
         self.args["-L"] = True
 
         mock_lock.side_effect = \
-                              elastic_db_dump.gen_class.SingleInstanceException
+            elastic_db_dump.gen_class.SingleInstanceException
         mock_class.return_value = "Elastic_Class"
         mock_load.return_value = self.ct
 
