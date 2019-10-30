@@ -51,6 +51,7 @@
 
 # Standard
 import sys
+import os
 
 # Local
 import lib.arg_parser as arg_parser
@@ -90,9 +91,9 @@ def create_repo(es, **kwargs):
 
     """
 
-    repo_name = kwargs.get("args_array").get("-C")
-    repo_dir = kwargs.get("args_array").get("-l")
-
+    args_array = dict(kwargs.get("args_array"))
+    repo_name = args_array.get("-C")
+    repo_dir = args_array.get("-l")
     er = elastic_class.ElasticSearchRepo(es.hosts, es.port)
 
     if repo_name in er.repo_dict:
@@ -100,7 +101,8 @@ def create_repo(es, **kwargs):
               % (repo_name, repo_dir))
 
     else:
-        err_flag, msg = er.create_repo(repo_name, repo_dir)
+        err_flag, msg = er.create_repo(repo_name,
+                                       os.path.join(repo_dir, repo_name))
 
         if err_flag:
             print("Error detected for Repository: '%s' at '%s'"
