@@ -99,8 +99,8 @@ class UnitTest(unittest.TestCase):
         self.argv_list.append("-D")
         self.argv_list.append(self.cfg.repo_name)
         self.argv_list.append("-i")
-        self.argv_list.append(str([x.split()
-            for x in es.es.cat.indices().splitlines()][0][2]))
+        self.argv_list.append(
+            str([x.split() for x in es.es.cat.indices().splitlines()][0][2]))
         sys.argv = self.argv_list
 
         self.er = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port)
@@ -118,7 +118,7 @@ class UnitTest(unittest.TestCase):
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
                    if os.path.isdir(os.path.join(dir_path, name))])
-        
+
         self.assertEqual(cnt, 1)
 
     def test_help_func(self):

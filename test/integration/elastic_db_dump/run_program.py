@@ -118,7 +118,7 @@ class UnitTest(unittest.TestCase):
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
                    if os.path.isdir(os.path.join(dir_path, name))])
-        
+
         self.assertEqual(cnt, 1)
 
     @mock.patch("elastic_db_dump.gen_class")

@@ -106,7 +106,7 @@ class UnitTest(unittest.TestCase):
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
                    if os.path.isdir(os.path.join(dir_path, name))])
-        
+
         self.assertEqual(cnt, 2)
 
     def test_i_option_one_db(self):
@@ -132,7 +132,7 @@ class UnitTest(unittest.TestCase):
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
                    if os.path.isdir(os.path.join(dir_path, name))])
-        
+
         self.assertEqual(cnt, 1)
 
     def test_i_option_missing_db(self):
