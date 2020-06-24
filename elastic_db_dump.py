@@ -6,24 +6,28 @@
     Description:  Execute a dump of an Elasticsearch database.
 
     Usage:
-        elastic_db_dump.py -c file -d path {-R | -C repo_name -l rep_dir
-            | -D [repo_name] [-i index1 {index2 ...}] | -L [repo_name]}
+        elastic_db_dump.py -c file -d path
+            {-C repo_name -l base_path |
+            -D [repo_name] [-i index1 {index2 ...}] |
+            -L [repo_name] | -R}
             [-v | -h]
 
     Arguments:
+        -c file => Elasticsearch configuration file.  Required argument.
+        -d dir path => Directory path for option '-c'.  Required argument.
         -C repo_name => Create new repository name.  Requires -l option.
+        -l base_path => Base directory path name for repository.
+            Used with the -C option.
         -D [repo_name] => Dump an Elasticsearch database.  repo_name is name
             of repository to dump.  repo_name is required if multiple
             repositories exist or if used in conjunction with -i option.
+        -i index1 {index2 ...} => One or more indices to dump.
+            Used with the -D option.
+            Can use wildcard searches in the index name.
         -L [repo_name] => List of database dumps for an Elasticsearch
-            database.  repo_name is name of repository to dump.  repo_name is
-            required if multiple repositories exist.
+            repository.
+            NOTE: repo_name is required if multiple repositories exist.
         -R => List of repositories in the Elasticsearch database.
-        -c file => Elasticsearch configuration file.  Required argument.
-        -d dir path => Directory path for option '-c'.  Required argument.
-        -i index1 {index2 ...} => One or more indices to dump.  Used with the
-            -D option.  Can use wildcard searches in the index name.
-        -l path => Directory path name for repository.
         -v => Display version of this program.
         -h => Help and usage message.
 
@@ -36,8 +40,9 @@
         database.
 
             # Elasticsearch configuration file.
-            name = "HOSTNAME"
-            port = PORT_NUMBER (default of Elasticsearch is 9200)
+            name = ["HOSTNAME1", "HOSTNAME2"]
+            # Default port for ElasticSearch is 9200.
+            port = 9200
 
         Configuration modules -> Name is runtime dependent as it can be used to
         connect to different databases with different names.
