@@ -6,3 +6,4 @@ coverage.xml
 lib
 elastic_lib
 config/*.py
+test/integration/elastic_db_dump/config/elastic.py
