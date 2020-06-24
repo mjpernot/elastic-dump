@@ -17,6 +17,7 @@
 # Standard
 import sys
 import os
+import shutil
 
 if sys.version_info < (2, 7):
     import unittest2 as unittest
@@ -62,19 +63,20 @@ class UnitTest(unittest.TestCase):
         self.test_path = os.path.join(os.getcwd(), self.base_dir)
         self.config_path = os.path.join(self.test_path, "config")
         self.cfg = gen_libs.load_module("elastic", self.config_path)
-
         self.args_array = {"-C": self.cfg.repo_name, "-l": self.cfg.repo_dir}
+        self.phy_repo_dir = os.path.join(self.cfg.phy_repo_dir,
+                                         self.cfg.repo_name)
+        self.els = elastic_class.ElasticSearchDump(self.cfg.host,
+                                                   self.cfg.port)
 
-        self.es = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port)
+        elr = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port)
 
-        er = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port)
-
-        if er.repo_dict:
+        if elr.repo_dict:
             print("ERROR: Test environment not clean - repositories exist.")
             self.skipTest("Pre-conditions not met.")
 
         else:
-            self.er = None
+            self.elr = None
 
     def test_repo_init(self):
 
@@ -86,11 +88,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.er = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port)
-        self.er.create_repo(self.cfg.repo_name, self.cfg.repo_dir)
+        self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
+                                                   self.cfg.port)
+        self.elr.create_repo(self.cfg.repo_name, self.cfg.repo_dir)
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.create_repo(self.es,
+            self.assertFalse(elastic_db_dump.create_repo(self.els,
                              args_array=self.args_array))
 
     def test_repo_create(self):
@@ -103,11 +106,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        elastic_db_dump.create_repo(self.es, args_array=self.args_array)
+        elastic_db_dump.create_repo(self.els, args_array=self.args_array)
 
-        self.er = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port)
+        self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
+                                                   self.cfg.port)
 
-        if self.cfg.repo_name in self.er.repo_dict:
+        if self.cfg.repo_name in self.elr.repo_dict:
             status = True
 
         else:
@@ -125,15 +129,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        err_flag, status_msg = self.er.delete_repo(self.cfg.repo_name)
+        err_flag, status_msg = self.elr.delete_repo(self.cfg.repo_name)
 
         if err_flag:
             print("Error: Failed to remove repository '%s'"
                   % self.cfg.repo_name)
             print("Reason: '%s'" % (status_msg))
 
-        if os.path.isdir(self.cfg.repo_dir):
-            os.rmdir(self.cfg.repo_dir)
+        if os.path.isdir(self.phy_repo_dir):
+            shutil.rmtree(self.phy_repo_dir)
 
 
 if __name__ == "__main__":
