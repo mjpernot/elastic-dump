@@ -17,9 +17,6 @@ pipeline {
                 dir ('elastic_lib/lib') {
                     git branch: "master", credentialsId: "2cfb403c-be21-4fac-94d7-c8cd5c531feb", url: "https://gitlab.code.dicelab.net/JAC-IDM/python-lib.git"
                 }
-                dir ('elastic_lib/requests_lib') {
-                    git branch: "master", credentialsId: "2cfb403c-be21-4fac-94d7-c8cd5c531feb", url: "https://gitlab.code.dicelab.net/JAC-IDM/requests-lib.git"
-                }
                 sh """
                 virtualenv test_env
                 source test_env/bin/activate
@@ -56,32 +53,32 @@ pipeline {
             steps {
                 script {
                     server = Artifactory.server('Artifactory')
-                    server.credentialsId = 'svc-highpoint-artifactory'
+                    server.credentialsId = 'art-svc-highpoint-dev'
                     uploadSpec = """{
                         "files": [
                             {
                                 "pattern": "./*.py",
                                 "recursive": false,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/elastic-dump/"
+                                "target": "pypi-proj-local/highpoint/elastic-dump/"
                             },
                             {
                                 "pattern": "./*.txt",
                                 "recursive": false,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/elastic-dump/"
+                                "target": "pypi-proj-local/highpoint/elastic-dump/"
                             },
                             {
                                 "pattern": "./*.md",
                                 "recursive": false,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/elastic-dump/"
+                                "target": "pypi-proj-local/highpoint/elastic-dump/"
                             },
                             {
                                 "pattern": "*.TEMPLATE",
                                 "recursive": true,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/elastic-dump/config/"
+                                "target": "pypi-proj-local/highpoint/elastic-dump/config/"
                             }
                         ]
                     }"""
