@@ -72,7 +72,9 @@ class UnitTest(unittest.TestCase):
             self.skipTest("Pre-conditions not met.")
 
         else:
-            _, _ = self.elr.create_repo(self.cfg.repo_name, self.cfg.repo_dir)
+            _, _ = self.elr.create_repo(
+                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+                                                 self.cfg.repo_name))
 
             self.els = elastic_class.ElasticSearchDump(
                 self.cfg.host, self.cfg.port, repo=self.cfg.repo_name)
