@@ -6,6 +6,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [1.0.3] - 2020-06-24
 ### Fixed
+- initate_dump:  Fixed call print_failures function.
 - main:  Fixed handling command line arguments from SonarQube scan finding.
 - run_program:  Fixed handling command line arguments from SonarQube scan finding.
 

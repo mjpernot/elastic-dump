@@ -166,7 +166,7 @@ def initate_dump(els, dbs_list=None, **kwargs):
 
         elif els.dump_status == "PARTIAL":
             print("Partial dump completed on %s" % (els.cluster_name))
-            print_failures
+            print_failures(els)
 
         elif els.dump_status == "INCOMPATIBLE":
             print("Older version of Elasticsearch in repo detected %s"
