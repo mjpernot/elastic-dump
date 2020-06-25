@@ -127,48 +127,44 @@ def main():
 
     """
 
+    prt_good = "\n\tTest Successful"
+    prt_fail = "\n\tTest Failure"
+
     cmdline = gen_libs.get_inst(sys)
     opt_val_list = ["-c", "-d", "-C", "-R", "-D", "-P"]
     args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list)
     cfg = load_cfg(args_array)
 
     if "-C" in args_array:
-        els = create_es_instance(cfg, elastic_class.ElasticSearchDump,
-                                 args_array["-C"])
         elr = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
                                  args_array["-C"])
 
         if chk_create_repo(elr, args_array["-C"]):
-            print("\n\tTest Successful")
+            print(prt_good)
 
         else:
-            print("\n\tTest Failure")
+            print(prt_fail)
 
         _ = remove_repo(elr, args_array["-C"], args_array["-P"])
 
     elif "-R" in args_array:
-        els = create_es_instance(cfg, elastic_class.ElasticSearchDump,
-                                args_array["-R"])
         elr = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
                                 args_array["-R"])
         _ = remove_repo(elr, args_array["-R"], args_array["-P"])
 
     elif "-i" in args_array and "-D" in args_array:
-        els = create_es_instance(cfg, elastic_class.ElasticSearchDump,
-                                 args_array["-D"])
         elr = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
                                  args_array["-D"])
-        #dir_path = os.path.join(els.dump_loc, "indices")
         dir_path = os.path.join(args_array["-P"], args_array["-D"], "indices")
 
         # Count number of databases/indices dumped to repository.
         if len([name for name in os.listdir(dir_path)
                 if os.path.isdir(os.path.join(dir_path, name))]) == 1:
 
-            print("\n\tTest Successful")
+            print(prt_good)
 
         else:
-            print("\n\tTest Failure")
+            print(prt_fail)
 
         _ = remove_repo(elr, args_array["-D"], args_array["-P"])
 
@@ -179,10 +175,10 @@ def main():
                                  args_array["-D"])
 
         if els.dump_list:
-            print("\n\tTest Successful")
+            print(prt_good)
 
         else:
-            print("\n\tTest Failure")
+            print(prt_fail)
 
         _ = remove_repo(elr, args_array["-D"], args_array["-P"])
 
