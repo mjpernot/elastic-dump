@@ -196,6 +196,20 @@ vim elastic.py
 sudo chown elasticsearch:elasticsearch elastic.py
 ```
 
+### Pre-Testing:
+  *  These tests will require at least two user indices to exist in Elasticsearch.
+
+```
+curl -X GET "localhost:9200/\_cat/indices?v"
+```
+
+  *  Creating two user indices for testing.
+
+```
+curl -XPUT 'localhost:9200/twitter?pretty' -H 'Content-Type: application/json' -d'{"settings" : {"index" : {"number_of_shards" : 3, "number_of_replicas" : 0 }}}'
+curl -XPUT 'localhost:9200/twitter2?pretty' -H 'Content-Type: application/json' -d'{"settings" : {"index" : {"number_of_shards" : 3, "number_of_replicas" : 0 }}}'
+```
+
 ### Testing:
   * These tests must be run as the elasticsearch account:
   * Replace **{Python_Project}** with the baseline path of the python program.
@@ -275,6 +289,19 @@ Setup the test environment for Blackbox testing.
 cd ..
 cp blackbox_test.sh.TEMPLATE blackbox_test.sh
 vim blackbox_test.sh
+```
+
+### Pre-Testing:
+  *  These tests will require at least one user indice to exist in Elasticsearch.
+
+```
+curl -X GET "localhost:9200/\_cat/indices?v"
+```
+
+  *  Creating one user indice for testing.
+
+```
+curl -XPUT 'localhost:9200/twitter?pretty' -H 'Content-Type: application/json' -d'{"settings" : {"index" : {"number_of_shards" : 3, "number_of_replicas" : 0 }}}'
 ```
 
 ### Testing:
