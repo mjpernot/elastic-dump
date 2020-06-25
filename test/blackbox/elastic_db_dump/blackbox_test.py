@@ -127,8 +127,9 @@ def main():
 
     """
 
+    cmdline = gen_libs.get_inst(sys)
     opt_val_list = ["-c", "-d", "-C", "-R", "-D", "-P"]
-    args_array = arg_parser.arg_parse2(sys.argv, opt_val_list)
+    args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list)
     cfg = load_cfg(args_array)
 
     if "-C" in args_array:
