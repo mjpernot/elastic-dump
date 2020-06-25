@@ -266,7 +266,10 @@ sudo chown elasticsearch:elasticsearch elastic.py
 Setup the test environment for Blackbox testing.
   * Change these entries in the blackbox_test.sh file:
     - REPOSITORY_DIR="DIRECTORY_PATH/TEST_REPO_BLACKBOX_DIR"
-  * NOTE:  **DIRECTORY_PATH** is a directory path to a shared file system that is shared and writable by all Elasticsearch databases in the cluster.
+    - PYH_REPO_DIR="DIRECTORY_PATH/TEST_REPO_BLACKBOX_DIR"
+  * REPOSITORY_DIR is the logical directory path to the share file system.
+  * PYH_REPO_DIR is the physical directory path to the share file system.
+  * NOTE:  **DIRECTORY_PATH** is a directory path to a shared file system that is shared and writable by all Elasticsearch databases in the cluster.  If running ElasticSearch as Docker setup, then these paths will be different.  If running as a standard setup, they will be the same.
 
 ```
 cd ..
