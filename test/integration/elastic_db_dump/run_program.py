@@ -105,8 +105,8 @@ class UnitTest(unittest.TestCase):
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
         status, msg = self.elr.create_repo(
-                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
-                                                 self.cfg.repo_name))
+            self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+                                             self.cfg.repo_name))
         elastic_db_dump.run_program(self.args, self.func_dict)
         dir_path = os.path.join(self.cfg.phy_repo_dir, self.cfg.repo_name,
                                 "indices")
@@ -172,8 +172,8 @@ class UnitTest(unittest.TestCase):
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
         status, msg = self.elr.create_repo(
-                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
-                                                 self.cfg.repo_name))
+            self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+                                             self.cfg.repo_name))
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.run_program(self.args,
@@ -193,8 +193,8 @@ class UnitTest(unittest.TestCase):
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
         status, msg = self.elr.create_repo(
-                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
-                                                 self.cfg.repo_name))
+            self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+                                             self.cfg.repo_name))
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.run_program(self.args,
@@ -214,8 +214,8 @@ class UnitTest(unittest.TestCase):
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
         status, msg = self.elr.create_repo(
-                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
-                                                 self.cfg.repo_name))
+            self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+                                             self.cfg.repo_name))
         elastic_db_dump.run_program(self.args, self.func_dict)
         els = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port,
                                               repo=self.cfg.repo_name)
