@@ -10,6 +10,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - run_program:  Fixed handling command line arguments from SonarQube scan finding.
 
 ### Changed
+- run_program:  Changed variable names to standard naming convention.
 - list_repos:  Changed variable names to standard naming convention.
 - list_dumps:  Changed variable names to standard naming convention.
 - initate_dump:  Changed variable names to standard naming convention.

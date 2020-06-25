@@ -233,10 +233,9 @@ def run_program(args_array, func_dict, **kwargs):
 
         # Find which functions to call.
         for opt in set(args_array.keys()) & set(func_dict.keys()):
-            es = elastic_class.ElasticSearchDump(cfg.host, cfg.port,
-                                                 args_array.get(opt, None),
-                                                 **kwargs)
-            func_dict[opt](es, args_array=args_array, **kwargs)
+            els = elastic_class.ElasticSearchDump(
+                cfg.host, cfg.port, args_array.get(opt, None), **kwargs)
+            func_dict[opt](els, args_array=args_array, **kwargs)
 
         del prog_lock
 
