@@ -90,6 +90,7 @@ class UnitTest(unittest.TestCase):
                 self.repo_name = "Test_Repo_Name"
                 self.cluster_name = "Test_Cluster_Name"
                 self.dump_status = "SUCCESS"
+                self.dbs = None
 
             def dump_db(self, **kwargs):
 
@@ -105,6 +106,7 @@ class UnitTest(unittest.TestCase):
 
                 err_flag = False
                 status_msg = None
+                self.dbs = kwargs.get("dbs")
 
                 if not self.repo_name:
                     status_msg = "ERROR:  Repository name not set."
