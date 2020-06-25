@@ -95,8 +95,9 @@ class UnitTest(unittest.TestCase):
                                           self.cfg.repo_name))
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.create_repo(self.els,
-                             args_array=self.args_array))
+            self.assertFalse(
+                elastic_db_dump.create_repo(self.els,
+                                            args_array=self.args_array))
 
     def test_repo_create(self):
 

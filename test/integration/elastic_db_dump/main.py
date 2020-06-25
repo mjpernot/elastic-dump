@@ -104,7 +104,7 @@ class UnitTest(unittest.TestCase):
         cmdline.argv = self.argv_list
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        status, msg = self.elr.create_repo(
+        _, _ = self.elr.create_repo(
             self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
                                              self.cfg.repo_name))
         elastic_db_dump.main()
@@ -252,7 +252,7 @@ class UnitTest(unittest.TestCase):
         cmdline.argv = self.argv_list
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        status, msg = self.elr.create_repo(
+        _, _ = self.elr.create_repo(
             self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
                                              self.cfg.repo_name))
 
@@ -274,7 +274,7 @@ class UnitTest(unittest.TestCase):
         cmdline.argv = self.argv_list
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        status, msg = self.elr.create_repo(
+        _, _ = self.elr.create_repo(
             self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
                                              self.cfg.repo_name))
 
@@ -297,7 +297,7 @@ class UnitTest(unittest.TestCase):
         cmdline.argv = self.argv_list
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        status, msg = self.elr.create_repo(
+        _, _ = self.elr.create_repo(
             self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
                                              self.cfg.repo_name))
         elastic_db_dump.main()

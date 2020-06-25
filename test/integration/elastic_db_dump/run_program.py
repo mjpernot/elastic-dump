@@ -104,7 +104,7 @@ class UnitTest(unittest.TestCase):
         self.args["-i"] = dbs
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        status, msg = self.elr.create_repo(
+        _, _ = self.elr.create_repo(
             self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
                                              self.cfg.repo_name))
         elastic_db_dump.run_program(self.args, self.func_dict)
@@ -171,7 +171,7 @@ class UnitTest(unittest.TestCase):
         self.args["-L"] = self.cfg.repo_name
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        status, msg = self.elr.create_repo(
+        _, _ = self.elr.create_repo(
             self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
                                              self.cfg.repo_name))
 
@@ -192,7 +192,7 @@ class UnitTest(unittest.TestCase):
         self.args["-R"] = True
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        status, msg = self.elr.create_repo(
+        _, _ = self.elr.create_repo(
             self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
                                              self.cfg.repo_name))
 
@@ -213,7 +213,7 @@ class UnitTest(unittest.TestCase):
         self.args["-D"] = self.cfg.repo_name
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        status, msg = self.elr.create_repo(
+        _, _ = self.elr.create_repo(
             self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
                                              self.cfg.repo_name))
         elastic_db_dump.run_program(self.args, self.func_dict)
