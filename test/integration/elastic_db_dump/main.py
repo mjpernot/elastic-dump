@@ -108,8 +108,6 @@ class UnitTest(unittest.TestCase):
                 self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
                                                  self.cfg.repo_name))
         elastic_db_dump.main()
-        els = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port,
-                                              repo=self.cfg.repo_name)
         dir_path = os.path.join(self.cfg.phy_repo_dir, self.cfg.repo_name,
                                 "indices")
 
@@ -325,19 +323,7 @@ class UnitTest(unittest.TestCase):
         """
 
         if self.elr and ("-C" in self.argv_list or "-L" in self.argv_list or
-                         "-R" in self.argv_list):
-
-            err_flag, status_msg = self.elr.delete_repo(self.cfg.repo_name)
-
-            if err_flag:
-                print("Error: Failed to remove repository '%s'"
-                      % self.cfg.repo_name)
-                print("Reason: '%s'" % (status_msg))
-
-            if os.path.isdir(self.phy_repo_dir):
-                shutil.rmtree(self.phy_repo_dir)
-
-        elif self.elr and "-D" in self.argv_list:
+                         "-R" in self.argv_list or "-D" in self.argv_list):
 
             err_flag, status_msg = self.elr.delete_repo(self.cfg.repo_name)
 
