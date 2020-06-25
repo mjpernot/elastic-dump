@@ -83,14 +83,14 @@ def help_message(**kwargs):
     print(__doc__)
 
 
-def create_repo(es, **kwargs):
+def create_repo(els, **kwargs):
 
     """Function:  create_repo
 
     Description:  Create a repository for Elasticsearch database dumps.
 
     Arguments:
-        (input) es -> ElasticSearch class instance.
+        (input) els -> ElasticSearch class instance.
         (input) **kwargs:
             args_array -> Dict of command line options and values.
 
@@ -99,15 +99,15 @@ def create_repo(es, **kwargs):
     args_array = dict(kwargs.get("args_array"))
     repo_name = args_array.get("-C")
     repo_dir = args_array.get("-l")
-    er = elastic_class.ElasticSearchRepo(es.hosts, es.port)
+    elr = elastic_class.ElasticSearchRepo(els.hosts, els.port)
 
-    if repo_name in er.repo_dict:
+    if repo_name in elr.repo_dict:
         print("ERROR:  '%s' repository already exists at: '%s'"
               % (repo_name, repo_dir))
 
     else:
-        err_flag, msg = er.create_repo(repo_name,
-                                       os.path.join(repo_dir, repo_name))
+        err_flag, msg = elr.create_repo(repo_name,
+                                        os.path.join(repo_dir, repo_name))
 
         if err_flag:
             print("Error detected for Repository: '%s' at '%s'"
