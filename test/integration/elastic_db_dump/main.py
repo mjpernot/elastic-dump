@@ -103,12 +103,14 @@ class UnitTest(unittest.TestCase):
         sys.argv = self.argv_list
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        status, msg = self.elr.create_repo(self.cfg.repo_name,
-                                           self.cfg.repo_dir)
+        status, msg = self.elr.create_repo(
+                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+                                                 self.cfg.repo_name))
         elastic_db_dump.main()
         els = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port,
                                               repo=self.cfg.repo_name)
-        dir_path = os.path.join(self.cfg.repo_dir, "indices")
+        dir_path = os.path.join(self.cfg.phy_repo_dir, self.cfg.repo_name,
+                                "indices")
 
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
@@ -243,8 +245,9 @@ class UnitTest(unittest.TestCase):
         sys.argv = self.argv_list
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        status, msg = self.elr.create_repo(self.cfg.repo_name,
-                                           self.cfg.repo_dir)
+        status, msg = self.elr.create_repo(
+                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+                                                 self.cfg.repo_name))
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.main())
@@ -263,8 +266,9 @@ class UnitTest(unittest.TestCase):
         sys.argv = self.argv_list
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        status, msg = self.elr.create_repo(self.cfg.repo_name,
-                                           self.cfg.repo_dir)
+        status, msg = self.elr.create_repo(
+                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+                                                 self.cfg.repo_name))
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.main())
@@ -284,8 +288,9 @@ class UnitTest(unittest.TestCase):
         sys.argv = self.argv_list
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        status, msg = self.elr.create_repo(self.cfg.repo_name,
-                                           self.cfg.repo_dir)
+        status, msg = self.elr.create_repo(
+                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+                                                 self.cfg.repo_name))
         elastic_db_dump.main()
         els = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port,
                                               repo=self.cfg.repo_name)
@@ -309,7 +314,7 @@ class UnitTest(unittest.TestCase):
         """
 
         if self.elr and ("-C" in self.argv_list or "-L" in self.argv_list or
-                        "-R" in self.argv_list):
+                         "-R" in self.argv_list):
 
             err_flag, status_msg = self.elr.delete_repo(self.cfg.repo_name)
 
@@ -318,8 +323,8 @@ class UnitTest(unittest.TestCase):
                       % self.cfg.repo_name)
                 print("Reason: '%s'" % (status_msg))
 
-            if os.path.isdir(self.cfg.repo_dir):
-                os.rmdir(self.cfg.repo_dir)
+            if os.path.isdir(self.phy_repo_dir):
+                shutil.rmtree(self.phy_repo_dir)
 
         elif self.elr and "-D" in self.argv_list:
 
