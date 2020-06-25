@@ -100,17 +100,18 @@ class UnitTest(unittest.TestCase):
         # Capture the first database/indice name in Elasticsearch.
         dbs = [str([x.split()
                     for x in els.els.cat.indices().splitlines()][0][2])]
-
         self.args["-D"] = self.cfg.repo_name
         self.args["-i"] = dbs
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        status, msg = self.elr.create_repo(self.cfg.repo_name,
-                                           self.cfg.repo_dir)
+        status, msg = self.elr.create_repo(
+                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+                                                 self.cfg.repo_name))
         elastic_db_dump.run_program(self.args, self.func_dict)
         els = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port,
                                               repo=self.cfg.repo_name)
-        dir_path = os.path.join(self.cfg.repo_dir, "indices")
+        dir_path = os.path.join(self.cfg.phy_repo_dir, self.cfg.repo_name,
+                                "indices")
 
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
@@ -172,8 +173,9 @@ class UnitTest(unittest.TestCase):
         self.args["-L"] = self.cfg.repo_name
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        status, msg = self.elr.create_repo(self.cfg.repo_name,
-                                           self.cfg.repo_dir)
+        status, msg = self.elr.create_repo(
+                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+                                                 self.cfg.repo_name))
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.run_program(self.args,
@@ -192,8 +194,9 @@ class UnitTest(unittest.TestCase):
         self.args["-R"] = True
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        status, msg = self.elr.create_repo(self.cfg.repo_name,
-                                           self.cfg.repo_dir)
+        status, msg = self.elr.create_repo(
+                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+                                                 self.cfg.repo_name))
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.run_program(self.args,
@@ -212,8 +215,9 @@ class UnitTest(unittest.TestCase):
         self.args["-D"] = self.cfg.repo_name
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        status, msg = self.elr.create_repo(self.cfg.repo_name,
-                                           self.cfg.repo_dir)
+        status, msg = self.elr.create_repo(
+                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+                                                 self.cfg.repo_name))
         elastic_db_dump.run_program(self.args, self.func_dict)
         els = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port,
                                               repo=self.cfg.repo_name)
