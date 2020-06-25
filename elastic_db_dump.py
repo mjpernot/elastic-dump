@@ -177,19 +177,19 @@ def initate_dump(els, dbs_list=None, **kwargs):
             print(prt_template % (status_msg))
 
 
-def list_dumps(es, **kwargs):
+def list_dumps(els, **kwargs):
 
     """Function:  list_dumps
 
     Description:  Lists the dumps in a repository.
 
     Arguments:
-        (input) es -> Elasticsearch class instance.
+        (input) els -> Elasticsearch class instance.
 
     """
 
-    if es.repo_name:
-        elastic_libs.list_dumps(es.dump_list, **kwargs)
+    if els.repo_name:
+        elastic_libs.list_dumps(els.dump_list, **kwargs)
 
     else:
         print("WARNING:  Repository name not found or not passed.")
