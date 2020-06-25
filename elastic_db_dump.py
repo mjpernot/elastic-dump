@@ -145,6 +145,8 @@ def initate_dump(es, dbs_list=None, **kwargs):
 
     """
 
+    prt_template = "Message:  %s"
+
     if "-i" in kwargs.get("args_array"):
         dbs_list = ','.join(kwargs.get("args_array").get("-i"))
 
@@ -153,14 +155,14 @@ def initate_dump(es, dbs_list=None, **kwargs):
     # Failed to execute dump
     if err_flag:
         print("Failed to execute dump on Cluster: %s" % (es.cluster_name))
-        print("Message:  %s" % (status_msg))
+        print(prt_template % (status_msg))
 
     # Check dump if anything other than success
     elif es.dump_status != "SUCCESS":
 
         if es.dump_status == "FAILED":
             print("Dump failed to finish on %s" % (es.cluster_name))
-            print("Message:  %s" % (status_msg))
+            print(prt_template % (status_msg))
 
         elif es.dump_status == "PARTIAL":
             print("Partial dump completed on %s" % (es.cluster_name))
@@ -172,7 +174,7 @@ def initate_dump(es, dbs_list=None, **kwargs):
 
         else:
             print("Unknown error detected on %s" % (es.cluster_name))
-            print("Message:  %s" % (status_msg))
+            print(prt_template % (status_msg))
 
 
 def list_dumps(es, **kwargs):
