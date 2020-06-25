@@ -90,7 +90,9 @@ class UnitTest(unittest.TestCase):
 
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
-        self.elr.create_repo(self.cfg.repo_name, self.cfg.repo_dir)
+        self.elr.create_repo(self.cfg.repo_name,
+                             os.path.join(self.cfg.repo_dir,
+                                          self.cfg.repo_name))
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.create_repo(self.els,
