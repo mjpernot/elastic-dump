@@ -115,19 +115,19 @@ def create_repo(els, **kwargs):
             print("Reason: '%s'" % (msg))
 
 
-def print_failures(es, **kwargs):
+def print_failures(els, **kwargs):
 
     """Function:  print_failures
 
     Description:  Prints out failures detected within the class.
 
     Arguments:
-        (input) es -> Elasticsearch class instance.
+        (input) els -> Elasticsearch class instance.
 
     """
 
-    print("Failed to dump on %s shards" % (es.failed_shards))
-    print("Detected failures: %s" % (es.failures))
+    print("Failed to dump on %s shards" % (els.failed_shards))
+    print("Detected failures: %s" % (els.failures))
 
 
 def initate_dump(es, dbs_list=None, **kwargs):
