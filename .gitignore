@@ -8,3 +8,4 @@ elastic_lib
 config/*.py
 test/integration/elastic_db_dump/config/elastic.py
 test/blackbox/elastic_db_dump/config/elastic.py
+test/blackbox/elastic_db_dump/blackbox_test.sh
