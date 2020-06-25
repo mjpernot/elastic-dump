@@ -149,7 +149,7 @@ def main():
 
     elif "-R" in args_array:
         elr = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
-                                args_array["-R"])
+                                 args_array["-R"])
         _ = remove_repo(elr, args_array["-R"], args_array["-P"])
 
     elif "-i" in args_array and "-D" in args_array:
