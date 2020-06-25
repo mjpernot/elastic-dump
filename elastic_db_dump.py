@@ -195,19 +195,19 @@ def list_dumps(els, **kwargs):
         print("WARNING:  Repository name not found or not passed.")
 
 
-def list_repos(es, **kwargs):
+def list_repos(els, **kwargs):
 
     """Function:  list_repos
 
     Description:  Lists the repositories present.
 
     Arguments:
-        (input) es -> Elasticsearch class instance.
+        (input) els -> Elasticsearch class instance.
 
     """
 
-    er = elastic_class.ElasticSearchRepo(es.hosts, es.port)
-    elastic_libs.list_repos2(er.repo_dict)
+    elr = elastic_class.ElasticSearchRepo(els.hosts, els.port)
+    elastic_libs.list_repos2(elr.repo_dict)
 
 
 def run_program(args_array, func_dict, **kwargs):
