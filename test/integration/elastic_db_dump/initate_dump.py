@@ -69,7 +69,7 @@ class UnitTest(unittest.TestCase):
         self.cfg = gen_libs.load_module("elastic", self.config_path)
         self.args_array = {}
         self.phy_repo_dir = os.path.join(self.cfg.phy_repo_dir,
-                                         self.cfg.repo_dir)
+                                         self.cfg.repo_name)
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
 
@@ -78,7 +78,9 @@ class UnitTest(unittest.TestCase):
             self.skipTest("Pre-conditions not met.")
 
         else:
-            _, _ = self.elr.create_repo(self.cfg.repo_name, self.cfg.repo_dir)
+            _, _ = self.elr.create_repo(
+                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+                                                 self.cfg.repo_name))
 
             self.els = elastic_class.ElasticSearchDump(
                 self.cfg.host, self.cfg.port, repo=self.cfg.repo_name)
@@ -100,7 +102,8 @@ class UnitTest(unittest.TestCase):
 
         elastic_db_dump.initate_dump(self.els, args_array=self.args_array)
 
-        dir_path = os.path.join(self.cfg.repo_dir, "indices")
+        dir_path = os.path.join(self.cfg.phy_repo_dir, self.cfg.repo_name,
+                                "indices")
 
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
@@ -124,9 +127,10 @@ class UnitTest(unittest.TestCase):
 
         self.args_array = {"-i": dbs}
 
-        elastic_db_dump.initate_dump(self.es, args_array=self.args_array)
+        elastic_db_dump.initate_dump(self.els, args_array=self.args_array)
 
-        dir_path = os.path.join(self.cfg.repo_dir, "indices")
+        dir_path = os.path.join(self.cfg.phy_repo_dir, self.cfg.repo_name,
+                                "indices")
 
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
