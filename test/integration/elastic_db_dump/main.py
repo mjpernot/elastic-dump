@@ -94,13 +94,14 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        cmdline = gen_libs.get_inst(sys)
         els = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port)
         self.argv_list.append("-D")
         self.argv_list.append(self.cfg.repo_name)
         self.argv_list.append("-i")
         self.argv_list.append(
             str([x.split() for x in els.els.cat.indices().splitlines()][0][2]))
-        sys.argv = self.argv_list
+        cmdline.argv = self.argv_list
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
         status, msg = self.elr.create_repo(
@@ -128,8 +129,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        cmdline = gen_libs.get_inst(sys)
         self.argv_list.append("-v")
-        sys.argv = self.argv_list
+        cmdline.argv = self.argv_list
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.main())
@@ -144,9 +146,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        cmdline = gen_libs.get_inst(sys)
         self.argv_list.remove("-c")
         self.argv_list.remove("elastic")
-        sys.argv = self.argv_list
+        cmdline.argv = self.argv_list
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.main())
@@ -161,9 +164,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        cmdline = gen_libs.get_inst(sys)
         self.argv_list.append("-L")
         self.argv_list.append("-D")
-        sys.argv = self.argv_list
+        cmdline.argv = self.argv_list
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.main())
@@ -178,9 +182,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        cmdline = gen_libs.get_inst(sys)
         self.argv_list.append("-C")
         self.argv_list.append("TEST_VALUE")
-        sys.argv = self.argv_list
+        cmdline.argv = self.argv_list
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.main())
@@ -194,9 +199,11 @@ class UnitTest(unittest.TestCase):
         Arguments:
 
         """
+
+        cmdline = gen_libs.get_inst(sys)
         self.argv_list.remove(self.config_path)
         self.argv_list.append("TEST_DIR")
-        sys.argv = self.argv_list
+        cmdline.argv = self.argv_list
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.main())
@@ -211,11 +218,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        cmdline = gen_libs.get_inst(sys)
         self.argv_list.append("-C")
         self.argv_list.append(self.cfg.repo_name)
         self.argv_list.append("-l")
         self.argv_list.append(self.cfg.repo_dir)
-        sys.argv = self.argv_list
+        cmdline.argv = self.argv_list
 
         elastic_db_dump.main()
 
@@ -240,9 +248,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        cmdline = gen_libs.get_inst(sys)
         self.argv_list.append("-L")
         self.argv_list.append(self.cfg.repo_name)
-        sys.argv = self.argv_list
+        cmdline.argv = self.argv_list
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
         status, msg = self.elr.create_repo(
@@ -262,8 +271,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        cmdline = gen_libs.get_inst(sys)
         self.argv_list.append("-R")
-        sys.argv = self.argv_list
+        cmdline.argv = self.argv_list
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
         status, msg = self.elr.create_repo(
@@ -283,9 +293,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        cmdline = gen_libs.get_inst(sys)
         self.argv_list.append("-D")
         self.argv_list.append(self.cfg.repo_name)
-        sys.argv = self.argv_list
+        cmdline.argv = self.argv_list
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
         status, msg = self.elr.create_repo(
