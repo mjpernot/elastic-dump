@@ -130,7 +130,7 @@ def print_failures(els, **kwargs):
     print("Detected failures: %s" % (els.failures))
 
 
-def initate_dump(es, dbs_list=None, **kwargs):
+def initate_dump(els, dbs_list=None, **kwargs):
 
     """Function:  initate_dump
 
@@ -138,7 +138,7 @@ def initate_dump(es, dbs_list=None, **kwargs):
         the return status of the database dump.
 
     Arguments:
-        (input) es -> Elasticsearch class instance.
+        (input) els -> Elasticsearch class instance.
         (input) dbs_list -> String of comma-delimited indice names to dump.
         (input) **kwargs:
             args_array -> Dict of command line options and values.
@@ -150,30 +150,30 @@ def initate_dump(es, dbs_list=None, **kwargs):
     if "-i" in kwargs.get("args_array"):
         dbs_list = ','.join(kwargs.get("args_array").get("-i"))
 
-    err_flag, status_msg = es.dump_db(dbs=dbs_list)
+    err_flag, status_msg = els.dump_db(dbs=dbs_list)
 
     # Failed to execute dump
     if err_flag:
-        print("Failed to execute dump on Cluster: %s" % (es.cluster_name))
+        print("Failed to execute dump on Cluster: %s" % (els.cluster_name))
         print(prt_template % (status_msg))
 
     # Check dump if anything other than success
-    elif es.dump_status != "SUCCESS":
+    elif els.dump_status != "SUCCESS":
 
-        if es.dump_status == "FAILED":
-            print("Dump failed to finish on %s" % (es.cluster_name))
+        if els.dump_status == "FAILED":
+            print("Dump failed to finish on %s" % (els.cluster_name))
             print(prt_template % (status_msg))
 
-        elif es.dump_status == "PARTIAL":
-            print("Partial dump completed on %s" % (es.cluster_name))
+        elif els.dump_status == "PARTIAL":
+            print("Partial dump completed on %s" % (els.cluster_name))
             print_failures
 
-        elif es.dump_status == "INCOMPATIBLE":
+        elif els.dump_status == "INCOMPATIBLE":
             print("Older version of Elasticsearch in repo detected %s"
-                  % (es.cluster_name))
+                  % (els.cluster_name))
 
         else:
-            print("Unknown error detected on %s" % (es.cluster_name))
+            print("Unknown error detected on %s" % (els.cluster_name))
             print(prt_template % (status_msg))
 
 
