@@ -153,13 +153,8 @@ class UnitTest(unittest.TestCase):
         elastic_db_dump.initate_dump(self.els, args_array=self.args_array)
 
         # If index dump directory exists, then test is a failure.
-        if os.path.isdir(os.path.join(self.cfg.repo_dir, "indices")):
-            status = False
-
-        else:
-            status = True
-
-        self.assertTrue(status)
+        self.assertFalse(
+            os.path.isdir(os.path.join(self.cfg.repo_dir, "indices")))
 
     def test_no_i_option(self):
 
@@ -173,13 +168,7 @@ class UnitTest(unittest.TestCase):
 
         elastic_db_dump.initate_dump(self.els, args_array=self.args_array)
 
-        if self.els.dump_list:
-            status = True
-
-        else:
-            status = False
-
-        self.assertTrue(status)
+        self.assertTrue(self.els.dump_list)
 
     def test_initate_dump(self):
 
@@ -193,13 +182,7 @@ class UnitTest(unittest.TestCase):
 
         elastic_db_dump.initate_dump(self.els, args_array=self.args_array)
 
-        if self.els.dump_list:
-            status = True
-
-        else:
-            status = False
-
-        self.assertTrue(status)
+        self.assertTrue(self.els.dump_list)
 
     def tearDown(self):
 
