@@ -150,13 +150,7 @@ class UnitTest(unittest.TestCase):
         self.elr = elastic_class.ElasticSearchRepo(
             self.cfg.host, self.cfg.port, repo=self.cfg.repo_name)
 
-        if self.cfg.repo_name in self.elr.repo_dict:
-            status = True
-
-        else:
-            status = False
-
-        self.assertTrue(status)
+        self.assertTrue(self.cfg.repo_name in self.elr.repo_dict)
 
     def test_list_dumps(self):
 
@@ -220,13 +214,7 @@ class UnitTest(unittest.TestCase):
         els = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port,
                                               repo=self.cfg.repo_name)
 
-        if els.dump_list:
-            status = True
-
-        else:
-            status = False
-
-        self.assertTrue(status)
+        self.assertTrue(els.dump_list)
 
     def tearDown(self):
 
