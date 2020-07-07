@@ -114,13 +114,7 @@ class UnitTest(unittest.TestCase):
         self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
                                                    self.cfg.port)
 
-        if self.cfg.repo_name in self.elr.repo_dict:
-            status = True
-
-        else:
-            status = False
-
-        self.assertTrue(status)
+        self.assertTrue(self.cfg.repo_name in self.elr.repo_dict)
 
     def tearDown(self):
 
