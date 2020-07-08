@@ -35,71 +35,69 @@ import version
 __version__ = version.__version__
 
 
-def list_dumps(es, **kwargs):
+def list_dumps(els, **kwargs):
 
     """Function:  list_dumps
 
     Description:  This is a function stub for elastic_db_dump.list_dumps.
 
     Arguments:
-        es -> Stub argument holder.
+        els -> Stub argument holder.
 
     """
 
-    pass
+    status = True
+
+    if els and dict(kwargs.get("args_array")):
+        status = True
+
+    return status
 
 
-def disk_usage(es, **kwargs):
+def disk_usage(els, **kwargs):
 
     """Function:  disk_usage
 
     Description:  This is a function stub for elastic_db_dump.disk_usage.
 
     Arguments:
-        es -> Stub argument holder.
+        els -> Stub argument holder.
 
     """
 
-    pass
+    status = True
+
+    if els and dict(kwargs.get("args_array")):
+        status = True
+
+    return status
 
 
 class ProgramLock(object):
 
     """Class:  ProgramLock
 
-    Description:  Mock of the gen_class.ProgramLock class.
+    Description:  Class stub holder for gen_class.ProgramLock class.
 
     Methods:
-        __init__ -> Class instance initilization.
-        __del__ -> Deletion of the ProgramLock instance.
+        __init__ -> Class initialization.
 
     """
 
-    def __init__(self, argv, flavor_id=""):
+    def __init__(self, cmdline, flavor):
 
         """Method:  __init__
 
-        Description:  Initialization of an instance of the ProgramLock class.
+        Description:  Class initialization.
 
         Arguments:
-            (input) argv -> Arguments from the command line.
-            (input) flavor_id -> Unique identifier for an instance.
+            (input) cmdline -> Argv command line.
+            (input) flavor -> Lock flavor ID.
 
         """
 
-        self.lock_created = True
-
-    def __del__(self):
-
-        """Method:  __del__
-
-        Description:  Deletion of the ProgramLock instance.
-
-        Arguments:
-
-        """
-
-        return True
+        self.cmdline = cmdline
+        self.flavor = flavor
 
 
 class UnitTest(unittest.TestCase):
@@ -151,10 +149,10 @@ class UnitTest(unittest.TestCase):
                 self.host = "SERVER_NAME"
                 self.port = 9200
 
-        self.ct = CfgTest()
-
+        self.cfg = CfgTest()
         self.args = {"-c": "config_file", "-d": "config_dir"}
         self.func_dict = {"-L": list_dumps, "-U": disk_usage}
+        self.proglock = ProgramLock(["cmdline"], "FlavorID")
 
     @mock.patch("elastic_db_dump.gen_libs.load_module")
     @mock.patch("elastic_db_dump.elastic_class.ElasticSearchDump")
@@ -175,7 +173,7 @@ class UnitTest(unittest.TestCase):
         mock_lock.side_effect = \
             elastic_db_dump.gen_class.SingleInstanceException
         mock_class.return_value = "Elastic_Class"
-        mock_load.return_value = self.ct
+        mock_load.return_value = self.cfg
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.run_program(self.args,
@@ -198,9 +196,9 @@ class UnitTest(unittest.TestCase):
         self.args["-U"] = True
         self.args["-L"] = True
 
-        mock_lock.ProgramLock.return_value = ProgramLock([], "FlavorID")
+        mock_lock.return_value = self.proglock
         mock_class.return_value = "Elastic_Class"
-        mock_load.return_value = self.ct
+        mock_load.return_value = self.cfg
 
         self.assertFalse(elastic_db_dump.run_program(self.args,
                                                      self.func_dict))
@@ -220,9 +218,9 @@ class UnitTest(unittest.TestCase):
 
         self.args["-L"] = True
 
-        mock_lock.ProgramLock.return_value = ProgramLock([], "FlavorID")
+        mock_lock.return_value = self.proglock
         mock_class.return_value = "Elastic_Class"
-        mock_load.return_value = self.ct
+        mock_load.return_value = self.cfg
 
         self.assertFalse(elastic_db_dump.run_program(self.args,
                                                      self.func_dict))
@@ -240,9 +238,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_lock.ProgramLock.return_value = ProgramLock([], "FlavorID")
+        mock_lock.return_value = self.proglock
         mock_class.return_value = "Elastic_Class"
-        mock_load.return_value = self.ct
+        mock_load.return_value = self.cfg
 
         self.assertFalse(elastic_db_dump.run_program(self.args,
                                                      self.func_dict))

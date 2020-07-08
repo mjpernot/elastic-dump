@@ -90,6 +90,7 @@ class UnitTest(unittest.TestCase):
                 self.repo_name = "Test_Repo_Name"
                 self.cluster_name = "Test_Cluster_Name"
                 self.dump_status = "SUCCESS"
+                self.dbs = None
 
             def dump_db(self, **kwargs):
 
@@ -105,6 +106,7 @@ class UnitTest(unittest.TestCase):
 
                 err_flag = False
                 status_msg = None
+                self.dbs = kwargs.get("dbs")
 
                 if not self.repo_name:
                     status_msg = "ERROR:  Repository name not set."
@@ -112,7 +114,7 @@ class UnitTest(unittest.TestCase):
 
                 return err_flag, status_msg
 
-        self.es = ElasticSearchDump()
+        self.els = ElasticSearchDump()
         self.args_array = {}
 
     def test_with_option(self):
@@ -129,7 +131,7 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.initate_dump(
-                self.es, args_array=self.args_array))
+                self.els, args_array=self.args_array))
 
     def test_no_i_option(self):
 
@@ -143,7 +145,7 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.initate_dump(
-                self.es, args_array=self.args_array))
+                self.els, args_array=self.args_array))
 
     def test_err_flag_true(self):
 
@@ -155,11 +157,11 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.es.repo_name = None
+        self.els.repo_name = None
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.initate_dump(
-                self.es, args_array=self.args_array))
+                self.els, args_array=self.args_array))
 
     def test_err_flag_false(self):
 
@@ -172,7 +174,7 @@ class UnitTest(unittest.TestCase):
         """
 
         self.assertFalse(elastic_db_dump.initate_dump(
-            self.es, args_array=self.args_array))
+            self.els, args_array=self.args_array))
 
     def test_dump_status_success(self):
 
@@ -185,7 +187,7 @@ class UnitTest(unittest.TestCase):
         """
 
         self.assertFalse(elastic_db_dump.initate_dump(
-            self.es, args_array=self.args_array))
+            self.els, args_array=self.args_array))
 
     def test_dump_status_unknown(self):
 
@@ -197,11 +199,11 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.es.dump_status = "unknown"
+        self.els.dump_status = "unknown"
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.initate_dump(
-                self.es, args_array=self.args_array))
+                self.els, args_array=self.args_array))
 
     def test_dump_status_incomp(self):
 
@@ -213,11 +215,11 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.es.dump_status = "INCOMPATIBLE"
+        self.els.dump_status = "INCOMPATIBLE"
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.initate_dump(
-                self.es, args_array=self.args_array))
+                self.els, args_array=self.args_array))
 
     @mock.patch("elastic_db_dump.print_failures")
     def test_dump_status_partial(self, mock_print):
@@ -232,11 +234,11 @@ class UnitTest(unittest.TestCase):
 
         mock_print.return_value = True
 
-        self.es.dump_status = "PARTIAL"
+        self.els.dump_status = "PARTIAL"
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.initate_dump(
-                self.es, args_array=self.args_array))
+                self.els, args_array=self.args_array))
 
     def test_dump_status_failed(self):
 
@@ -248,11 +250,11 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.es.dump_status = "FAILED"
+        self.els.dump_status = "FAILED"
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.initate_dump(
-                self.es, args_array=self.args_array))
+                self.els, args_array=self.args_array))
 
 
 if __name__ == "__main__":

@@ -82,7 +82,7 @@ class UnitTest(unittest.TestCase):
                 self.repo_name = "Test_Repo_Name"
                 self.dump_list = []
 
-        self.es = ElasticSearchDump()
+        self.els = ElasticSearchDump()
 
     @mock.patch("elastic_db_dump.elastic_libs.list_dumps")
     def test_repo_name_true(self, mock_list):
@@ -97,7 +97,7 @@ class UnitTest(unittest.TestCase):
 
         mock_list.return_value = True
 
-        self.assertFalse(elastic_db_dump.list_dumps(self.es))
+        self.assertFalse(elastic_db_dump.list_dumps(self.els))
 
     def test_repo_name_false(self):
 
@@ -109,10 +109,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.es.repo_name = None
+        self.els.repo_name = None
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.list_dumps(self.es))
+            self.assertFalse(elastic_db_dump.list_dumps(self.els))
 
 
 if __name__ == "__main__":
