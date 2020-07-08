@@ -68,20 +68,22 @@ class UnitTest(unittest.TestCase):
         self.config_path = os.path.join(self.test_path, "config")
         self.cfg = gen_libs.load_module("elastic", self.config_path)
         self.args_array = {}
+        self.phy_repo_dir = os.path.join(self.cfg.phy_repo_dir,
+                                         self.cfg.repo_name)
+        self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
+                                                   self.cfg.port)
 
-        self.er = elastic_class.ElasticSearchRepo(self.cfg.host,
-                                                  self.cfg.port)
-
-        if self.er.repo_dict:
+        if self.elr.repo_dict:
             print("ERROR: Test environment not clean - repositories exist.")
             self.skipTest("Pre-conditions not met.")
 
         else:
-            _, _ = self.er.create_repo(self.cfg.repo_name, self.cfg.repo_dir)
+            _, _ = self.elr.create_repo(
+                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+                                                 self.cfg.repo_name))
 
-            self.es = elastic_class.ElasticSearchDump(self.cfg.host,
-                                                      self.cfg.port,
-                                                      repo=self.cfg.repo_name)
+            self.els = elastic_class.ElasticSearchDump(
+                self.cfg.host, self.cfg.port, repo=self.cfg.repo_name)
 
     def test_i_option_multi_db(self):
 
@@ -93,15 +95,15 @@ class UnitTest(unittest.TestCase):
 
         """
         # Capture 2 databases/indices name in Elasticsearch.
-        dbs = [str(y[2])
-               for y in [x.split()
-                         for x in self.es.es.cat.indices().splitlines()]][0:2]
+        dbs = [str(y[2]) for y in [
+            x.split() for x in self.els.els.cat.indices().splitlines()]][0:2]
 
         self.args_array = {"-i": dbs}
 
-        elastic_db_dump.initate_dump(self.es, args_array=self.args_array)
+        elastic_db_dump.initate_dump(self.els, args_array=self.args_array)
 
-        dir_path = os.path.join(self.cfg.repo_dir, "indices")
+        dir_path = os.path.join(self.cfg.phy_repo_dir, self.cfg.repo_name,
+                                "indices")
 
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
@@ -121,13 +123,14 @@ class UnitTest(unittest.TestCase):
 
         # Capture the first database/indice name in Elasticsearch.
         dbs = [str([x.split()
-                    for x in self.es.es.cat.indices().splitlines()][0][2])]
+                    for x in self.els.els.cat.indices().splitlines()][0][2])]
 
         self.args_array = {"-i": dbs}
 
-        elastic_db_dump.initate_dump(self.es, args_array=self.args_array)
+        elastic_db_dump.initate_dump(self.els, args_array=self.args_array)
 
-        dir_path = os.path.join(self.cfg.repo_dir, "indices")
+        dir_path = os.path.join(self.cfg.phy_repo_dir, self.cfg.repo_name,
+                                "indices")
 
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
@@ -147,16 +150,11 @@ class UnitTest(unittest.TestCase):
 
         self.args_array = {"-i": ["Incorrect_Database_Name"]}
 
-        elastic_db_dump.initate_dump(self.es, args_array=self.args_array)
+        elastic_db_dump.initate_dump(self.els, args_array=self.args_array)
 
         # If index dump directory exists, then test is a failure.
-        if os.path.isdir(os.path.join(self.cfg.repo_dir, "indices")):
-            status = False
-
-        else:
-            status = True
-
-        self.assertTrue(status)
+        self.assertFalse(
+            os.path.isdir(os.path.join(self.cfg.repo_dir, "indices")))
 
     def test_no_i_option(self):
 
@@ -168,15 +166,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        elastic_db_dump.initate_dump(self.es, args_array=self.args_array)
+        elastic_db_dump.initate_dump(self.els, args_array=self.args_array)
 
-        if self.es.dump_list:
-            status = True
-
-        else:
-            status = False
-
-        self.assertTrue(status)
+        self.assertTrue(self.els.dump_list)
 
     def test_initate_dump(self):
 
@@ -188,15 +180,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        elastic_db_dump.initate_dump(self.es, args_array=self.args_array)
+        elastic_db_dump.initate_dump(self.els, args_array=self.args_array)
 
-        if self.es.dump_list:
-            status = True
-
-        else:
-            status = False
-
-        self.assertTrue(status)
+        self.assertTrue(self.els.dump_list)
 
     def tearDown(self):
 
@@ -208,15 +194,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        err_flag, status_msg = self.er.delete_repo(self.cfg.repo_name)
+        err_flag, status_msg = self.elr.delete_repo(self.cfg.repo_name)
 
         if err_flag:
             print("Error: Failed to remove repository '%s'"
                   % self.cfg.repo_name)
             print("Reason: '%s'" % (status_msg))
 
-        if os.path.isdir(self.cfg.repo_dir):
-            shutil.rmtree(self.cfg.repo_dir)
+        if os.path.isdir(self.phy_repo_dir):
+            shutil.rmtree(self.phy_repo_dir)
 
 
 if __name__ == "__main__":

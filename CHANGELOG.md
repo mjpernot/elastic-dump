@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [1.0.3] - 2020-06-24
+### Fixed
+- initate_dump:  Fixed call print_failures function.
+- main:  Fixed handling command line arguments from SonarQube scan finding.
+- run_program:  Fixed handling command line arguments from SonarQube scan finding.
+
+### Changed
+- run_program:  Changed variable names to standard naming convention.
+- list_repos:  Changed variable names to standard naming convention.
+- list_dumps:  Changed variable names to standard naming convention.
+- initate_dump:  Changed variable names to standard naming convention.
+- print_failures:  Changed variable names to standard naming convention.
+- create_repo:  Changed variable names to standard naming convention.
+- initate_dump: Added printing template variable.
+- Documentation updates.
+
+
 ## [1.0.2] - 2019-10-28
 ### Fixed
 - create_repo:  Fixed mutable list/dictionary argument issue.

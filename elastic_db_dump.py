@@ -6,24 +6,28 @@
     Description:  Execute a dump of an Elasticsearch database.
 
     Usage:
-        elastic_db_dump.py -c file -d path {-R | -C repo_name -l rep_dir
-            | -D [repo_name] [-i index1 {index2 ...}] | -L [repo_name]}
+        elastic_db_dump.py -c file -d path
+            {-C repo_name -l base_path |
+            -D [repo_name] [-i index1 {index2 ...}] |
+            -L [repo_name] | -R}
             [-v | -h]
 
     Arguments:
+        -c file => Elasticsearch configuration file.  Required argument.
+        -d dir path => Directory path for option '-c'.  Required argument.
         -C repo_name => Create new repository name.  Requires -l option.
+        -l base_path => Base directory path name for repository.
+            Used with the -C option.
         -D [repo_name] => Dump an Elasticsearch database.  repo_name is name
             of repository to dump.  repo_name is required if multiple
             repositories exist or if used in conjunction with -i option.
+        -i index1 {index2 ...} => One or more indices to dump.
+            Used with the -D option.
+            Can use wildcard searches in the index name.
         -L [repo_name] => List of database dumps for an Elasticsearch
-            database.  repo_name is name of repository to dump.  repo_name is
-            required if multiple repositories exist.
+            repository.
+            NOTE: repo_name is required if multiple repositories exist.
         -R => List of repositories in the Elasticsearch database.
-        -c file => Elasticsearch configuration file.  Required argument.
-        -d dir path => Directory path for option '-c'.  Required argument.
-        -i index1 {index2 ...} => One or more indices to dump.  Used with the
-            -D option.  Can use wildcard searches in the index name.
-        -l path => Directory path name for repository.
         -v => Display version of this program.
         -h => Help and usage message.
 
@@ -36,8 +40,9 @@
         database.
 
             # Elasticsearch configuration file.
-            name = "HOSTNAME"
-            port = PORT_NUMBER (default of Elasticsearch is 9200)
+            name = ["HOSTNAME1", "HOSTNAME2"]
+            # Default port for ElasticSearch is 9200.
+            port = 9200
 
         Configuration modules -> Name is runtime dependent as it can be used to
         connect to different databases with different names.
@@ -78,14 +83,14 @@ def help_message(**kwargs):
     print(__doc__)
 
 
-def create_repo(es, **kwargs):
+def create_repo(els, **kwargs):
 
     """Function:  create_repo
 
     Description:  Create a repository for Elasticsearch database dumps.
 
     Arguments:
-        (input) es -> ElasticSearch class instance.
+        (input) els -> ElasticSearch class instance.
         (input) **kwargs:
             args_array -> Dict of command line options and values.
 
@@ -94,15 +99,15 @@ def create_repo(es, **kwargs):
     args_array = dict(kwargs.get("args_array"))
     repo_name = args_array.get("-C")
     repo_dir = args_array.get("-l")
-    er = elastic_class.ElasticSearchRepo(es.hosts, es.port)
+    elr = elastic_class.ElasticSearchRepo(els.hosts, els.port)
 
-    if repo_name in er.repo_dict:
+    if repo_name in elr.repo_dict:
         print("ERROR:  '%s' repository already exists at: '%s'"
               % (repo_name, repo_dir))
 
     else:
-        err_flag, msg = er.create_repo(repo_name,
-                                       os.path.join(repo_dir, repo_name))
+        err_flag, msg = elr.create_repo(repo_name,
+                                        os.path.join(repo_dir, repo_name))
 
         if err_flag:
             print("Error detected for Repository: '%s' at '%s'"
@@ -110,22 +115,22 @@ def create_repo(es, **kwargs):
             print("Reason: '%s'" % (msg))
 
 
-def print_failures(es, **kwargs):
+def print_failures(els, **kwargs):
 
     """Function:  print_failures
 
     Description:  Prints out failures detected within the class.
 
     Arguments:
-        (input) es -> Elasticsearch class instance.
+        (input) els -> Elasticsearch class instance.
 
     """
 
-    print("Failed to dump on %s shards" % (es.failed_shards))
-    print("Detected failures: %s" % (es.failures))
+    print("Failed to dump on %s shards" % (els.failed_shards))
+    print("Detected failures: %s" % (els.failures))
 
 
-def initate_dump(es, dbs_list=None, **kwargs):
+def initate_dump(els, dbs_list=None, **kwargs):
 
     """Function:  initate_dump
 
@@ -133,74 +138,76 @@ def initate_dump(es, dbs_list=None, **kwargs):
         the return status of the database dump.
 
     Arguments:
-        (input) es -> Elasticsearch class instance.
+        (input) els -> Elasticsearch class instance.
         (input) dbs_list -> String of comma-delimited indice names to dump.
         (input) **kwargs:
             args_array -> Dict of command line options and values.
 
     """
 
+    prt_template = "Message:  %s"
+
     if "-i" in kwargs.get("args_array"):
         dbs_list = ','.join(kwargs.get("args_array").get("-i"))
 
-    err_flag, status_msg = es.dump_db(dbs=dbs_list)
+    err_flag, status_msg = els.dump_db(dbs=dbs_list)
 
     # Failed to execute dump
     if err_flag:
-        print("Failed to execute dump on Cluster: %s" % (es.cluster_name))
-        print("Message:  %s" % (status_msg))
+        print("Failed to execute dump on Cluster: %s" % (els.cluster_name))
+        print(prt_template % (status_msg))
 
     # Check dump if anything other than success
-    elif es.dump_status != "SUCCESS":
+    elif els.dump_status != "SUCCESS":
 
-        if es.dump_status == "FAILED":
-            print("Dump failed to finish on %s" % (es.cluster_name))
-            print("Message:  %s" % (status_msg))
+        if els.dump_status == "FAILED":
+            print("Dump failed to finish on %s" % (els.cluster_name))
+            print(prt_template % (status_msg))
 
-        elif es.dump_status == "PARTIAL":
-            print("Partial dump completed on %s" % (es.cluster_name))
-            print_failures
+        elif els.dump_status == "PARTIAL":
+            print("Partial dump completed on %s" % (els.cluster_name))
+            print_failures(els)
 
-        elif es.dump_status == "INCOMPATIBLE":
+        elif els.dump_status == "INCOMPATIBLE":
             print("Older version of Elasticsearch in repo detected %s"
-                  % (es.cluster_name))
+                  % (els.cluster_name))
 
         else:
-            print("Unknown error detected on %s" % (es.cluster_name))
-            print("Message:  %s" % (status_msg))
+            print("Unknown error detected on %s" % (els.cluster_name))
+            print(prt_template % (status_msg))
 
 
-def list_dumps(es, **kwargs):
+def list_dumps(els, **kwargs):
 
     """Function:  list_dumps
 
     Description:  Lists the dumps in a repository.
 
     Arguments:
-        (input) es -> Elasticsearch class instance.
+        (input) els -> Elasticsearch class instance.
 
     """
 
-    if es.repo_name:
-        elastic_libs.list_dumps(es.dump_list, **kwargs)
+    if els.repo_name:
+        elastic_libs.list_dumps(els.dump_list, **kwargs)
 
     else:
         print("WARNING:  Repository name not found or not passed.")
 
 
-def list_repos(es, **kwargs):
+def list_repos(els, **kwargs):
 
     """Function:  list_repos
 
     Description:  Lists the repositories present.
 
     Arguments:
-        (input) es -> Elasticsearch class instance.
+        (input) els -> Elasticsearch class instance.
 
     """
 
-    er = elastic_class.ElasticSearchRepo(es.hosts, es.port)
-    elastic_libs.list_repos2(er.repo_dict)
+    elr = elastic_class.ElasticSearchRepo(els.hosts, els.port)
+    elastic_libs.list_repos2(elr.repo_dict)
 
 
 def run_program(args_array, func_dict, **kwargs):
@@ -216,19 +223,19 @@ def run_program(args_array, func_dict, **kwargs):
 
     """
 
+    cmdline = gen_libs.get_inst(sys)
     args_array = dict(args_array)
     func_dict = dict(func_dict)
     cfg = gen_libs.load_module(args_array["-c"], args_array["-d"])
 
     try:
-        prog_lock = gen_class.ProgramLock(sys.argv, cfg.host)
+        prog_lock = gen_class.ProgramLock(cmdline.argv, cfg.host)
 
         # Find which functions to call.
         for opt in set(args_array.keys()) & set(func_dict.keys()):
-            es = elastic_class.ElasticSearchDump(cfg.host, cfg.port,
-                                                 args_array.get(opt, None),
-                                                 **kwargs)
-            func_dict[opt](es, args_array=args_array, **kwargs)
+            els = elastic_class.ElasticSearchDump(
+                cfg.host, cfg.port, args_array.get(opt, None), **kwargs)
+            func_dict[opt](els, args_array=args_array, **kwargs)
 
         del prog_lock
 
@@ -258,6 +265,7 @@ def main():
 
     """
 
+    cmdline = gen_libs.get_inst(sys)
     dir_chk_list = ["-d"]
     func_dict = {"-C": create_repo, "-D": initate_dump, "-L": list_dumps,
                  "-R": list_repos}
@@ -270,8 +278,8 @@ def main():
                     "-L": ["-C", "-D", "-R"], "-R": ["-C", "-D", "-L"]}
 
     # Process argument list from command line.
-    args_array = arg_parser.arg_parse2(sys.argv, opt_val_list, opt_val=opt_val,
-                                       multi_val=opt_multi_list)
+    args_array = arg_parser.arg_parse2(
+        cmdline.argv, opt_val_list, opt_val=opt_val, multi_val=opt_multi_list)
 
     if not gen_libs.help_func(args_array, __version__, help_message) \
        and not arg_parser.arg_require(args_array, opt_req_list) \
