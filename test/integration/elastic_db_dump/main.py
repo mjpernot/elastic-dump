@@ -43,17 +43,17 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Unit testing initilization.
-        test_initate_dump_i_option -> Test initiate dump call -i option.
-        test_help_func -> Test help call.
-        test_arg_require -> Test arg require call.
-        test_arg_xor_dict -> Test arg xor dict call.
-        test_arg_cond_req_or -> Test arg cond req or call.
-        test_arg_dir_chk_crt -> Test arg dir chk crt call.
-        test_create_repo -> Test create repo call.
-        test_list_dumps -> Test list dumps call.
-        test_list_repos -> Test list repos call.
-        test_initate_dump -> Test initiate dump call.
+        setUp
+        test_initate_dump_i_option
+        test_help_func
+        test_arg_require
+        test_arg_xor_dict
+        test_arg_cond_req_or
+        test_arg_dir_chk_crt
+        test_create_repo
+        test_list_dumps
+        test_list_repos
+        test_initate_dump
 
     """
 
