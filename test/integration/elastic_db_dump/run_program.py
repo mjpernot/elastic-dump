@@ -44,13 +44,13 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Unit testing initilization.
-        test_initate_dump_i_option -> Test initiate dump call -i option.
-        test_load_module -> Test load module call.
-        test_create_repo -> Test create repo call.
-        test_list_dumps -> Test list dumps call.
-        test_list_repos -> Test list repos call.
-        test_initate_dump -> Test initate dump call.
+        setUp
+        test_initate_dump_i_option
+        test_load_module
+        test_create_repo
+        test_list_dumps
+        test_list_repos
+        test_initate_dump
 
     """
 
