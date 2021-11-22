@@ -42,11 +42,11 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Unit testing initilization.
-        test_reponame_in_list -> Test repo name is in list.
-        test_reponame_not_in_list -> Test repo name is not in list.
-        test_err_flag_false -> Test err_flag is set to False.
-        test_err_flag_true -> Test err_flag is set to True.
+        setUp
+        test_reponame_in_list
+        test_reponame_not_in_list
+        test_err_flag_false
+        test_err_flag_true
 
     """
 
@@ -67,7 +67,7 @@ class UnitTest(unittest.TestCase):
             Description:  Class representation of the ElasticSearchDump class.
 
             Methods:
-                __init__ -> Initialize configuration environment.
+                __init__
 
             """
 
@@ -91,7 +91,7 @@ class UnitTest(unittest.TestCase):
             Description:  Class representation of the ElasticSearchRepo class.
 
             Methods:
-                __init__ -> Initialize configuration environment.
+                __init__
 
             """
 
@@ -116,10 +116,6 @@ class UnitTest(unittest.TestCase):
                 Description:  Mock of creating a repository.
 
                 Arguments:
-                    (input) repo -> Name of repository.
-                    (input) repo_dir -> Directory path to respository.
-                    (output) err_flag -> True | False - Error status.
-                    (output) status_msg -> Status error message or None.
 
                 """
 
