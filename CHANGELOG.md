@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [1.1.0] - 2021-11-22
+
+
 ## [1.0.3] - 2020-06-24
 ### Fixed
 - initate_dump:  Fixed call print_failures function.
