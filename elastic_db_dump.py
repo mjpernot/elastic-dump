@@ -8,8 +8,9 @@
     Usage:
         elastic_db_dump.py -c file -d path
             {-C repo_name -l base_path |
-            -D [repo_name] [-i index1 {index2 ...}] |
-            -L [repo_name] | -R}
+             -D [repo_name] [-i index1 {index2 ...}] |
+             -L [repo_name] |
+             -R}
             [-v | -h]
 
     Arguments:
