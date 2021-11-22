@@ -28,7 +28,7 @@
 
         -L [repo_name] => List of database dumps for an Elasticsearch
             repository.
-            NOTE: repo_name is required if multiple repositories exist.
+                Note: repo_name is required if multiple repositories exist.
 
         -R => List of repositories in the Elasticsearch database.
 
@@ -39,8 +39,8 @@
         NOTE 2:  -C, -D, -L, and -R are XOR options.
 
     Notes:
-        Elasticsearch configuration file format (elastic.py).  The
-        configuration file format for the Elasticsearch connection to a
+        Elasticsearch configuration file format (config/elastic.py.TEMPLATE).
+        The configuration file format for the Elasticsearch connection to a
         database.
 
             # Elasticsearch configuration file.
