@@ -31,11 +31,8 @@
     - python-pip
 
   * Local class/library dependencies within the program structure.
-    - lib/gen_class
-    - lib/arg_parser
-    - lib/gen_libs
-    - elastic_lib/elastic_class
-    - elastic_lib/elastic_libs
+    - python-lib
+    - elastic-lib
 
 
 # Installation:
