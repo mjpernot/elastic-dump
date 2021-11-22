@@ -15,19 +15,23 @@
     Arguments:
         -c file => Elasticsearch configuration file.  Required argument.
         -d dir path => Directory path for option '-c'.  Required argument.
-        -C repo_name => Create new repository name.  Requires -l option.
-        -l base_path => Base directory path name for repository.
-            Used with the -C option.
+
+        -C repo_name => Create new repository name.
+            -l base_path => Base directory path name for repository.
+
         -D [repo_name] => Dump an Elasticsearch database.  repo_name is name
-            of repository to dump.  repo_name is required if multiple
-            repositories exist or if used in conjunction with -i option.
-        -i index1 {index2 ...} => One or more indices to dump.
-            Used with the -D option.
-            Can use wildcard searches in the index name.
+            of repository to dump.
+                Note:  repo_name is required if multiple repositories exist or
+                if the -i option is used.
+            -i index1 {index2 ...} => One or more indices to dump.
+                Note: Can use wildcard searches in the index name.
+
         -L [repo_name] => List of database dumps for an Elasticsearch
             repository.
             NOTE: repo_name is required if multiple repositories exist.
+
         -R => List of repositories in the Elasticsearch database.
+
         -v => Display version of this program.
         -h => Help and usage message.
 
