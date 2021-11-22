@@ -41,8 +41,8 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Unit testing initilization.
-        test_list_repos -> Test the printing of respositories.
+        setUp
+        test_list_repos
 
     """
 
@@ -63,7 +63,7 @@ class UnitTest(unittest.TestCase):
             Description:  Class representation of the ElasticSearchDump class.
 
             Methods:
-                __init__ -> Initialize configuration environment.
+                __init__
 
             """
 
@@ -89,7 +89,7 @@ class UnitTest(unittest.TestCase):
             Description:  Class representation of the ElasticSearchRepo class.
 
             Methods:
-                __init__ -> Initialize configuration environment.
+                __init__
 
             """
 
