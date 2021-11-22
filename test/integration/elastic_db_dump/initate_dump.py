@@ -43,13 +43,13 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Unit testing initilization.
-        test_i_option_multi_db -> Test database with multiple database names.
-        test_i_option_one_db -> Test database with one database name.
-        test_i_option_missing_db -> Test database with incorrect database name.
-        test_no_i_option -> Test database dump with no -i option.
-        test_initate_dump -> Test datbase dump is created.
-        tearDown -> Clean up of integration testing.
+        setUp
+        test_i_option_multi_db
+        test_i_option_one_db
+        test_i_option_missing_db
+        test_no_i_option
+        test_initate_dump
+        tearDown
 
     """
 
