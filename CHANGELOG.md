@@ -10,34 +10,22 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 ## [1.0.3] - 2020-06-24
 ### Fixed
 - initate_dump:  Fixed call print_failures function.
-- main:  Fixed handling command line arguments from SonarQube scan finding.
-- run_program:  Fixed handling command line arguments from SonarQube scan finding.
+- main, run_program:  Fixed handling command line arguments.
 
 ### Changed
-- run_program:  Changed variable names to standard naming convention.
-- list_repos:  Changed variable names to standard naming convention.
-- list_dumps:  Changed variable names to standard naming convention.
-- initate_dump:  Changed variable names to standard naming convention.
-- print_failures:  Changed variable names to standard naming convention.
-- create_repo:  Changed variable names to standard naming convention.
+- run_program, list_repos, list_dumps, initate_dump, print_failures, create_repo:  Changed variable names to standard naming convention.
 - initate_dump: Added printing template variable.
 - Documentation updates.
 
 
 ## [1.0.2] - 2019-10-28
 ### Fixed
-- create_repo:  Fixed mutable list/dictionary argument issue.
-- run_program:  Fixed mutable list/dictionary argument issue.
+- create_repo, run_program:  Fixed mutable list/dictionary argument issue.
 
 ### Changed
 - create_repo:  Repo_name will be joined to repo_dir to create new repository.
 - main:  Refactored "if" statements.
-- run_program:  Changed variables to standard naming convention.
-- list_repos:  Changed variables to standard naming convention.
-- list_dumps:  Changed variables to standard naming convention.
-- initate_dump:  Changed variables to standard naming convention.
-- print_failures:  Changed variables to standard naming convention.
-- create_repo:  Changed variables to standard naming convention.
+- run_program, list_repos, list_dumps, initate_dump, print_failures, create_repo:  Changed variables to standard naming convention.
 - Documentation updates.
 
 
@@ -172,8 +160,8 @@ Breaking Change
 - Run_Program:  Remove args_array from function calls.
 
 ### Removed
-- List_Repos:  Transfered to elastic_libs library.
-- List_Dumps:  Transfered to elastic_libs library.
+- List_Repos
+- List_Dumps
 
 
 ## [0.1.1] - 2017-09-15
