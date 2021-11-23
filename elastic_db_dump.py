@@ -104,20 +104,27 @@ def create_repo(els, **kwargs):
     args_array = dict(kwargs.get("args_array"))
     repo_name = args_array.get("-C")
     repo_dir = args_array.get("-l")
-    elr = elastic_class.ElasticSearchRepo(els.hosts, els.port)
+    elr = elastic_class.ElasticSearchRepo(
+        els.hosts, port=els.port, user=els.user, japd=els.japd,
+        ca_cert=els.ca_cert, scheme=els.scheme)
+    elr.connect()
 
-    if repo_name in elr.repo_dict:
-        print("ERROR:  '%s' repository already exists at: '%s'"
-              % (repo_name, repo_dir))
+    if elr.is_connected:
+        if repo_name in elr.repo_dict:
+            print("ERROR:  '%s' repository already exists at: '%s'"
+                  % (repo_name, repo_dir))
+
+        else:
+            err_flag, msg = elr.create_repo(repo_name,
+                                            os.path.join(repo_dir, repo_name))
+
+            if err_flag:
+                print("Error detected for Repository: '%s' at '%s'"
+                      % (repo_name, repo_dir))
+                print("Reason: '%s'" % (msg))
 
     else:
-        err_flag, msg = elr.create_repo(repo_name,
-                                        os.path.join(repo_dir, repo_name))
-
-        if err_flag:
-            print("Error detected for Repository: '%s' at '%s'"
-                  % (repo_name, repo_dir))
-            print("Reason: '%s'" % (msg))
+        print("Error: create_repo: Failed to connect to Elasticsearch")
 
 
 def print_failures(els):
