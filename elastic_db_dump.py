@@ -74,7 +74,7 @@ import version
 __version__ = version.__version__
 
 
-def help_message(**kwargs):
+def help_message():
 
     """Function:  help_message
 
@@ -120,7 +120,7 @@ def create_repo(els, **kwargs):
             print("Reason: '%s'" % (msg))
 
 
-def print_failures(els, **kwargs):
+def print_failures(els):
 
     """Function:  print_failures
 
@@ -190,6 +190,8 @@ def list_dumps(els, **kwargs):
 
     Arguments:
         (input) els -> Elasticsearch class instance.
+        (input) **kwargs:
+            args_array -> Dict of command line options and values.
 
     """
 
@@ -208,6 +210,8 @@ def list_repos(els, **kwargs):
 
     Arguments:
         (input) els -> Elasticsearch class instance.
+        (input) **kwargs:
+            args_array -> Dict of command line options and values.
 
     """
 
@@ -215,7 +219,7 @@ def list_repos(els, **kwargs):
     elastic_libs.list_repos2(elr.repo_dict)
 
 
-def run_program(args_array, func_dict, **kwargs):
+def run_program(args_array, func_dict):
 
     """Function:  run_program
 
@@ -239,8 +243,8 @@ def run_program(args_array, func_dict, **kwargs):
         # Find which functions to call.
         for opt in set(args_array.keys()) & set(func_dict.keys()):
             els = elastic_class.ElasticSearchDump(
-                cfg.host, cfg.port, args_array.get(opt, None), **kwargs)
-            func_dict[opt](els, args_array=args_array, **kwargs)
+                cfg.host, cfg.port, args_array.get(opt, None))
+            func_dict[opt](els, args_array=args_array)
 
         del prog_lock
 

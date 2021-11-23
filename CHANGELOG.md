@@ -6,6 +6,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [1.1.0] - 2021-11-22
 ### Changed
+- Removed unnecessary \*\*kwargs in function defintions.
 - config/elastic.py.TEMPLATE:  Added login credentials and SSL connection entries.
 - Documentation updates.
 
