@@ -137,9 +137,7 @@ class ElasticSearchDump(object):
 
     """
 
-    def __init__(
-        self, host, port=port, repo=repo, user=user, japd=japd,
-        ca_cert=ca_cert, scheme=scheme):
+    def __init__(self, host, port, repo, user, japd, ca_cert, scheme):
 
         """Method:  __init__
 
@@ -227,8 +225,9 @@ class UnitTest(unittest.TestCase):
         mock_class.return_value = els
         mock_load.return_value = self.cfg
 
-        self.assertFalse(
-            elastic_db_dump.run_program(self.args, self.func_dict))
+        with gen_libs.no_std_out():
+            self.assertFalse(
+                elastic_db_dump.run_program(self.args, self.func_dict))
 
     @mock.patch("elastic_db_dump.gen_libs.load_module")
     @mock.patch("elastic_db_dump.elastic_class.ElasticSearchDump")
@@ -243,10 +242,14 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        els = ElasticSearchDump(
+            self.cfg.host, self.cfg.port, None, self.cfg.user,
+            self.cfg.japd, self.cfg.ssl_client_ca, self.cfg.scheme)
+
         self.args["-L"] = True
 
         mock_lock.return_value = self.proglock
-        mock_class.return_value = ElasticSearchDump()
+        mock_class.return_value = els
         mock_load.return_value = self.cfg
 
         self.assertFalse(
@@ -265,12 +268,16 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        els = ElasticSearchDump(
+            self.cfg.host, self.cfg.port, None, self.cfg.user,
+            self.cfg.japd, self.cfg.ssl_client_ca, self.cfg.scheme)
+
         self.args["-U"] = True
         self.args["-L"] = True
 
         mock_lock.side_effect = \
             elastic_db_dump.gen_class.SingleInstanceException
-        mock_class.return_value = ElasticSearchDump()
+        mock_class.return_value = els
         mock_load.return_value = self.cfg
 
         with gen_libs.no_std_out():
@@ -291,11 +298,16 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        els = ElasticSearchDump(
+            self.cfg.host, self.cfg.port, None, self.cfg.user,
+            self.cfg.japd, self.cfg.ssl_client_ca, self.cfg.scheme)
+
         self.args["-U"] = True
         self.args["-L"] = True
 
         mock_lock.return_value = self.proglock
-        mock_class.return_value = "ElasticSearchDump()        mock_load.return_value = self.cfg
+        mock_class.return_value = els
+        mock_load.return_value = self.cfg
 
         self.assertFalse(
             elastic_db_dump.run_program(self.args, self.func_dict))
@@ -313,10 +325,14 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        els = ElasticSearchDump(
+            self.cfg.host, self.cfg.port, None, self.cfg.user,
+            self.cfg.japd, self.cfg.ssl_client_ca, self.cfg.scheme)
+
         self.args["-L"] = True
 
         mock_lock.return_value = self.proglock
-        mock_class.return_value = ElasticSearchDump()
+        mock_class.return_value = els
         mock_load.return_value = self.cfg
 
         self.assertFalse(
@@ -335,8 +351,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        els = ElasticSearchDump(
+            self.cfg.host, self.cfg.port, None, self.cfg.user,
+            self.cfg.japd, self.cfg.ssl_client_ca, self.cfg.scheme)
+
         mock_lock.return_value = self.proglock
-        mock_class.return_value = ElasticSearchDump()
+        mock_class.return_value = els
         mock_load.return_value = self.cfg
 
         self.assertFalse(
