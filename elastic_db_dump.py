@@ -215,8 +215,16 @@ def list_repos(els, **kwargs):
 
     """
 
-    elr = elastic_class.ElasticSearchRepo(els.hosts, els.port)
-    elastic_libs.list_repos2(elr.repo_dict)
+    elr = elastic_class.ElasticSearchRepo(
+        els.hosts, port=els.port, user=els.user, japd=els.japd,
+        ca_cert=els.ca_cert, scheme=els.scheme)
+    elr.connect()
+
+    if elr.is_connected:
+        elastic_libs.list_repos2(elr.repo_dict)
+
+    else:
+        print("Error: list_repos: Failed to connect to Elasticsearch")
 
 
 def run_program(args_array, func_dict):
@@ -244,7 +252,6 @@ def run_program(args_array, func_dict):
     try:
         prog_lock = gen_class.ProgramLock(cmdline.argv, cfg.host)
 
-        # Find which functions to call.
         for opt in set(args_array.keys()) & set(func_dict.keys()):
             els = elastic_class.ElasticSearchDump(
                 cfg.host, port=cfg.port, repo=args_array.get(opt, None),
