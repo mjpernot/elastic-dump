@@ -35,6 +35,97 @@ import version
 __version__ = version.__version__
 
 
+class ElasticSearchDump(object):
+
+    """Class:  ElasticSearchDump
+
+    Description:  Class representation of the ElasticSearchDump class.
+
+    Methods:
+        __init__
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Initialization instance of the class.
+
+        Arguments:
+
+        """
+
+        self.hosts = "Server_Name"
+        self.port = 9200
+        self.user = "user"
+        self.japd = "japd"
+        self.ca_cert = "ca_cert"
+        self.scheme = "https"
+
+
+class ElasticSearchRepo(object):
+
+    """Class:  ElasticSearchRepo
+
+    Description:  Class representation of the ElasticSearchRepo class.
+
+    Methods:
+        __init__
+        connect
+        create_repo
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Initialization instance of the class.
+
+        Arguments:
+
+        """
+
+        self.repo_dict = ["Test_Repo_Name_1", "Test_Rep_Name_2"]
+        self.repo_name = None
+        self.repo_dir = None
+        self.is_connected = True
+
+    def connect(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        return True
+
+    def create_repo(self, repo_name, repo_dir):
+
+        """Method:  create_repo
+
+        Description:  Mock of creating a repository.
+
+        Arguments:
+
+        """
+
+        self.repo_name = repo_name
+        self.repo_dir = repo_dir
+        err_flag = False
+        err_msg = None
+
+        if self.repo_name == "Test_Repo_Name_False":
+            err_flag = True
+            err_msg = "Error_Message_Here"
+
+        return err_flag, err_msg
+
+
 class UnitTest(unittest.TestCase):
 
     """Class:  UnitTest
@@ -43,6 +134,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
+        test_connection_failed
+        test_connection_successful
         test_reponame_in_list
         test_reponame_not_in_list
         test_err_flag_false
@@ -60,79 +153,44 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        class ElasticSearchDump(object):
-
-            """Class:  ElasticSearchDump
-
-            Description:  Class representation of the ElasticSearchDump class.
-
-            Methods:
-                __init__
-
-            """
-
-            def __init__(self):
-
-                """Method:  __init__
-
-                Description:  Initialization instance of the class.
-
-                Arguments:
-
-                """
-
-                self.hosts = "Server_Name"
-                self.port = 9200
-
-        class ElasticSearchRepo(object):
-
-            """Class:  ElasticSearchRepo
-
-            Description:  Class representation of the ElasticSearchRepo class.
-
-            Methods:
-                __init__
-
-            """
-
-            def __init__(self):
-
-                """Method:  __init__
-
-                Description:  Initialization instance of the class.
-
-                Arguments:
-
-                """
-
-                self.repo_dict = ["Test_Repo_Name_1", "Test_Rep_Name_2"]
-                self.repo_name = None
-                self.repo_dir = None
-
-            def create_repo(self, repo_name, repo_dir):
-
-                """Method:  create_repo
-
-                Description:  Mock of creating a repository.
-
-                Arguments:
-
-                """
-
-                self.repo_name = repo_name
-                self.repo_dir = repo_dir
-                err_flag = False
-                err_msg = None
-
-                if self.repo_name == "Test_Repo_Name_False":
-                    err_flag = True
-                    err_msg = "Error_Message_Here"
-
-                return err_flag, err_msg
-
         self.els = ElasticSearchDump()
         self.elr = ElasticSearchRepo()
         self.args_array = {"-C": "Test_Repo_Name_3", "-l": "Repo_Directory"}
+
+    @mock.patch("elastic_db_dump.elastic_class.ElasticSearchRepo")
+    def test_connection_failed(self, mock_er):
+
+        """Function:  test_connection_failed
+
+        Description:  Test with failed connection.
+
+        Arguments:
+
+        """
+
+        self.elr.is_connected = False
+
+        mock_er.return_value = self.elr
+
+        with gen_libs.no_std_out():
+            self.assertFalse(elastic_db_dump.create_repo(
+                self.els, args_array=self.args_array))
+
+    @mock.patch("elastic_db_dump.elastic_class.ElasticSearchRepo")
+    def test_connection_successful(self, mock_er):
+
+        """Function:  test_connection_successful
+
+        Description:  Test with successful connection.
+
+        Arguments:
+
+        """
+
+        mock_er.return_value = self.elr
+
+        self.assertFalse(elastic_db_dump.create_repo(
+            self.els, args_array=self.args_array))
 
     @mock.patch("elastic_db_dump.elastic_class.ElasticSearchRepo")
     def test_reponame_in_list(self, mock_er):
