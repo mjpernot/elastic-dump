@@ -96,6 +96,81 @@ class ProgramLock(object):
         self.flavor = flavor
 
 
+class CfgTest(object):
+
+    """Class:  CfgTest
+
+    Description:  Class which is a representation of a cfg module.
+
+    Methods:
+        __init__
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Initialization instance of the CfgTest class.
+
+        Arguments:
+
+        """
+
+        self.host = "SERVER_NAME"
+        self.port = 9200
+        self.user = None
+        self.japd = None
+        self.ssl_client_ca = None
+        self.scheme = "https"
+
+
+class ElasticSearchDump(object):
+
+    """Class:  ElasticSearchDump
+
+    Description:  Class stub holder for elastic_class.ElasticSearchDump class.
+
+    Methods:
+        __init__
+        connect
+
+    """
+
+    def __init__(
+        self, host, port=port, repo=repo, user=user, japd=japd,
+        ca_cert=ca_cert, scheme=scheme):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.host = host
+        self.port = port
+        self.repo = repo
+        self.user = user
+        self.japd = japd
+        self.ca_cert = ca_cert
+        self.scheme = scheme
+        self.is_connected = True
+
+    def connect(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        return True
+
+
 class UnitTest(unittest.TestCase):
 
     """Class:  UnitTest
@@ -104,6 +179,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
+        test_failed_connection
+        test_success_connection
         test_exception_handler
         test_func_call_multi
         test_func_call_one
@@ -121,34 +198,59 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        class CfgTest(object):
-
-            """Class:  CfgTest
-
-            Description:  Class which is a representation of a cfg module.
-
-            Methods:
-                __init__
-
-            """
-
-            def __init__(self):
-
-                """Method:  __init__
-
-                Description:  Initialization instance of the CfgTest class.
-
-                Arguments:
-
-                """
-
-                self.host = "SERVER_NAME"
-                self.port = 9200
-
         self.cfg = CfgTest()
         self.args = {"-c": "config_file", "-d": "config_dir"}
         self.func_dict = {"-L": list_dumps, "-U": disk_usage}
         self.proglock = ProgramLock(["cmdline"], "FlavorID")
+
+    @mock.patch("elastic_db_dump.gen_libs.load_module")
+    @mock.patch("elastic_db_dump.elastic_class.ElasticSearchDump")
+    @mock.patch("elastic_db_dump.gen_class")
+    def test_failed_connection(self, mock_lock, mock_class, mock_load):
+
+        """Function:  test_failed_connection
+
+        Description:  Test with failed connection.
+
+        Arguments:
+
+        """
+
+        self.args["-L"] = True
+
+        els = ElasticSearchDump(
+            "host", port=9200, repo="repo", user="user", japd="japd",
+            ca_cert="ca_cert", scheme="https")
+        els.is_connected = False
+
+        mock_lock.return_value = self.proglock
+        mock_class.return_value = els
+        mock_load.return_value = self.cfg
+
+        self.assertFalse(
+            elastic_db_dump.run_program(self.args, self.func_dict))
+
+    @mock.patch("elastic_db_dump.gen_libs.load_module")
+    @mock.patch("elastic_db_dump.elastic_class.ElasticSearchDump")
+    @mock.patch("elastic_db_dump.gen_class")
+    def test_success_connection(self, mock_lock, mock_class, mock_load):
+
+        """Function:  test_success_connection
+
+        Description:  Test with successful connection.
+
+        Arguments:
+
+        """
+
+        self.args["-L"] = True
+
+        mock_lock.return_value = self.proglock
+        mock_class.return_value = ElasticSearchDump()
+        mock_load.return_value = self.cfg
+
+        self.assertFalse(
+            elastic_db_dump.run_program(self.args, self.func_dict))
 
     @mock.patch("elastic_db_dump.gen_libs.load_module")
     @mock.patch("elastic_db_dump.elastic_class.ElasticSearchDump")
@@ -168,12 +270,12 @@ class UnitTest(unittest.TestCase):
 
         mock_lock.side_effect = \
             elastic_db_dump.gen_class.SingleInstanceException
-        mock_class.return_value = "Elastic_Class"
+        mock_class.return_value = ElasticSearchDump()
         mock_load.return_value = self.cfg
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.run_program(self.args,
-                                                         self.func_dict))
+            self.assertFalse(
+                elastic_db_dump.run_program(self.args, self.func_dict))
 
     @mock.patch("elastic_db_dump.gen_libs.load_module")
     @mock.patch("elastic_db_dump.elastic_class.ElasticSearchDump")
@@ -193,11 +295,10 @@ class UnitTest(unittest.TestCase):
         self.args["-L"] = True
 
         mock_lock.return_value = self.proglock
-        mock_class.return_value = "Elastic_Class"
-        mock_load.return_value = self.cfg
+        mock_class.return_value = "ElasticSearchDump()        mock_load.return_value = self.cfg
 
-        self.assertFalse(elastic_db_dump.run_program(self.args,
-                                                     self.func_dict))
+        self.assertFalse(
+            elastic_db_dump.run_program(self.args, self.func_dict))
 
     @mock.patch("elastic_db_dump.gen_libs.load_module")
     @mock.patch("elastic_db_dump.elastic_class.ElasticSearchDump")
@@ -215,11 +316,11 @@ class UnitTest(unittest.TestCase):
         self.args["-L"] = True
 
         mock_lock.return_value = self.proglock
-        mock_class.return_value = "Elastic_Class"
+        mock_class.return_value = ElasticSearchDump()
         mock_load.return_value = self.cfg
 
-        self.assertFalse(elastic_db_dump.run_program(self.args,
-                                                     self.func_dict))
+        self.assertFalse(
+            elastic_db_dump.run_program(self.args, self.func_dict))
 
     @mock.patch("elastic_db_dump.gen_libs.load_module")
     @mock.patch("elastic_db_dump.elastic_class.ElasticSearchDump")
@@ -235,11 +336,11 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_lock.return_value = self.proglock
-        mock_class.return_value = "Elastic_Class"
+        mock_class.return_value = ElasticSearchDump()
         mock_load.return_value = self.cfg
 
-        self.assertFalse(elastic_db_dump.run_program(self.args,
-                                                     self.func_dict))
+        self.assertFalse(
+            elastic_db_dump.run_program(self.args, self.func_dict))
 
 
 if __name__ == "__main__":
