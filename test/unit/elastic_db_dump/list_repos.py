@@ -29,6 +29,7 @@ import mock
 # Local
 sys.path.append(os.getcwd())
 import elastic_db_dump
+import lib.gen_libs as gen_libs
 import version
 
 __version__ = version.__version__
@@ -56,8 +57,11 @@ class ElasticSearchDump(object):
         """
 
         self.hosts = ["Server1"]
-        self.port = 9000
-        self.is_connected = True
+        self.port = 9200
+        self.user = "user"
+        self.japd = "japd"
+        self.ca_cert = "ca_cert"
+        self.scheme = "https"
 
 
 class ElasticSearchRepo(object):
@@ -68,6 +72,7 @@ class ElasticSearchRepo(object):
 
     Methods:
         __init__
+        connect
 
     """
 
@@ -82,6 +87,19 @@ class ElasticSearchRepo(object):
         """
 
         self.repo_dict = {}
+        self.is_connected = True
+
+    def connect(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        return True
 
 
 class UnitTest(unittest.TestCase):
@@ -126,7 +144,8 @@ class UnitTest(unittest.TestCase):
 
         mock_er.return_value = self.elr
 
-        self.assertFalse(elastic_db_dump.list_repos(self.els))
+        with gen_libs.no_std_out():
+            self.assertFalse(elastic_db_dump.list_repos(self.els))
 
     @mock.patch("elastic_db_dump.elastic_libs.list_repos2")
     @mock.patch("elastic_db_dump.elastic_class.ElasticSearchRepo")
