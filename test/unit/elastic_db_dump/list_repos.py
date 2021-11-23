@@ -34,6 +34,56 @@ import version
 __version__ = version.__version__
 
 
+class ElasticSearchDump(object):
+
+    """Class:  ElasticSearchDump
+
+    Description:  Class representation of the ElasticSearchDump class.
+
+    Methods:
+        __init__
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Initialization instance of the class.
+
+        Arguments:
+
+        """
+
+        self.hosts = ["Server1"]
+        self.port = 9000
+        self.is_connected = True
+
+
+class ElasticSearchRepo(object):
+
+    """Class:  ElasticSearchRepo
+
+    Description:  Class representation of the ElasticSearchRepo class.
+
+    Methods:
+        __init__
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Initialization instance of the class.
+
+        Arguments:
+
+        """
+
+        self.repo_dict = {}
+
+
 class UnitTest(unittest.TestCase):
 
     """Class:  UnitTest
@@ -42,6 +92,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
+        test_connection_failed
+        test_connection_successful
         test_list_repos
 
     """
@@ -56,56 +108,42 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        class ElasticSearchDump(object):
-
-            """Class:  ElasticSearchDump
-
-            Description:  Class representation of the ElasticSearchDump class.
-
-            Methods:
-                __init__
-
-            """
-
-            def __init__(self):
-
-                """Method:  __init__
-
-                Description:  Initialization instance of the class.
-
-                Arguments:
-
-                """
-
-                self.hosts = ["Server1"]
-                self.port = 9000
-
         self.els = ElasticSearchDump()
-
-        class ElasticSearchRepo(object):
-
-            """Class:  ElasticSearchRepo
-
-            Description:  Class representation of the ElasticSearchRepo class.
-
-            Methods:
-                __init__
-
-            """
-
-            def __init__(self):
-
-                """Method:  __init__
-
-                Description:  Initialization instance of the class.
-
-                Arguments:
-
-                """
-
-                self.repo_dict = {}
-
         self.elr = ElasticSearchRepo()
+
+    @mock.patch("elastic_db_dump.elastic_class.ElasticSearchRepo")
+    def test_connection_failed(self, mock_er):
+
+        """Function:  test_connection_failed
+
+        Description:  Test with failed connection.
+
+        Arguments:
+
+        """
+
+        self.elr.is_connected = False
+
+        mock_er.return_value = self.elr
+
+        self.assertFalse(elastic_db_dump.list_repos(self.els))
+
+    @mock.patch("elastic_db_dump.elastic_libs.list_repos2")
+    @mock.patch("elastic_db_dump.elastic_class.ElasticSearchRepo")
+    def test_connection_successful(self, mock_er, mock_list):
+
+        """Function:  test_connection_successful
+
+        Description:  Test with successful connection.
+
+        Arguments:
+
+        """
+
+        mock_er.return_value = self.elr
+        mock_list.return_value = True
+
+        self.assertFalse(elastic_db_dump.list_repos(self.els))
 
     @mock.patch("elastic_db_dump.elastic_libs.list_repos2")
     @mock.patch("elastic_db_dump.elastic_class.ElasticSearchRepo")
