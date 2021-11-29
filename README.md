@@ -74,8 +74,19 @@ cp elastic.py.TEMPLATE elastic.py
 ```
 
 Make the appropriate changes to the Elasticsearch environment.
-  * Change these entries in the elastic.py file.  List all the servers in the Elasticsearch cluster.
+  * Change these entries in the elasticsearch set up:
     - host = ["HOST_NAME1", "HOST_NAME2"]
+
+  * If login credentials are required:
+    - user = None
+    - japd = None
+
+  * If SSL connections are being used:
+    - ssl_client_ca = None
+
+  * Change these entries only if required and you know what you are doing:
+    - port = 9200
+    - scheme = "https"
 
 ```
 vim elastic.py
@@ -123,14 +134,27 @@ Install the project using the procedures in the Installation section.
 
 ### Configuration:
 
-Create Elasticsearch configuration file.  Make the appropriate changes to the Elasticsearch environment.
-  * Change these entries in the elastic.py file.  List all the servers in the Elasticsearch cluster.  Add or delete HOST_NAMEs as necessary.
+Make the appropriate changes to the Elasticsearch environment.
+  * Change these entries in the elasticsearch set up:
     - host = ["HOST_NAME1", "HOST_NAME2"]
+
+  * If login credentials are required:
+    - user = None
+    - japd = None
+
+  * If SSL connections are being used:
+    - ssl_client_ca = None
+
+  * Change these entries only if required and you know what you are doing:
+    - port = 9200
+    - scheme = "https"
+
+  * In addition to the normal configuration entries, modify these entries for this testing section.
+    Note 1:  **LOGICAL_DIR_PATH** is the logical directory path to the share file system.
+    Note 2:  **phy_repo_dir** is the physical directory path to the share file system.
+    Note 3:  If running ElasticSearch as Docker setup, then these paths will be different.  If running as a standard setup, they will be the same.
     - log_repo_dir = "LOGICAL_DIR_PATH"
     - phy_repo_dir = "PHYSICAL_DIR_PATH"
-  * **LOGICAL_DIR_PATH** is the logical directory path to the share file system.
-  * **phy_repo_dir** is the physical directory path to the share file system.
-    -  NOTE:  If running ElasticSearch as Docker setup, then these paths will be different.  If running as a standard setup, they will be the same.
 
 ```
 cd test/integration/elastic_db_dump/config
