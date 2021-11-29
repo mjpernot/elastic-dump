@@ -5,6 +5,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [1.1.0] - 2021-11-22
+### Fixed
+- list_dumps:  Removed \*\*kwargs from elastic_libs.list_dumps call.
+
 ### Changed
 - list_repos, create_repo:  Added connect call and check for elasticsearch connection status.
 - run_program:  Added connect call, check for elasticsearch connection status, and set login credentials and SSL connection settings.

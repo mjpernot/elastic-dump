@@ -203,7 +203,7 @@ def list_dumps(els, **kwargs):
     """
 
     if els.repo_name:
-        elastic_libs.list_dumps(els.dump_list, **kwargs)
+        elastic_libs.list_dumps(els.dump_list)
 
     else:
         print("WARNING:  Repository name not found or not passed.")
