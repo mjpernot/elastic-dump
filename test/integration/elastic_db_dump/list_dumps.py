@@ -62,10 +62,13 @@ class UnitTest(unittest.TestCase):
         self.test_path = os.path.join(os.getcwd(), self.base_dir)
         self.config_path = os.path.join(self.test_path, "config")
         self.cfg = gen_libs.load_module("elastic", self.config_path)
-        self.phy_repo_dir = os.path.join(self.cfg.phy_repo_dir,
-                                         self.cfg.repo_name)
-        self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
-                                                   self.cfg.port)
+        self.phy_repo_dir = os.path.join(
+            self.cfg.phy_repo_dir, self.cfg.repo_name)
+        self.elr = elastic_class.ElasticSearchRepo(
+            self.cfg.host, port=self.cfg.port, user=self.cfg.user,
+            japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
+            scheme=self.cfg.scheme)
+        self.elr.connect()
 
         if self.elr.repo_dict:
             print("ERROR: Test environment not clean - repositories exist.")
@@ -73,11 +76,14 @@ class UnitTest(unittest.TestCase):
 
         else:
             _, _ = self.elr.create_repo(
-                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
-                                                 self.cfg.repo_name))
+                self.cfg.repo_name, os.path.join(
+                    self.cfg.phy_repo_dir, self.cfg.repo_name))
 
             self.els = elastic_class.ElasticSearchDump(
-                self.cfg.host, self.cfg.port, repo=self.cfg.repo_name)
+                self.cfg.host, port=self.cfg.port, repo=self.cfg.repo_name,
+                user=self.cfg.user, japd=self.cfg.japd,
+                ca_cert=self.cfg.ssl_client_ca, scheme=self.cfg.scheme)
+            self.els.connect()
 
     def test_list_dumps(self):
 
