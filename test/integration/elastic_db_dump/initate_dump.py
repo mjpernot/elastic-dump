@@ -70,8 +70,11 @@ class UnitTest(unittest.TestCase):
         self.args_array = {}
         self.phy_repo_dir = os.path.join(self.cfg.phy_repo_dir,
                                          self.cfg.repo_name)
-        self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
-                                                   self.cfg.port)
+        self.elr = elastic_class.ElasticSearchRepo(
+            self.cfg.host, port=self.cfg.port, user=self.cfg.user,
+            japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
+            scheme=self.cfg.scheme)
+        self.elr.connect()
 
         if self.elr.repo_dict:
             print("ERROR: Test environment not clean - repositories exist.")
@@ -79,11 +82,14 @@ class UnitTest(unittest.TestCase):
 
         else:
             _, _ = self.elr.create_repo(
-                self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+                self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
                                                  self.cfg.repo_name))
 
             self.els = elastic_class.ElasticSearchDump(
-                self.cfg.host, self.cfg.port, repo=self.cfg.repo_name)
+                self.cfg.host, port=self.cfg.port, repo=self.cfg.repo_name,
+                user=self.cfg.user, japd=self.cfg.japd,
+                ca_cert=self.cfg.ssl_client_ca, scheme=self.cfg.scheme)
+            self.els.connect()
 
     def test_i_option_multi_db(self):
 
@@ -109,7 +115,7 @@ class UnitTest(unittest.TestCase):
         cnt = len([name for name in os.listdir(dir_path)
                    if os.path.isdir(os.path.join(dir_path, name))])
 
-        self.assertEqual(cnt, 2)
+        self.assertTrue(cnt >= 2)
 
     def test_i_option_one_db(self):
 
@@ -136,7 +142,7 @@ class UnitTest(unittest.TestCase):
         cnt = len([name for name in os.listdir(dir_path)
                    if os.path.isdir(os.path.join(dir_path, name))])
 
-        self.assertEqual(cnt, 1)
+        self.assertTrue(cnt >= 1)
 
     def test_i_option_missing_db(self):
 
@@ -154,7 +160,7 @@ class UnitTest(unittest.TestCase):
 
         # If index dump directory exists, then test is a failure.
         self.assertFalse(
-            os.path.isdir(os.path.join(self.cfg.repo_dir, "indices")))
+            os.path.isdir(os.path.join(self.cfg.phy_repo_dir, "indices")))
 
     def test_no_i_option(self):
 
