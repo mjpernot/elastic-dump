@@ -76,7 +76,11 @@ class UnitTest(unittest.TestCase):
                           "-R": elastic_db_dump.list_repos}
         self.args = {"-c": "elastic", "-d": self.config_path}
 
-        elr = elastic_class.ElasticSearchRepo(self.cfg.host, self.cfg.port)
+        elr = elastic_class.ElasticSearchRepo(
+            self.cfg.host, port=self.cfg.port, user=self.cfg.user,
+            japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
+            scheme=self.cfg.scheme)
+        elr.connect()
 
         if elr.repo_dict:
             print("ERROR: Test environment not clean - repositories exist.")
@@ -95,17 +99,24 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        els = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port)
+        els = elastic_class.ElasticSearchDump(
+            self.cfg.host, port=self.cfg.port, user=self.cfg.user,
+            japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
+            scheme=self.cfg.scheme)
+        els.connect()
 
         # Capture the first database/indice name in Elasticsearch.
         dbs = [str([x.split()
                     for x in els.els.cat.indices().splitlines()][0][2])]
         self.args["-D"] = self.cfg.repo_name
         self.args["-i"] = dbs
-        self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
-                                                   self.cfg.port)
+        self.elr = elastic_class.ElasticSearchRepo(
+            self.cfg.host, port=self.cfg.port, user=self.cfg.user,
+            japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
+            scheme=self.cfg.scheme)
+        self.elr.connect()
         _, _ = self.elr.create_repo(
-            self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+            self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
                                              self.cfg.repo_name))
         elastic_db_dump.run_program(self.args, self.func_dict)
         dir_path = os.path.join(self.cfg.phy_repo_dir, self.cfg.repo_name,
@@ -115,7 +126,7 @@ class UnitTest(unittest.TestCase):
         cnt = len([name for name in os.listdir(dir_path)
                    if os.path.isdir(os.path.join(dir_path, name))])
 
-        self.assertEqual(cnt, 1)
+        self.assertTrue(cnt >= 1)
 
     @mock.patch("elastic_db_dump.gen_class")
     def test_load_module(self, mock_lock):
@@ -145,10 +156,13 @@ class UnitTest(unittest.TestCase):
         """
 
         self.args["-C"] = self.cfg.repo_name
-        self.args["-l"] = self.cfg.repo_dir
+        self.args["-l"] = self.cfg.phy_repo_dir
         elastic_db_dump.run_program(self.args, self.func_dict)
         self.elr = elastic_class.ElasticSearchRepo(
-            self.cfg.host, self.cfg.port, repo=self.cfg.repo_name)
+            self.cfg.host, port=self.cfg.port, repo=self.cfg.repo_name,
+            user=self.cfg.user, japd=self.cfg.japd,
+            ca_cert=self.cfg.ssl_client_ca, scheme=self.cfg.scheme)
+        self.elr.connect()
 
         self.assertTrue(self.cfg.repo_name in self.elr.repo_dict)
 
@@ -163,10 +177,13 @@ class UnitTest(unittest.TestCase):
         """
 
         self.args["-L"] = self.cfg.repo_name
-        self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
-                                                   self.cfg.port)
+        self.elr = elastic_class.ElasticSearchRepo(
+            self.cfg.host, port=self.cfg.port, user=self.cfg.user,
+            japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
+            scheme=self.cfg.scheme)
+        self.elr.connect()
         _, _ = self.elr.create_repo(
-            self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+            self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
                                              self.cfg.repo_name))
 
         with gen_libs.no_std_out():
@@ -184,10 +201,13 @@ class UnitTest(unittest.TestCase):
         """
 
         self.args["-R"] = True
-        self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
-                                                   self.cfg.port)
+        self.elr = elastic_class.ElasticSearchRepo(
+            self.cfg.host, port=self.cfg.port, user=self.cfg.user,
+            japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
+            scheme=self.cfg.scheme)
+        self.elr.connect()
         _, _ = self.elr.create_repo(
-            self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+            self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
                                              self.cfg.repo_name))
 
         with gen_libs.no_std_out():
@@ -205,14 +225,20 @@ class UnitTest(unittest.TestCase):
         """
 
         self.args["-D"] = self.cfg.repo_name
-        self.elr = elastic_class.ElasticSearchRepo(self.cfg.host,
-                                                   self.cfg.port)
+        self.elr = elastic_class.ElasticSearchRepo(
+            self.cfg.host, port=self.cfg.port, user=self.cfg.user,
+            japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
+            scheme=self.cfg.scheme)
+        self.elr.connect()
         _, _ = self.elr.create_repo(
-            self.cfg.repo_name, os.path.join(self.cfg.repo_dir,
+            self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
                                              self.cfg.repo_name))
         elastic_db_dump.run_program(self.args, self.func_dict)
-        els = elastic_class.ElasticSearchDump(self.cfg.host, self.cfg.port,
-                                              repo=self.cfg.repo_name)
+        els = elastic_class.ElasticSearchDump(
+            self.cfg.host, port=self.cfg.port, repo=self.cfg.repo_name,
+            user=self.cfg.user, japd=self.cfg.japd,
+            ca_cert=self.cfg.ssl_client_ca, scheme=self.cfg.scheme)
+        els.connect()
 
         self.assertTrue(els.dump_list)
 
