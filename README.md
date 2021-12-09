@@ -66,13 +66,6 @@ pip install -r requirements-elastic-python-lib.txt --target elastic_lib/lib --tr
 
 # Configuration:
 
-Create Elasticsearch configuration file.
-
-```
-cd config
-cp elastic.py.TEMPLATE elastic.py
-```
-
 Make the appropriate changes to the Elasticsearch environment.
   * Change these entries in the elasticsearch set up:
     - host = ["HOST_NAME1", "HOST_NAME2"]
@@ -89,6 +82,8 @@ Make the appropriate changes to the Elasticsearch environment.
     - scheme = "https"
 
 ```
+cd config
+cp elastic.py.TEMPLATE elastic.py
 vim elastic.py
 sudo chown elasticsearch:elasticsearch elastic.py
 ```
@@ -205,16 +200,24 @@ Install/upgrade system modules.
 
 Create Elasticsearch configuration file.
 
+Make the appropriate changes to the Elasticsearch environment.
+  * Change these entries in the elasticsearch set up:
+    - host = ["HOST_NAME1", "HOST_NAME2"]
+
+  * If login credentials are required:
+    - user = None
+    - japd = None
+
+  * If SSL connections are being used:
+    - ssl_client_ca = None
+
+  * Change these entries only if required and you know what you are doing:
+    - port = 9200
+    - scheme = "https"
+
 ```
 cd test/blackbox/elastic_db_dump/config
 cp ../../../../config/elastic.py.TEMPLATE elastic.py
-```
-
-Make the appropriate changes to the Elasticsearch environment.
-  * Change these entries in the elastic.py file.  List all the servers in the Elasticsearch cluster.
-    - host = ["HOST_NAME1", "HOST_NAME2"]
-
-```
 vim elastic.py
 sudo chown elasticsearch:elasticsearch elastic.py
 ```
