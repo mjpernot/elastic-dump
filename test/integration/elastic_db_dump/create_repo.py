@@ -64,7 +64,8 @@ class UnitTest(unittest.TestCase):
         self.test_path = os.path.join(os.getcwd(), self.base_dir)
         self.config_path = os.path.join(self.test_path, "config")
         self.cfg = gen_libs.load_module("elastic", self.config_path)
-        self.args_array = {"-C": self.cfg.repo_name, "-l": self.cfg.phy_repo_dir}
+        self.args_array = {"-C": self.cfg.repo_name,
+                           "-l": self.cfg.phy_repo_dir}
         self.phy_repo_dir = os.path.join(
             self.cfg.phy_repo_dir, self.cfg.repo_name)
         self.els = elastic_class.ElasticSearchDump(
@@ -102,7 +103,7 @@ class UnitTest(unittest.TestCase):
             scheme=self.cfg.scheme)
         self.elr.connect()
         self.elr.create_repo(
-            self.cfg.repo_name,os.path.join(
+            self.cfg.repo_name, os.path.join(
                 self.cfg.phy_repo_dir, self.cfg.repo_name))
 
         with gen_libs.no_std_out():
@@ -122,7 +123,7 @@ class UnitTest(unittest.TestCase):
 
         elastic_db_dump.create_repo(self.els, args_array=self.args_array)
         self.elr = elastic_class.ElasticSearchRepo(
-            self.cfg.host,port=self.cfg.port, user=self.cfg.user,
+            self.cfg.host, port=self.cfg.port, user=self.cfg.user,
             japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
             scheme=self.cfg.scheme)
         self.elr.connect()
