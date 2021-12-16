@@ -42,16 +42,16 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Unit testing initilization.
-        test_with_option -> Test with -i option in args_array.
-        test_no_i_option -> Test with no -i option in args_array.
-        test_err_flag_true -> Test error flag set to True.
-        test_err_flag_false -> Test error flag set to False.
-        test_dump_status_success -> Test dump status set to success.
-        test_dump_status_unknown -> Test dump status set to unknown.
-        test_dump_status_incomp -> Test dump status set to incompatible.
-        test_dump_status_partial -> Test dump status set to partial.
-        test_dump_status_failed -> Test dump status set to failed.
+        setUp
+        test_with_option
+        test_no_i_option
+        test_err_flag_true
+        test_err_flag_false
+        test_dump_status_success
+        test_dump_status_unknown
+        test_dump_status_incomp
+        test_dump_status_partial
+        test_dump_status_failed
 
     """
 
@@ -72,8 +72,8 @@ class UnitTest(unittest.TestCase):
             Description:  Class representation of the ElasticSearchDump class.
 
             Methods:
-                __init__ -> Initialize configuration environment.
-                dump_db -> Simulates dumping a Elasticssearch database.
+                __init__
+                dump_db
 
             """
 
@@ -99,8 +99,6 @@ class UnitTest(unittest.TestCase):
                 Description:  Simulates dumping a Elasticssearch database.
 
                 Arguments:
-                    (output) err_flag True|False -> Has errors been detected.
-                    (output) status_msg -> Return dump status or error message.
 
                 """
 

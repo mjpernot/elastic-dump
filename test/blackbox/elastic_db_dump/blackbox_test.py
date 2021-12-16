@@ -81,7 +81,9 @@ def create_es_instance(cfg, instance, repo_name=None):
 
     """
 
-    return instance(cfg.host, cfg.port, repo=repo_name)
+    return instance(
+        cfg.host, port=cfg.port, repo=repo_name, user=cfg.user,
+        japd=cfg.japd, ca_cert=cfg.ssl_client_ca, scheme=cfg.scheme)
 
 
 def remove_repo(elr, repo_name, dump_loc):
@@ -138,6 +140,7 @@ def main():
     if "-C" in args_array:
         elr = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
                                  args_array["-C"])
+        elr.connect()
 
         if chk_create_repo(elr, args_array["-C"]):
             print(prt_good)
@@ -150,11 +153,13 @@ def main():
     elif "-R" in args_array:
         elr = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
                                  args_array["-R"])
+        elr.connect()
         _ = remove_repo(elr, args_array["-R"], args_array["-P"])
 
     elif "-i" in args_array and "-D" in args_array:
         elr = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
                                  args_array["-D"])
+        elr.connect()
         dir_path = os.path.join(args_array["-P"], args_array["-D"], "indices")
 
         # Count number of databases/indices dumped to repository.
@@ -171,8 +176,10 @@ def main():
     elif "-D" in args_array:
         els = create_es_instance(cfg, elastic_class.ElasticSearchDump,
                                  args_array["-D"])
+        els.connect()
         elr = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
                                  args_array["-D"])
+        elr.connect()
 
         if els.dump_list:
             print(prt_good)
@@ -184,6 +191,7 @@ def main():
 
     elif "-I" in args_array:
         els = create_es_instance(cfg, elastic_class.ElasticSearchDump)
+        els.connect()
 
         print(str(
             [x.split() for x in els.els.cat.indices().splitlines()][0][2]))
