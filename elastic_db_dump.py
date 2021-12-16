@@ -44,10 +44,17 @@
         The configuration file format for the Elasticsearch connection to a
         database.
 
-            # Elasticsearch configuration file.
-            name = ["HOSTNAME1", "HOSTNAME2"]
-            # Default port for ElasticSearch is 9200.
+            # Elasticsearch configuration file
+            name = ["HOST_NAME1", "HOST_NAME2"]
             port = 9200
+
+            # Login credentials
+            user = None
+            japd = None
+
+            # SSL connection
+            ssl_client_ca = None
+            scheme = "https"
 
         Configuration modules -> Name is runtime dependent as it can be used to
         connect to different databases with different names.
