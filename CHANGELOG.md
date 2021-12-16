@@ -5,6 +5,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [1.1.0] - 2021-11-22
+- Updated to work in Elasticsearch 7.12.0
+- Use login credentials and SSL connections
+
 ### Fixed
 - list_dumps:  Removed \*\*kwargs from elastic_libs.list_dumps call.
 
