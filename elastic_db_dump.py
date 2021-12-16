@@ -8,26 +8,31 @@
     Usage:
         elastic_db_dump.py -c file -d path
             {-C repo_name -l base_path |
-            -D [repo_name] [-i index1 {index2 ...}] |
-            -L [repo_name] | -R}
+             -D [repo_name] [-i index1 {index2 ...}] |
+             -L [repo_name] |
+             -R}
             [-v | -h]
 
     Arguments:
         -c file => Elasticsearch configuration file.  Required argument.
         -d dir path => Directory path for option '-c'.  Required argument.
-        -C repo_name => Create new repository name.  Requires -l option.
-        -l base_path => Base directory path name for repository.
-            Used with the -C option.
+
+        -C repo_name => Create new repository name.
+            -l base_path => Base directory path name for repository.
+
         -D [repo_name] => Dump an Elasticsearch database.  repo_name is name
-            of repository to dump.  repo_name is required if multiple
-            repositories exist or if used in conjunction with -i option.
-        -i index1 {index2 ...} => One or more indices to dump.
-            Used with the -D option.
-            Can use wildcard searches in the index name.
+            of repository to dump.
+                Note:  repo_name is required if multiple repositories exist or
+                if the -i option is used.
+            -i index1 {index2 ...} => One or more indices to dump.
+                Note: Can use wildcard searches in the index name.
+
         -L [repo_name] => List of database dumps for an Elasticsearch
             repository.
-            NOTE: repo_name is required if multiple repositories exist.
+                Note: repo_name is required if multiple repositories exist.
+
         -R => List of repositories in the Elasticsearch database.
+
         -v => Display version of this program.
         -h => Help and usage message.
 
@@ -35,14 +40,21 @@
         NOTE 2:  -C, -D, -L, and -R are XOR options.
 
     Notes:
-        Elasticsearch configuration file format (elastic.py).  The
-        configuration file format for the Elasticsearch connection to a
+        Elasticsearch configuration file format (config/elastic.py.TEMPLATE).
+        The configuration file format for the Elasticsearch connection to a
         database.
 
-            # Elasticsearch configuration file.
-            name = ["HOSTNAME1", "HOSTNAME2"]
-            # Default port for ElasticSearch is 9200.
+            # Elasticsearch configuration file
+            name = ["HOST_NAME1", "HOST_NAME2"]
             port = 9200
+
+            # Login credentials
+            user = None
+            japd = None
+
+            # SSL connection
+            ssl_client_ca = None
+            scheme = "https"
 
         Configuration modules -> Name is runtime dependent as it can be used to
         connect to different databases with different names.
@@ -69,7 +81,7 @@ import version
 __version__ = version.__version__
 
 
-def help_message(**kwargs):
+def help_message():
 
     """Function:  help_message
 
@@ -99,23 +111,30 @@ def create_repo(els, **kwargs):
     args_array = dict(kwargs.get("args_array"))
     repo_name = args_array.get("-C")
     repo_dir = args_array.get("-l")
-    elr = elastic_class.ElasticSearchRepo(els.hosts, els.port)
+    elr = elastic_class.ElasticSearchRepo(
+        els.hosts, port=els.port, user=els.user, japd=els.japd,
+        ca_cert=els.ca_cert, scheme=els.scheme)
+    elr.connect()
 
-    if repo_name in elr.repo_dict:
-        print("ERROR:  '%s' repository already exists at: '%s'"
-              % (repo_name, repo_dir))
+    if elr.is_connected:
+        if repo_name in elr.repo_dict:
+            print("ERROR:  '%s' repository already exists at: '%s'"
+                  % (repo_name, repo_dir))
+
+        else:
+            err_flag, msg = elr.create_repo(repo_name,
+                                            os.path.join(repo_dir, repo_name))
+
+            if err_flag:
+                print("Error detected for Repository: '%s' at '%s'"
+                      % (repo_name, repo_dir))
+                print("Reason: '%s'" % (msg))
 
     else:
-        err_flag, msg = elr.create_repo(repo_name,
-                                        os.path.join(repo_dir, repo_name))
-
-        if err_flag:
-            print("Error detected for Repository: '%s' at '%s'"
-                  % (repo_name, repo_dir))
-            print("Reason: '%s'" % (msg))
+        print("Error: create_repo: Failed to connect to Elasticsearch")
 
 
-def print_failures(els, **kwargs):
+def print_failures(els):
 
     """Function:  print_failures
 
@@ -185,11 +204,13 @@ def list_dumps(els, **kwargs):
 
     Arguments:
         (input) els -> Elasticsearch class instance.
+        (input) **kwargs:
+            args_array -> Dict of command line options and values.
 
     """
 
     if els.repo_name:
-        elastic_libs.list_dumps(els.dump_list, **kwargs)
+        elastic_libs.list_dumps(els.dump_list)
 
     else:
         print("WARNING:  Repository name not found or not passed.")
@@ -203,14 +224,24 @@ def list_repos(els, **kwargs):
 
     Arguments:
         (input) els -> Elasticsearch class instance.
+        (input) **kwargs:
+            args_array -> Dict of command line options and values.
 
     """
 
-    elr = elastic_class.ElasticSearchRepo(els.hosts, els.port)
-    elastic_libs.list_repos2(elr.repo_dict)
+    elr = elastic_class.ElasticSearchRepo(
+        els.hosts, port=els.port, user=els.user, japd=els.japd,
+        ca_cert=els.ca_cert, scheme=els.scheme)
+    elr.connect()
+
+    if elr.is_connected:
+        elastic_libs.list_repos2(elr.repo_dict)
+
+    else:
+        print("Error: list_repos: Failed to connect to Elasticsearch")
 
 
-def run_program(args_array, func_dict, **kwargs):
+def run_program(args_array, func_dict):
 
     """Function:  run_program
 
@@ -227,15 +258,25 @@ def run_program(args_array, func_dict, **kwargs):
     args_array = dict(args_array)
     func_dict = dict(func_dict)
     cfg = gen_libs.load_module(args_array["-c"], args_array["-d"])
+    user = cfg.user if hasattr(cfg, "user") else None
+    japd = cfg.japd if hasattr(cfg, "japd") else None
+    ca_cert = cfg.ssl_client_ca if hasattr(cfg, "ssl_client_ca") else None
+    scheme = cfg.scheme if hasattr(cfg, "scheme") else "https"
 
     try:
         prog_lock = gen_class.ProgramLock(cmdline.argv, cfg.host)
 
-        # Find which functions to call.
         for opt in set(args_array.keys()) & set(func_dict.keys()):
             els = elastic_class.ElasticSearchDump(
-                cfg.host, cfg.port, args_array.get(opt, None), **kwargs)
-            func_dict[opt](els, args_array=args_array, **kwargs)
+                cfg.host, port=cfg.port, repo=args_array.get(opt, None),
+                user=user, japd=japd, ca_cert=ca_cert, scheme=scheme)
+            els.connect()
+
+            if els.is_connected:
+                func_dict[opt](els, args_array=args_array)
+
+            else:
+                print("ERROR:  Failed to connect to Elasticsearch")
 
         del prog_lock
 

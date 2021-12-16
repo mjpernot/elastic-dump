@@ -2,15 +2,34 @@
 # Classification (U)
 # Unclassified until filled.
 
+# List of elasticsearch nodes in cluster
 host = ["HOST_NAME1", "HOST_NAME2"]
+# Elasticsearch port - default is port 9200
 port = 9200
+# User name
+# If no user name is required then use None
+# Example:  user = "username"
+user = None
+# User pswd
+# Example:  japd = "xxx"
+japd = None
+
+# SSL Configuration settings
+# If not set will connect to Elasticsearch without using SSL connections.
+# File containing the SSL certificate authority.
+# Example: ssl_client_ca = "/etc/elasticsearch/certs/ca.pem"
+ssl_client_ca = None
+# Type of connection when using SSL connection.
+# Do not change unless you know what you are doing.
+scheme = "https"
+
+# Name of the test repository directory path
+# Must be a shared mount between all Elasticsearch databases in the cluster.
+# NOTE:  If running ElasticSearch as Docker setup, then these paths will be different.  If running as a standard setup, they will be the same.
+# Logical base repository directory.
+log_repo_dir = "LOGICAL_DIR_PATH"
+# Physical base repository directory.
+phy_repo_dir = "PHYSICAL_DIR_PATH"
 
 # Name of the test repository name.
 repo_name = "TEST_INTR_REPO"
-# Directory path to the shared repository.
-# Must be a shared mount between all Elasticsearch database servers.
-# NOTE:  If running ElasticSearch as Docker setup, then these paths will be different.  If running as a standard setup, they will be the same.
-# Logical base repository directory.
-repo_dir = "LOGICAL_DIR_PATH"
-# Physical base repository directory.
-phy_repo_dir = "PHYSICAL_DIR_PATH"

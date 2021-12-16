@@ -42,8 +42,8 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Unit testing initilization.
-        test_list_repos -> Test listing of repositories.
+        setUp
+        test_list_repos
 
     """
 
@@ -61,8 +61,11 @@ class UnitTest(unittest.TestCase):
         self.test_path = os.path.join(os.getcwd(), self.base_dir)
         self.config_path = os.path.join(self.test_path, "config")
         self.cfg = gen_libs.load_module("elastic", self.config_path)
-        self.els = elastic_class.ElasticSearchDump(self.cfg.host,
-                                                   self.cfg.port)
+        self.els = elastic_class.ElasticSearchDump(
+            self.cfg.host, port=self.cfg.port, user=self.cfg.user,
+            japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
+            scheme=self.cfg.scheme)
+        self.els.connect()
 
     def test_list_repos(self):
 
