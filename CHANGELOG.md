@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
-## [1.1.0] - 2022-04-13
+## [1.1.1] - 2022-04-13
 - Updated to work in Elasticsearch 7.17.0
 - Updated elastic-lib to v4.0.0
 
