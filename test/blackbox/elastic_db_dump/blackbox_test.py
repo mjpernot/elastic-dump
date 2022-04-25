@@ -164,7 +164,7 @@ def main():
 
         # Count number of databases/indices dumped to repository.
         if len([name for name in os.listdir(dir_path)
-                if os.path.isdir(os.path.join(dir_path, name))]) == 1:
+                if os.path.isdir(os.path.join(dir_path, name))]) >= 1:
 
             print(prt_good)
 
