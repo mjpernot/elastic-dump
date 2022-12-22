@@ -64,10 +64,11 @@ class UnitTest(unittest.TestCase):
         self.cfg = gen_libs.load_module("elastic", self.config_path)
         self.phy_repo_dir = os.path.join(self.cfg.phy_repo_dir,
                                          self.cfg.repo_name)
-        self.func_names = {"-C": elastic_db_dump.create_repo,
-                          "-D": elastic_db_dump.initate_dump,
-                          "-L": elastic_db_dump.list_dumps,
-                          "-R": elastic_db_dump.list_repos}
+        self.func_names = {
+            "-C": elastic_db_dump.create_repo,
+            "-D": elastic_db_dump.initate_dump,
+            "-L": elastic_db_dump.list_dumps,
+            "-R": elastic_db_dump.list_repos}
         self.args = {"-c": "elastic", "-d": self.config_path}
 
         elr = elastic_class.ElasticSearchRepo(
