@@ -6,12 +6,12 @@
 
 echo ""
 echo "Unit test:"
-test/unit/elastic_db_dump/help_message.py
-test/unit/elastic_db_dump/print_failures.py
-test/unit/elastic_db_dump/create_repo.py
-test/unit/elastic_db_dump/initate_dump.py
-test/unit/elastic_db_dump/list_dumps.py
-test/unit/elastic_db_dump/list_repos.py
-test/unit/elastic_db_dump/run_program.py
-test/unit/elastic_db_dump/main.py
+/usr/bin/python test/unit/elastic_db_dump/help_message.py
+/usr/bin/python test/unit/elastic_db_dump/print_failures.py
+/usr/bin/python test/unit/elastic_db_dump/create_repo.py
+/usr/bin/python test/unit/elastic_db_dump/initate_dump.py
+/usr/bin/python test/unit/elastic_db_dump/list_dumps.py
+/usr/bin/python test/unit/elastic_db_dump/list_repos.py
+/usr/bin/python test/unit/elastic_db_dump/run_program.py
+/usr/bin/python test/unit/elastic_db_dump/main.py
 
