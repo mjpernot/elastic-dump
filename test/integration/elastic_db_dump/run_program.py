@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # Classification (U)
 
 """Program:  run_program.py
@@ -18,13 +17,7 @@
 import sys
 import os
 import shutil
-
-if sys.version_info < (2, 7):
-    import unittest2 as unittest
-else:
-    import unittest
-
-# Third-party
+import unittest
 import mock
 
 # Local
@@ -70,7 +63,7 @@ class UnitTest(unittest.TestCase):
         self.cfg = gen_libs.load_module("elastic", self.config_path)
         self.phy_repo_dir = os.path.join(self.cfg.phy_repo_dir,
                                          self.cfg.repo_name)
-        self.func_dict = {"-C": elastic_db_dump.create_repo,
+        self.func_names = {"-C": elastic_db_dump.create_repo,
                           "-D": elastic_db_dump.initate_dump,
                           "-L": elastic_db_dump.list_dumps,
                           "-R": elastic_db_dump.list_repos}
@@ -118,7 +111,7 @@ class UnitTest(unittest.TestCase):
         _, _ = self.elr.create_repo(
             self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
                                              self.cfg.repo_name))
-        elastic_db_dump.run_program(self.args, self.func_dict)
+        elastic_db_dump.run_program(self.args, self.func_names)
         dir_path = os.path.join(self.cfg.phy_repo_dir, self.cfg.repo_name,
                                 "indices")
 
@@ -143,7 +136,7 @@ class UnitTest(unittest.TestCase):
             elastic_db_dump.gen_class.SingleInstanceException()
 
         self.assertFalse(elastic_db_dump.run_program(self.args,
-                                                     self.func_dict))
+                                                     self.func_names))
 
     def test_create_repo(self):
 
@@ -157,7 +150,7 @@ class UnitTest(unittest.TestCase):
 
         self.args["-C"] = self.cfg.repo_name
         self.args["-l"] = self.cfg.phy_repo_dir
-        elastic_db_dump.run_program(self.args, self.func_dict)
+        elastic_db_dump.run_program(self.args, self.func_names)
         self.elr = elastic_class.ElasticSearchRepo(
             self.cfg.host, port=self.cfg.port, repo=self.cfg.repo_name,
             user=self.cfg.user, japd=self.cfg.japd,
@@ -188,7 +181,7 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.run_program(self.args,
-                                                         self.func_dict))
+                                                         self.func_names))
 
     def test_list_repos(self):
 
@@ -212,7 +205,7 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(elastic_db_dump.run_program(self.args,
-                                                         self.func_dict))
+                                                         self.func_names))
 
     def test_initate_dump(self):
 
@@ -233,7 +226,7 @@ class UnitTest(unittest.TestCase):
         _, _ = self.elr.create_repo(
             self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
                                              self.cfg.repo_name))
-        elastic_db_dump.run_program(self.args, self.func_dict)
+        elastic_db_dump.run_program(self.args, self.func_names)
         els = elastic_class.ElasticSearchDump(
             self.cfg.host, port=self.cfg.port, repo=self.cfg.repo_name,
             user=self.cfg.user, japd=self.cfg.japd,
