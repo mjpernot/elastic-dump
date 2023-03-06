@@ -8,7 +8,6 @@
 
 ###  This README file is broken down into the following sections:
   * Features
-  * Prerequisites
   * Installation
   * Configuration
   * Program Help Function
@@ -23,16 +22,6 @@
   * List current repositories in the Elasticsearch database.
   * List of database dumps for the Elasticsearch database.
   * Create new repositories for dumping Elasticsearch databases to.
-
-
-# Prerequisites:
-  * List of Linux packages that need to be installed on the server via git.
-    - git
-    - python-pip
-
-  * Local class/library dependencies within the program structure.
-    - python-lib
-    - elastic-lib
 
 
 # Installation:
