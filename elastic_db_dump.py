@@ -273,9 +273,10 @@ def run_program(args_array, func_dict):
     japd = cfg.japd if hasattr(cfg, "japd") else None
     ca_cert = cfg.ssl_client_ca if hasattr(cfg, "ssl_client_ca") else None
     scheme = cfg.scheme if hasattr(cfg, "scheme") else "https"
+    flavorid = "elasticdump"
 
     try:
-        prog_lock = gen_class.ProgramLock(cmdline.argv, cfg.host)
+        prog_lock = gen_class.ProgramLock(cmdline.argv, flavor_id=flavorid)
 
         for opt in set(args_array.keys()) & set(func_dict.keys()):
             els = elastic_class.ElasticSearchDump(
@@ -292,7 +293,7 @@ def run_program(args_array, func_dict):
         del prog_lock
 
     except gen_class.SingleInstanceException:
-        print("WARNING:  elastic_db_dump lock in place for: %s" % (cfg.host))
+        print("WARNING:  elastic_db_dump lock in place for: %s" % (flavorid))
 
 
 def main():
