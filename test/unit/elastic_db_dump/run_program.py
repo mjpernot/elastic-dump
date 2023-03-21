@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # Classification (U)
 
 """Program:  run_program.py
@@ -17,13 +16,7 @@
 # Standard
 import sys
 import os
-
-if sys.version_info < (2, 7):
-    import unittest2 as unittest
-else:
-    import unittest
-
-# Third-party
+import unittest
 import mock
 
 # Local
@@ -198,7 +191,7 @@ class UnitTest(unittest.TestCase):
 
         self.cfg = CfgTest()
         self.args = {"-c": "config_file", "-d": "config_dir"}
-        self.func_dict = {"-L": list_dumps, "-U": disk_usage}
+        self.func_names = {"-L": list_dumps, "-U": disk_usage}
         self.proglock = ProgramLock(["cmdline"], "FlavorID")
 
     @mock.patch("elastic_db_dump.gen_libs.load_module")
@@ -227,7 +220,7 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(
-                elastic_db_dump.run_program(self.args, self.func_dict))
+                elastic_db_dump.run_program(self.args, self.func_names))
 
     @mock.patch("elastic_db_dump.gen_libs.load_module")
     @mock.patch("elastic_db_dump.elastic_class.ElasticSearchDump")
@@ -253,7 +246,7 @@ class UnitTest(unittest.TestCase):
         mock_load.return_value = self.cfg
 
         self.assertFalse(
-            elastic_db_dump.run_program(self.args, self.func_dict))
+            elastic_db_dump.run_program(self.args, self.func_names))
 
     @mock.patch("elastic_db_dump.gen_libs.load_module")
     @mock.patch("elastic_db_dump.elastic_class.ElasticSearchDump")
@@ -282,7 +275,7 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(
-                elastic_db_dump.run_program(self.args, self.func_dict))
+                elastic_db_dump.run_program(self.args, self.func_names))
 
     @mock.patch("elastic_db_dump.gen_libs.load_module")
     @mock.patch("elastic_db_dump.elastic_class.ElasticSearchDump")
@@ -310,7 +303,7 @@ class UnitTest(unittest.TestCase):
         mock_load.return_value = self.cfg
 
         self.assertFalse(
-            elastic_db_dump.run_program(self.args, self.func_dict))
+            elastic_db_dump.run_program(self.args, self.func_names))
 
     @mock.patch("elastic_db_dump.gen_libs.load_module")
     @mock.patch("elastic_db_dump.elastic_class.ElasticSearchDump")
@@ -336,7 +329,7 @@ class UnitTest(unittest.TestCase):
         mock_load.return_value = self.cfg
 
         self.assertFalse(
-            elastic_db_dump.run_program(self.args, self.func_dict))
+            elastic_db_dump.run_program(self.args, self.func_names))
 
     @mock.patch("elastic_db_dump.gen_libs.load_module")
     @mock.patch("elastic_db_dump.elastic_class.ElasticSearchDump")
@@ -360,7 +353,7 @@ class UnitTest(unittest.TestCase):
         mock_load.return_value = self.cfg
 
         self.assertFalse(
-            elastic_db_dump.run_program(self.args, self.func_dict))
+            elastic_db_dump.run_program(self.args, self.func_names))
 
 
 if __name__ == "__main__":

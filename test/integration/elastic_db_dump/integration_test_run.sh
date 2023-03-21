@@ -6,10 +6,10 @@
 
 echo ""
 echo "Integration test:"
-test/integration/elastic_db_dump/create_repo.py
-test/integration/elastic_db_dump/initate_dump.py
-test/integration/elastic_db_dump/list_dumps.py
-test/integration/elastic_db_dump/list_repos.py
-test/integration/elastic_db_dump/run_program.py
-test/integration/elastic_db_dump/main.py
+/usr/bin/python test/integration/elastic_db_dump/create_repo.py
+/usr/bin/python test/integration/elastic_db_dump/initate_dump.py
+/usr/bin/python test/integration/elastic_db_dump/list_dumps.py
+/usr/bin/python test/integration/elastic_db_dump/list_repos.py
+/usr/bin/python test/integration/elastic_db_dump/run_program.py
+/usr/bin/python test/integration/elastic_db_dump/main.py
 
