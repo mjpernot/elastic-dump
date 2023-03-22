@@ -45,7 +45,7 @@
         database.
 
             # Elasticsearch configuration file
-            host = ["HOST_NAME1", "HOST_NAME2"]
+            host = ["https://HOST_NAME1:9200", "https://HOST_NAME2:9200"]
             port = 9200
 
             # Login credentials
@@ -65,18 +65,29 @@
 """
 
 # Libraries and Global Variables
+from __future__ import print_function
+from __future__ import absolute_import
 
 # Standard
 import sys
 import os
 
 # Local
-import lib.arg_parser as arg_parser
-import lib.gen_libs as gen_libs
-import lib.gen_class as gen_class
-import elastic_lib.elastic_class as elastic_class
-import elastic_lib.elastic_libs as elastic_libs
-import version
+try:
+    from .lib import arg_parser
+    from .lib import gen_libs
+    from .lib import gen_class
+    from .elastic_lib import elastic_class
+    from .elastic_lib import elastic_libs
+    from . import version
+
+except (ValueError, ImportError) as err:
+    import lib.arg_parser as arg_parser
+    import lib.gen_libs as gen_libs
+    import lib.gen_class as gen_class
+    import elastic_lib.elastic_class as elastic_class
+    import elastic_lib.elastic_libs as elastic_libs
+    import version
 
 __version__ = version.__version__
 
@@ -262,9 +273,10 @@ def run_program(args_array, func_dict):
     japd = cfg.japd if hasattr(cfg, "japd") else None
     ca_cert = cfg.ssl_client_ca if hasattr(cfg, "ssl_client_ca") else None
     scheme = cfg.scheme if hasattr(cfg, "scheme") else "https"
+    flavorid = "elasticdump"
 
     try:
-        prog_lock = gen_class.ProgramLock(cmdline.argv, cfg.host)
+        prog_lock = gen_class.ProgramLock(cmdline.argv, flavor_id=flavorid)
 
         for opt in set(args_array.keys()) & set(func_dict.keys()):
             els = elastic_class.ElasticSearchDump(
@@ -281,7 +293,7 @@ def run_program(args_array, func_dict):
         del prog_lock
 
     except gen_class.SingleInstanceException:
-        print("WARNING:  elastic_db_dump lock in place for: %s" % (cfg.host))
+        print("WARNING:  elastic_db_dump lock in place for: %s" % (flavorid))
 
 
 def main():
