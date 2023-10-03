@@ -265,7 +265,6 @@ def run_program(args_array, func_dict):
 
     """
 
-    cmdline = gen_libs.get_inst(sys)
     args_array = dict(args_array)
     func_dict = dict(func_dict)
     cfg = gen_libs.load_module(args_array["-c"], args_array["-d"])
@@ -276,7 +275,7 @@ def run_program(args_array, func_dict):
     flavorid = "elasticdump"
 
     try:
-        prog_lock = gen_class.ProgramLock(cmdline.argv, flavor_id=flavorid)
+        prog_lock = gen_class.ProgramLock(sys.argv, flavor_id=flavorid)
 
         for opt in set(args_array.keys()) & set(func_dict.keys()):
             els = elastic_class.ElasticSearchDump(
@@ -318,7 +317,6 @@ def main():
 
     """
 
-    cmdline = gen_libs.get_inst(sys)
     dir_chk_list = ["-d"]
     func_dict = {"-C": create_repo, "-D": initate_dump, "-L": list_dumps,
                  "-R": list_repos}
@@ -332,7 +330,7 @@ def main():
 
     # Process argument list from command line.
     args_array = arg_parser.arg_parse2(
-        cmdline.argv, opt_val_list, opt_val=opt_val, multi_val=opt_multi_list)
+        sys.argv, opt_val_list, opt_val=opt_val, multi_val=opt_multi_list)
 
     if not gen_libs.help_func(args_array, __version__, help_message) \
        and not arg_parser.arg_require(args_array, opt_req_list) \
