@@ -5,6 +5,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [1.2.0] - 2023-10-03
+- Updated to work in Elasticsearch v8.5.2
 
 
 ## [1.1.2] - 2022-12-22
