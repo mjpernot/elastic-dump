@@ -9,6 +9,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ### Changed
 - main, run_program: Removed gen_libs.get_inst call.
+- Documentation update
 
 
 ## [1.1.2] - 2022-12-22

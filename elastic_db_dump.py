@@ -113,9 +113,9 @@ def create_repo(els, **kwargs):
     Description:  Create a repository for Elasticsearch database dumps.
 
     Arguments:
-        (input) els -> ElasticSearch class instance.
+        (input) els -> ElasticSearch class instance
         (input) **kwargs:
-            args_array -> Dict of command line options and values.
+            args_array -> Dict of command line options and values
 
     """
 
@@ -152,7 +152,7 @@ def print_failures(els):
     Description:  Prints out failures detected within the class.
 
     Arguments:
-        (input) els -> Elasticsearch class instance.
+        (input) els -> Elasticsearch class instance
 
     """
 
@@ -168,10 +168,10 @@ def initate_dump(els, dbs_list=None, **kwargs):
         the return status of the database dump.
 
     Arguments:
-        (input) els -> Elasticsearch class instance.
-        (input) dbs_list -> String of comma-delimited indice names to dump.
+        (input) els -> Elasticsearch class instance
+        (input) dbs_list -> String of comma-delimited indice names to dump
         (input) **kwargs:
-            args_array -> Dict of command line options and values.
+            args_array -> Dict of command line options and values
 
     """
 
@@ -214,9 +214,9 @@ def list_dumps(els, **kwargs):
     Description:  Lists the dumps in a repository.
 
     Arguments:
-        (input) els -> Elasticsearch class instance.
+        (input) els -> Elasticsearch class instance
         (input) **kwargs:
-            args_array -> Dict of command line options and values.
+            args_array -> Dict of command line options and values
 
     """
 
@@ -234,9 +234,9 @@ def list_repos(els, **kwargs):
     Description:  Lists the repositories present.
 
     Arguments:
-        (input) els -> Elasticsearch class instance.
+        (input) els -> Elasticsearch class instance
         (input) **kwargs:
-            args_array -> Dict of command line options and values.
+            args_array -> Dict of command line options and values
 
     """
 
@@ -260,8 +260,8 @@ def run_program(args_array, func_dict):
         Create a program lock to prevent other instantiations from running.
 
     Arguments:
-        (input) args_array -> Dict of command line options and values.
-        (input) func_dict -> Dictionary list of functions and options.
+        (input) args_array -> Dict of command line options and values
+        (input) func_dict -> Dictionary list of functions and options
 
     """
 
@@ -303,17 +303,17 @@ def main():
         line arguments and values.
 
     Variables:
-        dir_chk_list -> contains options which will be directories.
-        func_dict -> dictionary list for the function calls or other options.
-        opt_con_req_dict -> contains options requiring other options.
-        opt_multi_list -> contains the options that will have multiple values.
-        opt_req_list -> contains options that are required for the program.
-        opt_val -> List of options that allow 0 or 1 value for option.
-        opt_val_list -> contains options which require values.
-        opt_xor_dict -> contains dict with key that is xor with it's values.
+        dir_chk_list -> contains options which will be directories
+        func_dict -> dictionary list for the function calls or other options
+        opt_con_req_dict -> contains options requiring other options
+        opt_multi_list -> contains the options that will have multiple values
+        opt_req_list -> contains options that are required for the program
+        opt_val -> List of options that allow 0 or 1 value for option
+        opt_val_list -> contains options which require values
+        opt_xor_dict -> contains dict with key that is xor with it's values
 
     Arguments:
-        (input) argv -> Arguments from the command line.
+        (input) argv -> Arguments from the command line
 
     """
 
