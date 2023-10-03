@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [1.2.0] - 2023-10-03
+
+
 ## [1.1.2] - 2022-12-22
 - Updated to work in Python 3 too
 - Updated elastic-lib to v4.0.1
