@@ -303,13 +303,14 @@ def main():
         line arguments and values.
 
     Variables:
-        dir_chk_list -> contains options which will be directories
+        dir_perms_chk -> contains options which will be directories and the
+            octal permission settings
         func_dict -> dictionary list for the function calls or other options
         opt_con_req_dict -> contains options requiring other options
         opt_multi_list -> contains the options that will have multiple values
         opt_req_list -> contains options that are required for the program
-        opt_val -> List of options that allow 0 or 1 value for option
-        opt_val_list -> contains options which require values
+        opt_val_bin -> List of options that allow 0 or 1 value for option
+        opt_val -> contains options which require values
         opt_xor_dict -> contains dict with key that is xor with it's values
 
     Arguments:
@@ -317,27 +318,29 @@ def main():
 
     """
 
-    dir_chk_list = ["-d"]
+    dir_perms_chk = {"-d": 5}
     func_dict = {"-C": create_repo, "-D": initate_dump, "-L": list_dumps,
                  "-R": list_repos}
     opt_con_req_dict = {"-C": ["-l"], "-i": ["-D"]}
     opt_multi_list = ["-i"]
     opt_req_list = ["-c", "-d"]
-    opt_val = ["-D", "-L"]
-    opt_val_list = ["-c", "-d", "-i", "-l", "-C"]
-    opt_xor_dict = {"-C": ["-D", "-L", "-R"], "-D": ["-C", "-L", "-R"],
-                    "-L": ["-C", "-D", "-R"], "-R": ["-C", "-D", "-L"]}
+    opt_val_bin = ["-D", "-L"]
+    opt_val = ["-c", "-d", "-i", "-l", "-C"]
+    opt_xor_dict = {
+        "-C": ["-D", "-L", "-R"], "-D": ["-C", "-L", "-R"],
+        "-L": ["-C", "-D", "-R"], "-R": ["-C", "-D", "-L"]}
 
     # Process argument list from command line.
-    args_array = arg_parser.arg_parse2(
-        sys.argv, opt_val_list, opt_val=opt_val, multi_val=opt_multi_list)
+    args = gen_class.ArgParser(
+        sys.argv, opt_val=opt_val, opt_val_bin=opt_val_bin,
+        multi_val=opt_multi_list, do_parse=True)
 
-    if not gen_libs.help_func(args_array, __version__, help_message) \
-       and not arg_parser.arg_require(args_array, opt_req_list) \
-       and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
-       and arg_parser.arg_cond_req_or(args_array, opt_con_req_dict) \
-       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list):
-        run_program(args_array, func_dict)
+    if not gen_libs.help_func(args, __version__, help_message)  \
+       and args.arg_require(opt_req=opt_req_list)               \
+       and args.arg_xor_dict(opt_xor_val=opt_xor_dict)          \
+       and args.arg_cond_req_or(opt_con_or=opt_con_req_dict)    \
+       and args.arg_dir_chk(dir_perms_chk=dir_perms_chk):
+        run_program(args, func_dict)
 
 
 if __name__ == "__main__":
