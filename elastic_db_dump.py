@@ -115,13 +115,13 @@ def create_repo(els, **kwargs):
     Arguments:
         (input) els -> ElasticSearch class instance
         (input) **kwargs:
-            args_array -> Dict of command line options and values
+            args -> ArgParser class instance
 
     """
-
-    args_array = dict(kwargs.get("args_array"))
-    repo_name = args_array.get("-C")
-    repo_dir = args_array.get("-l")
+# STOPPED HERE - modify test unit
+    args = kwargs.get("args")
+    repo_name = args.get_val("-C")
+    repo_dir = args.get_val("-l")
     elr = elastic_class.ElasticSearchRepo(
         els.hosts, port=els.port, user=els.user, japd=els.japd,
         ca_cert=els.ca_cert, scheme=els.scheme)
@@ -133,8 +133,8 @@ def create_repo(els, **kwargs):
                   % (repo_name, repo_dir))
 
         else:
-            err_flag, msg = elr.create_repo(repo_name,
-                                            os.path.join(repo_dir, repo_name))
+            err_flag, msg = elr.create_repo(
+                repo_name, os.path.join(repo_dir, repo_name))
 
             if err_flag:
                 print("Error detected for Repository: '%s' at '%s'"
@@ -171,14 +171,15 @@ def initate_dump(els, dbs_list=None, **kwargs):
         (input) els -> Elasticsearch class instance
         (input) dbs_list -> String of comma-delimited indice names to dump
         (input) **kwargs:
-            args_array -> Dict of command line options and values
+            args -> ArgParser class instance
 
     """
 
     prt_template = "Message:  %s"
+    args = kwargs.get("args")
 
-    if "-i" in kwargs.get("args_array"):
-        dbs_list = ','.join(kwargs.get("args_array").get("-i"))
+    if args.arg_exist("-i"):
+        dbs_list = ','.join(args.get_val("-i"))
 
     err_flag, status_msg = els.dump_db(dbs=dbs_list)
 
@@ -216,7 +217,7 @@ def list_dumps(els, **kwargs):
     Arguments:
         (input) els -> Elasticsearch class instance
         (input) **kwargs:
-            args_array -> Dict of command line options and values
+            args -> ArgParser class instance
 
     """
 
@@ -236,7 +237,7 @@ def list_repos(els, **kwargs):
     Arguments:
         (input) els -> Elasticsearch class instance
         (input) **kwargs:
-            args_array -> Dict of command line options and values
+            args -> ArgParser class instance
 
     """
 
@@ -252,7 +253,7 @@ def list_repos(els, **kwargs):
         print("Error: list_repos: Failed to connect to Elasticsearch")
 
 
-def run_program(args_array, func_dict):
+def run_program(args, func_dict):
 
     """Function:  run_program
 
@@ -260,14 +261,13 @@ def run_program(args_array, func_dict):
         Create a program lock to prevent other instantiations from running.
 
     Arguments:
-        (input) args_array -> Dict of command line options and values
+        (input) args -> ArgParser class instance
         (input) func_dict -> Dictionary list of functions and options
 
     """
 
-    args_array = dict(args_array)
     func_dict = dict(func_dict)
-    cfg = gen_libs.load_module(args_array["-c"], args_array["-d"])
+    cfg = gen_libs.load_module(args.get_val("-c"), args.get_val("-d"))
     user = cfg.user if hasattr(cfg, "user") else None
     japd = cfg.japd if hasattr(cfg, "japd") else None
     ca_cert = cfg.ssl_client_ca if hasattr(cfg, "ssl_client_ca") else None
@@ -277,14 +277,14 @@ def run_program(args_array, func_dict):
     try:
         prog_lock = gen_class.ProgramLock(sys.argv, flavor_id=flavorid)
 
-        for opt in set(args_array.keys()) & set(func_dict.keys()):
+        for opt in set(args.get_args_keys()) & set(func_dict.keys()):
             els = elastic_class.ElasticSearchDump(
-                cfg.host, port=cfg.port, repo=args_array.get(opt, None),
+                cfg.host, port=cfg.port, repo=args.get_val(opt, def_val=None),
                 user=user, japd=japd, ca_cert=ca_cert, scheme=scheme)
             els.connect()
 
             if els.is_connected:
-                func_dict[opt](els, args_array=args_array)
+                func_dict[opt](els, args=args)
 
             else:
                 print("ERROR:  Failed to connect to Elasticsearch")
@@ -319,8 +319,9 @@ def main():
     """
 
     dir_perms_chk = {"-d": 5}
-    func_dict = {"-C": create_repo, "-D": initate_dump, "-L": list_dumps,
-                 "-R": list_repos}
+    func_dict = {
+        "-C": create_repo, "-D": initate_dump, "-L": list_dumps,
+        "-R": list_repos}
     opt_con_req_dict = {"-C": ["-l"], "-i": ["-D"]}
     opt_multi_list = ["-i"]
     opt_req_list = ["-c", "-d"]

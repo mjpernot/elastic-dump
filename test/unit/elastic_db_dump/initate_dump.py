@@ -28,6 +28,104 @@ import version
 __version__ = version.__version__
 
 
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        arg_exist
+        get_val
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.args_array = dict()
+
+    def arg_exist(self, arg):
+
+        """Method:  arg_exist
+
+        Description:  Method stub holder for gen_class.ArgParser.arg_exist.
+
+        Arguments:
+
+        """
+
+        return True if arg in self.args_array else False
+
+    def get_val(self, skey, def_val=None):
+
+        """Method:  get_val
+
+        Description:  Method stub holder for gen_class.ArgParser.get_val.
+
+        Arguments:
+
+        """
+
+        return self.args_array.get(skey, def_val)
+
+
+class ElasticSearchDump(object):
+
+    """Class:  ElasticSearchDump
+
+    Description:  Class representation of the ElasticSearchDump class.
+
+    Methods:
+        __init__
+        dump_db
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Initialization instance of the class.
+
+        Arguments:
+
+        """
+
+        self.repo_name = "Test_Repo_Name"
+        self.cluster_name = "Test_Cluster_Name"
+        self.dump_status = "SUCCESS"
+        self.dbs = None
+
+    def dump_db(self, **kwargs):
+
+        """Method:  dump_db
+
+        Description:  Simulates dumping a Elasticssearch database.
+
+        Arguments:
+
+        """
+
+        err_flag = False
+        status_msg = None
+        self.dbs = kwargs.get("dbs")
+
+        if not self.repo_name:
+            status_msg = "ERROR:  Repository name not set."
+            err_flag = True
+
+        return err_flag, status_msg
+
+
 class UnitTest(unittest.TestCase):
 
     """Class:  UnitTest
@@ -58,55 +156,8 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        class ElasticSearchDump(object):
-
-            """Class:  ElasticSearchDump
-
-            Description:  Class representation of the ElasticSearchDump class.
-
-            Methods:
-                __init__
-                dump_db
-
-            """
-
-            def __init__(self):
-
-                """Method:  __init__
-
-                Description:  Initialization instance of the class.
-
-                Arguments:
-
-                """
-
-                self.repo_name = "Test_Repo_Name"
-                self.cluster_name = "Test_Cluster_Name"
-                self.dump_status = "SUCCESS"
-                self.dbs = None
-
-            def dump_db(self, **kwargs):
-
-                """Method:  dump_db
-
-                Description:  Simulates dumping a Elasticssearch database.
-
-                Arguments:
-
-                """
-
-                err_flag = False
-                status_msg = None
-                self.dbs = kwargs.get("dbs")
-
-                if not self.repo_name:
-                    status_msg = "ERROR:  Repository name not set."
-                    err_flag = True
-
-                return err_flag, status_msg
-
         self.els = ElasticSearchDump()
-        self.args_array = {}
+        self.args = ArgParser()
 
     def test_with_option(self):
 
@@ -118,11 +169,11 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.args_array = {"-i": ["Index1", "Index2"]}
+        self.args.args_array = {"-i": ["Index1", "Index2"]}
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.initate_dump(
-                self.els, args_array=self.args_array))
+            self.assertFalse(
+                elastic_db_dump.initate_dump(self.els, args=self.args))
 
     def test_no_i_option(self):
 
@@ -135,8 +186,8 @@ class UnitTest(unittest.TestCase):
         """
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.initate_dump(
-                self.els, args_array=self.args_array))
+            self.assertFalse(
+                elastic_db_dump.initate_dump(self.els, args=self.args))
 
     def test_err_flag_true(self):
 
@@ -151,8 +202,8 @@ class UnitTest(unittest.TestCase):
         self.els.repo_name = None
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.initate_dump(
-                self.els, args_array=self.args_array))
+            self.assertFalse(
+                elastic_db_dump.initate_dump(self.els, args=self.args))
 
     def test_err_flag_false(self):
 
@@ -164,8 +215,8 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(elastic_db_dump.initate_dump(
-            self.els, args_array=self.args_array))
+        self.assertFalse(
+            elastic_db_dump.initate_dump(self.els, args=self.args))
 
     def test_dump_status_success(self):
 
@@ -177,8 +228,8 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(elastic_db_dump.initate_dump(
-            self.els, args_array=self.args_array))
+        self.assertFalse(
+            elastic_db_dump.initate_dump(self.els, args=self.args))
 
     def test_dump_status_unknown(self):
 
@@ -193,8 +244,8 @@ class UnitTest(unittest.TestCase):
         self.els.dump_status = "unknown"
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.initate_dump(
-                self.els, args_array=self.args_array))
+            self.assertFalse(
+                elastic_db_dump.initate_dump(self.els, args=self.args))
 
     def test_dump_status_incomp(self):
 
@@ -209,8 +260,8 @@ class UnitTest(unittest.TestCase):
         self.els.dump_status = "INCOMPATIBLE"
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.initate_dump(
-                self.els, args_array=self.args_array))
+            self.assertFalse(
+                elastic_db_dump.initate_dump(self.els, args=self.args))
 
     @mock.patch("elastic_db_dump.print_failures")
     def test_dump_status_partial(self, mock_print):
@@ -228,8 +279,8 @@ class UnitTest(unittest.TestCase):
         self.els.dump_status = "PARTIAL"
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.initate_dump(
-                self.els, args_array=self.args_array))
+            self.assertFalse(
+                elastic_db_dump.initate_dump(self.els, args=self.args))
 
     def test_dump_status_failed(self):
 
@@ -244,8 +295,8 @@ class UnitTest(unittest.TestCase):
         self.els.dump_status = "FAILED"
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.initate_dump(
-                self.els, args_array=self.args_array))
+            self.assertFalse(
+                elastic_db_dump.initate_dump(self.els, args=self.args))
 
 
 if __name__ == "__main__":
