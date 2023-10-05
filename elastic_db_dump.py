@@ -118,7 +118,7 @@ def create_repo(els, **kwargs):
             args -> ArgParser class instance
 
     """
-# STOPPED HERE - modify test unit
+
     args = kwargs.get("args")
     repo_name = args.get_val("-C")
     repo_dir = args.get_val("-l")
