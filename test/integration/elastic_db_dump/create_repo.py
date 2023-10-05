@@ -30,6 +30,43 @@ import version
 __version__ = version.__version__
 
 
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        get_val
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.args_array = dict()
+
+    def get_val(self, skey, def_val=None):
+
+        """Method:  get_val
+
+        Description:  Method stub holder for gen_class.ArgParser.get_val.
+
+        Arguments:
+
+        """
+
+        return self.args_array.get(skey, def_val)
+
+
 class UnitTest(unittest.TestCase):
 
     """Class:  UnitTest
@@ -58,8 +95,9 @@ class UnitTest(unittest.TestCase):
         self.test_path = os.path.join(os.getcwd(), self.base_dir)
         self.config_path = os.path.join(self.test_path, "config")
         self.cfg = gen_libs.load_module("elastic", self.config_path)
-        self.args_array = {"-C": self.cfg.repo_name,
-                           "-l": self.cfg.phy_repo_dir}
+        self.args = ArgParser()
+        self.args.args_array = {
+            "-C": self.cfg.repo_name, "-l": self.cfg.phy_repo_dir}
         self.phy_repo_dir = os.path.join(
             self.cfg.phy_repo_dir, self.cfg.repo_name)
         self.els = elastic_class.ElasticSearchDump(
@@ -102,8 +140,7 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(
-                elastic_db_dump.create_repo(self.els,
-                                            args_array=self.args_array))
+                elastic_db_dump.create_repo(self.els, args=self.args))
 
     def test_repo_create(self):
 
@@ -115,7 +152,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        elastic_db_dump.create_repo(self.els, args_array=self.args_array)
+        elastic_db_dump.create_repo(self.els, args=self.args)
         self.elr = elastic_class.ElasticSearchRepo(
             self.cfg.host, port=self.cfg.port, user=self.cfg.user,
             japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,

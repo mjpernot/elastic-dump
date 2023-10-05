@@ -74,7 +74,6 @@ import os
 
 # Local
 try:
-    from .lib import arg_parser
     from .lib import gen_libs
     from .lib import gen_class
     from .elastic_lib import elastic_class
@@ -82,7 +81,6 @@ try:
     from . import version
 
 except (ValueError, ImportError) as err:
-    import lib.arg_parser as arg_parser
     import lib.gen_libs as gen_libs
     import lib.gen_class as gen_class
     import elastic_lib.elastic_class as elastic_class
@@ -113,15 +111,15 @@ def create_repo(els, **kwargs):
     Description:  Create a repository for Elasticsearch database dumps.
 
     Arguments:
-        (input) els -> ElasticSearch class instance.
+        (input) els -> ElasticSearch class instance
         (input) **kwargs:
-            args_array -> Dict of command line options and values.
+            args -> ArgParser class instance
 
     """
 
-    args_array = dict(kwargs.get("args_array"))
-    repo_name = args_array.get("-C")
-    repo_dir = args_array.get("-l")
+    args = kwargs.get("args")
+    repo_name = args.get_val("-C")
+    repo_dir = args.get_val("-l")
     elr = elastic_class.ElasticSearchRepo(
         els.hosts, port=els.port, user=els.user, japd=els.japd,
         ca_cert=els.ca_cert, scheme=els.scheme)
@@ -133,8 +131,8 @@ def create_repo(els, **kwargs):
                   % (repo_name, repo_dir))
 
         else:
-            err_flag, msg = elr.create_repo(repo_name,
-                                            os.path.join(repo_dir, repo_name))
+            err_flag, msg = elr.create_repo(
+                repo_name, os.path.join(repo_dir, repo_name))
 
             if err_flag:
                 print("Error detected for Repository: '%s' at '%s'"
@@ -152,7 +150,7 @@ def print_failures(els):
     Description:  Prints out failures detected within the class.
 
     Arguments:
-        (input) els -> Elasticsearch class instance.
+        (input) els -> Elasticsearch class instance
 
     """
 
@@ -168,17 +166,18 @@ def initate_dump(els, dbs_list=None, **kwargs):
         the return status of the database dump.
 
     Arguments:
-        (input) els -> Elasticsearch class instance.
-        (input) dbs_list -> String of comma-delimited indice names to dump.
+        (input) els -> Elasticsearch class instance
+        (input) dbs_list -> String of comma-delimited indice names to dump
         (input) **kwargs:
-            args_array -> Dict of command line options and values.
+            args -> ArgParser class instance
 
     """
 
     prt_template = "Message:  %s"
+    args = kwargs.get("args")
 
-    if "-i" in kwargs.get("args_array"):
-        dbs_list = ','.join(kwargs.get("args_array").get("-i"))
+    if args.arg_exist("-i"):
+        dbs_list = ','.join(args.get_val("-i"))
 
     err_flag, status_msg = els.dump_db(dbs=dbs_list)
 
@@ -214,9 +213,9 @@ def list_dumps(els, **kwargs):
     Description:  Lists the dumps in a repository.
 
     Arguments:
-        (input) els -> Elasticsearch class instance.
+        (input) els -> Elasticsearch class instance
         (input) **kwargs:
-            args_array -> Dict of command line options and values.
+            args -> ArgParser class instance
 
     """
 
@@ -234,9 +233,9 @@ def list_repos(els, **kwargs):
     Description:  Lists the repositories present.
 
     Arguments:
-        (input) els -> Elasticsearch class instance.
+        (input) els -> Elasticsearch class instance
         (input) **kwargs:
-            args_array -> Dict of command line options and values.
+            args -> ArgParser class instance
 
     """
 
@@ -252,7 +251,7 @@ def list_repos(els, **kwargs):
         print("Error: list_repos: Failed to connect to Elasticsearch")
 
 
-def run_program(args_array, func_dict):
+def run_program(args, func_dict):
 
     """Function:  run_program
 
@@ -260,15 +259,13 @@ def run_program(args_array, func_dict):
         Create a program lock to prevent other instantiations from running.
 
     Arguments:
-        (input) args_array -> Dict of command line options and values.
-        (input) func_dict -> Dictionary list of functions and options.
+        (input) args -> ArgParser class instance
+        (input) func_dict -> Dictionary list of functions and options
 
     """
 
-    cmdline = gen_libs.get_inst(sys)
-    args_array = dict(args_array)
     func_dict = dict(func_dict)
-    cfg = gen_libs.load_module(args_array["-c"], args_array["-d"])
+    cfg = gen_libs.load_module(args.get_val("-c"), args.get_val("-d"))
     user = cfg.user if hasattr(cfg, "user") else None
     japd = cfg.japd if hasattr(cfg, "japd") else None
     ca_cert = cfg.ssl_client_ca if hasattr(cfg, "ssl_client_ca") else None
@@ -276,16 +273,16 @@ def run_program(args_array, func_dict):
     flavorid = "elasticdump"
 
     try:
-        prog_lock = gen_class.ProgramLock(cmdline.argv, flavor_id=flavorid)
+        prog_lock = gen_class.ProgramLock(sys.argv, flavor_id=flavorid)
 
-        for opt in set(args_array.keys()) & set(func_dict.keys()):
+        for opt in set(args.get_args_keys()) & set(func_dict.keys()):
             els = elastic_class.ElasticSearchDump(
-                cfg.host, port=cfg.port, repo=args_array.get(opt, None),
+                cfg.host, port=cfg.port, repo=args.get_val(opt, def_val=None),
                 user=user, japd=japd, ca_cert=ca_cert, scheme=scheme)
             els.connect()
 
             if els.is_connected:
-                func_dict[opt](els, args_array=args_array)
+                func_dict[opt](els, args=args)
 
             else:
                 print("ERROR:  Failed to connect to Elasticsearch")
@@ -304,42 +301,45 @@ def main():
         line arguments and values.
 
     Variables:
-        dir_chk_list -> contains options which will be directories.
-        func_dict -> dictionary list for the function calls or other options.
-        opt_con_req_dict -> contains options requiring other options.
-        opt_multi_list -> contains the options that will have multiple values.
-        opt_req_list -> contains options that are required for the program.
-        opt_val -> List of options that allow 0 or 1 value for option.
-        opt_val_list -> contains options which require values.
-        opt_xor_dict -> contains dict with key that is xor with it's values.
+        dir_perms_chk -> contains options which will be directories and the
+            octal permission settings
+        func_dict -> dictionary list for the function calls or other options
+        opt_con_req_dict -> contains options requiring other options
+        opt_multi_list -> contains the options that will have multiple values
+        opt_req_list -> contains options that are required for the program
+        opt_val_bin -> List of options that allow 0 or 1 value for option
+        opt_val -> contains options which require values
+        opt_xor_dict -> contains dict with key that is xor with it's values
 
     Arguments:
-        (input) argv -> Arguments from the command line.
+        (input) argv -> Arguments from the command line
 
     """
 
-    cmdline = gen_libs.get_inst(sys)
-    dir_chk_list = ["-d"]
-    func_dict = {"-C": create_repo, "-D": initate_dump, "-L": list_dumps,
-                 "-R": list_repos}
+    dir_perms_chk = {"-d": 5}
+    func_dict = {
+        "-C": create_repo, "-D": initate_dump, "-L": list_dumps,
+        "-R": list_repos}
     opt_con_req_dict = {"-C": ["-l"], "-i": ["-D"]}
     opt_multi_list = ["-i"]
     opt_req_list = ["-c", "-d"]
-    opt_val = ["-D", "-L"]
-    opt_val_list = ["-c", "-d", "-i", "-l", "-C"]
-    opt_xor_dict = {"-C": ["-D", "-L", "-R"], "-D": ["-C", "-L", "-R"],
-                    "-L": ["-C", "-D", "-R"], "-R": ["-C", "-D", "-L"]}
+    opt_val_bin = ["-D", "-L"]
+    opt_val = ["-c", "-d", "-i", "-l", "-C"]
+    opt_xor_dict = {
+        "-C": ["-D", "-L", "-R"], "-D": ["-C", "-L", "-R"],
+        "-L": ["-C", "-D", "-R"], "-R": ["-C", "-D", "-L"]}
 
     # Process argument list from command line.
-    args_array = arg_parser.arg_parse2(
-        cmdline.argv, opt_val_list, opt_val=opt_val, multi_val=opt_multi_list)
+    args = gen_class.ArgParser(
+        sys.argv, opt_val=opt_val, opt_val_bin=opt_val_bin,
+        multi_val=opt_multi_list, do_parse=True)
 
-    if not gen_libs.help_func(args_array, __version__, help_message) \
-       and not arg_parser.arg_require(args_array, opt_req_list) \
-       and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
-       and arg_parser.arg_cond_req_or(args_array, opt_con_req_dict) \
-       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list):
-        run_program(args_array, func_dict)
+    if not gen_libs.help_func(args, __version__, help_message)  \
+       and args.arg_require(opt_req=opt_req_list)               \
+       and args.arg_xor_dict(opt_xor_val=opt_xor_dict)          \
+       and args.arg_cond_req_or(opt_con_or=opt_con_req_dict)    \
+       and args.arg_dir_chk(dir_perms_chk=dir_perms_chk):
+        run_program(args, func_dict)
 
 
 if __name__ == "__main__":
