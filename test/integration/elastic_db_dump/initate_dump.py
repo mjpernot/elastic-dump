@@ -30,6 +30,56 @@ import version
 __version__ = version.__version__
 
 
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        arg_exist
+        get_val
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.args_array = dict()
+
+    def arg_exist(self, arg):
+
+        """Method:  arg_exist
+
+        Description:  Method stub holder for gen_class.ArgParser.arg_exist.
+
+        Arguments:
+
+        """
+
+        return True if arg in self.args_array else False
+
+    def get_val(self, skey, def_val=None):
+
+        """Method:  get_val
+
+        Description:  Method stub holder for gen_class.ArgParser.get_val.
+
+        Arguments:
+
+        """
+
+        return self.args_array.get(skey, def_val)
+
+
 class UnitTest(unittest.TestCase):
 
     """Class:  UnitTest
@@ -61,7 +111,7 @@ class UnitTest(unittest.TestCase):
         self.test_path = os.path.join(os.getcwd(), self.base_dir)
         self.config_path = os.path.join(self.test_path, "config")
         self.cfg = gen_libs.load_module("elastic", self.config_path)
-        self.args_array = {}
+        self.args = ArgParser()
         self.phy_repo_dir = os.path.join(self.cfg.phy_repo_dir,
                                          self.cfg.repo_name)
         self.elr = elastic_class.ElasticSearchRepo(
@@ -98,12 +148,12 @@ class UnitTest(unittest.TestCase):
         dbs = [str(y[2]) for y in [
             x.split() for x in self.els.els.cat.indices().splitlines()]][0:2]
 
-        self.args_array = {"-i": dbs}
+        self.args.args_array = {"-i": dbs}
 
-        elastic_db_dump.initate_dump(self.els, args_array=self.args_array)
+        elastic_db_dump.initate_dump(self.els, args=self.args)
 
-        dir_path = os.path.join(self.cfg.phy_repo_dir, self.cfg.repo_name,
-                                "indices")
+        dir_path = os.path.join(
+            self.cfg.phy_repo_dir, self.cfg.repo_name, "indices")
 
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
@@ -125,12 +175,12 @@ class UnitTest(unittest.TestCase):
         dbs = [str([x.split()
                     for x in self.els.els.cat.indices().splitlines()][0][2])]
 
-        self.args_array = {"-i": dbs}
+        self.args.args_array = {"-i": dbs}
 
-        elastic_db_dump.initate_dump(self.els, args_array=self.args_array)
+        elastic_db_dump.initate_dump(self.els, args=self.args)
 
-        dir_path = os.path.join(self.cfg.phy_repo_dir, self.cfg.repo_name,
-                                "indices")
+        dir_path = os.path.join(
+            self.cfg.phy_repo_dir, self.cfg.repo_name, "indices")
 
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
@@ -148,9 +198,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.args_array = {"-i": ["Incorrect_Database_Name"]}
+        self.args.args_array = {"-i": ["Incorrect_Database_Name"]}
 
-        elastic_db_dump.initate_dump(self.els, args_array=self.args_array)
+        elastic_db_dump.initate_dump(self.els, args=self.args)
 
         # If index dump directory exists, then test is a failure.
         self.assertFalse(
@@ -166,7 +216,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        elastic_db_dump.initate_dump(self.els, args_array=self.args_array)
+        elastic_db_dump.initate_dump(self.els, args=self.args)
 
         self.assertTrue(self.els.dump_list)
 
@@ -180,7 +230,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        elastic_db_dump.initate_dump(self.els, args_array=self.args_array)
+        elastic_db_dump.initate_dump(self.els, args=self.args)
 
         self.assertTrue(self.els.dump_list)
 

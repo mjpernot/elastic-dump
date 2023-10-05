@@ -40,7 +40,7 @@ def list_dumps(els, **kwargs):
 
     status = True
 
-    if els and dict(kwargs.get("args_array")):
+    if els and kwargs.get("args"):
         status = True
 
     return status
@@ -58,10 +58,60 @@ def disk_usage(els, **kwargs):
 
     status = True
 
-    if els and dict(kwargs.get("args_array")):
+    if els and kwargs.get("args"):
         status = True
 
     return status
+
+
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        get_val
+        get_args_keys
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.args_array = {"-c": "mongo_cfg", "-d": "config"}
+
+    def get_val(self, skey, def_val=None):
+
+        """Method:  get_val
+
+        Description:  Method stub holder for gen_class.ArgParser.get_val.
+
+        Arguments:
+
+        """
+
+        return self.args_array.get(skey, def_val)
+
+    def get_args_keys(self):
+
+        """Method:  get_args_keys
+
+        Description:  Method stub holder for gen_class.ArgParser.get_args_keys.
+
+        Arguments:
+
+        """
+
+        return list(self.args_array.keys())
 
 
 class ProgramLock(object):
@@ -190,7 +240,8 @@ class UnitTest(unittest.TestCase):
         """
 
         self.cfg = CfgTest()
-        self.args = {"-c": "config_file", "-d": "config_dir"}
+        self.args = ArgParser()
+        self.args.args_array = {"-c": "config_file", "-d": "config_dir"}
         self.func_names = {"-L": list_dumps, "-U": disk_usage}
         self.proglock = ProgramLock(["cmdline"], "FlavorID")
 
@@ -207,7 +258,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.args["-L"] = True
+        self.args.args_array["-L"] = True
 
         els = ElasticSearchDump(
             "host", port=9200, repo="repo", user="user", japd="japd",
@@ -239,7 +290,7 @@ class UnitTest(unittest.TestCase):
             self.cfg.host, self.cfg.port, None, self.cfg.user,
             self.cfg.japd, self.cfg.ssl_client_ca, self.cfg.scheme)
 
-        self.args["-L"] = True
+        self.args.args_array["-L"] = True
 
         mock_lock.return_value = self.proglock
         mock_class.return_value = els
@@ -265,8 +316,8 @@ class UnitTest(unittest.TestCase):
             self.cfg.host, self.cfg.port, None, self.cfg.user,
             self.cfg.japd, self.cfg.ssl_client_ca, self.cfg.scheme)
 
-        self.args["-U"] = True
-        self.args["-L"] = True
+        self.args.args_array["-U"] = True
+        self.args.args_array["-L"] = True
 
         mock_lock.side_effect = \
             elastic_db_dump.gen_class.SingleInstanceException
@@ -295,8 +346,8 @@ class UnitTest(unittest.TestCase):
             self.cfg.host, self.cfg.port, None, self.cfg.user,
             self.cfg.japd, self.cfg.ssl_client_ca, self.cfg.scheme)
 
-        self.args["-U"] = True
-        self.args["-L"] = True
+        self.args.args_array["-U"] = True
+        self.args.args_array["-L"] = True
 
         mock_lock.return_value = self.proglock
         mock_class.return_value = els
@@ -322,7 +373,7 @@ class UnitTest(unittest.TestCase):
             self.cfg.host, self.cfg.port, None, self.cfg.user,
             self.cfg.japd, self.cfg.ssl_client_ca, self.cfg.scheme)
 
-        self.args["-L"] = True
+        self.args.args_array["-L"] = True
 
         mock_lock.return_value = self.proglock
         mock_class.return_value = els
