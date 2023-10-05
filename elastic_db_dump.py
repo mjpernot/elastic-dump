@@ -74,7 +74,6 @@ import os
 
 # Local
 try:
-    from .lib import arg_parser
     from .lib import gen_libs
     from .lib import gen_class
     from .elastic_lib import elastic_class
@@ -82,7 +81,6 @@ try:
     from . import version
 
 except (ValueError, ImportError) as err:
-    import lib.arg_parser as arg_parser
     import lib.gen_libs as gen_libs
     import lib.gen_class as gen_class
     import elastic_lib.elastic_class as elastic_class
