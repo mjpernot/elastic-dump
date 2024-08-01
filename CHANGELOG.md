@@ -7,12 +7,13 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Set urllib3 to 1.26.19 for Python 2 for security reasons.
 - Set requests to 2.22.0 for Python 2
 - Updated elastic-lib to v4.0.3
+- Downgraded python-lib to v2.10.1
 
 ### Changed
 - main: Removed parsing from gen_class.ArgParser call and called arg_parse2 as part of "if" statement.
 
 
-## [1.2.1] - 2024-03-01
+## [1.2.1] - 2024-03-01 (Pulled due to python-lib v3.0.3 problems)
 - Updated to work in Red Hat 8
 - Updated python-lib to v3.0.3
 
