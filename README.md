@@ -122,7 +122,7 @@ Install the project using the procedures in the Installation section.
 
 ```
 cd {Python_Project}/elastic-dump
-test/unit/elastic_db_dump/unit_test_run.sh
+test/unit/elastic_db_dump/unit_test_run3.sh
 ```
 
 ### Code coverage:
@@ -189,7 +189,7 @@ curl -XPUT 'localhost:9200/twitter2?pretty' -H 'Content-Type: application/json' 
 
 ```
 cd {Python_Project}/elastic-dump
-test/integration/elastic_db_dump/integration_test_run.sh
+test/integration/elastic_db_dump/integration_test_run3.sh
 ```
 
 ### Code coverage:
