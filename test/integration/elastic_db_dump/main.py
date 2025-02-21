@@ -12,7 +12,6 @@
 """
 
 # Libraries and Global Variables
-from __future__ import print_function
 
 # Standard
 import sys
@@ -110,17 +109,17 @@ class UnitTest(unittest.TestCase):
             scheme=self.cfg.scheme)
         self.elr.connect()
         _, _ = self.elr.create_repo(
-            self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
-                                             self.cfg.repo_name))
+            self.cfg.repo_name, os.path.join(
+                self.cfg.phy_repo_dir, self.cfg.repo_name))
         elastic_db_dump.main()
-        dir_path = os.path.join(self.cfg.phy_repo_dir, self.cfg.repo_name,
-                                "indices")
+        dir_path = os.path.join(
+            self.cfg.phy_repo_dir, self.cfg.repo_name, "indices")
 
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
                    if os.path.isdir(os.path.join(dir_path, name))])
 
-        self.assertTrue(cnt >= 1)
+        self.assertGreaterEqual(cnt, 1)
 
     def test_help_func(self):
 
@@ -236,7 +235,7 @@ class UnitTest(unittest.TestCase):
             ca_cert=self.cfg.ssl_client_ca, scheme=self.cfg.scheme)
         self.elr.connect()
 
-        self.assertTrue(self.cfg.repo_name in self.elr.repo_dict)
+        self.assertIn(self.cfg.repo_name, self.elr.repo_dict)
 
     def test_list_dumps(self):
 

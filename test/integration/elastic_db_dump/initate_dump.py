@@ -12,7 +12,6 @@
 """
 
 # Libraries and Global Variables
-from __future__ import print_function
 
 # Standard
 import sys
@@ -126,8 +125,8 @@ class UnitTest(unittest.TestCase):
 
         else:
             _, _ = self.elr.create_repo(
-                self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
-                                                 self.cfg.repo_name))
+                self.cfg.repo_name, os.path.join(
+                    self.cfg.phy_repo_dir, self.cfg.repo_name))
 
             self.els = ecls.ElasticSearchDump(
                 self.cfg.host, port=self.cfg.port, repo=self.cfg.repo_name,
@@ -159,7 +158,7 @@ class UnitTest(unittest.TestCase):
         cnt = len([name for name in os.listdir(dir_path)
                    if os.path.isdir(os.path.join(dir_path, name))])
 
-        self.assertTrue(cnt >= 2)
+        self.assertGreaterEqual(cnt, 2)
 
     def test_i_option_one_db(self):
 
@@ -186,7 +185,7 @@ class UnitTest(unittest.TestCase):
         cnt = len([name for name in os.listdir(dir_path)
                    if os.path.isdir(os.path.join(dir_path, name))])
 
-        self.assertTrue(cnt >= 1)
+        self.assertGreaterEqual(cnt, 1)
 
     def test_i_option_missing_db(self):
 

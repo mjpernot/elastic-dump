@@ -12,7 +12,6 @@
 """
 
 # Libraries and Global Variables
-from __future__ import print_function
 
 # Standard
 import sys
@@ -111,8 +110,8 @@ class UnitTest(unittest.TestCase):
             scheme=self.cfg.scheme)
         self.elr.connect()
         _, _ = self.elr.create_repo(
-            self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
-                                             self.cfg.repo_name))
+            self.cfg.repo_name, os.path.join(
+                self.cfg.phy_repo_dir, self.cfg.repo_name))
         elastic_db_dump.run_program(self.args, self.func_names)
         dir_path = os.path.join(
             self.cfg.phy_repo_dir, self.cfg.repo_name, "indices")
@@ -121,7 +120,7 @@ class UnitTest(unittest.TestCase):
         cnt = len([name for name in os.listdir(dir_path)
                    if os.path.isdir(os.path.join(dir_path, name))])
 
-        self.assertTrue(cnt >= 1)
+        self.assertGreaterEqual(cnt, 1)
 
     @mock.patch("elastic_db_dump.gen_class")
     def test_load_module(self, mock_lock):
@@ -137,8 +136,8 @@ class UnitTest(unittest.TestCase):
         mock_lock.ProgramLock.side_effect = \
             elastic_db_dump.gen_class.SingleInstanceException()
 
-        self.assertFalse(elastic_db_dump.run_program(self.args,
-                                                     self.func_names))
+        self.assertFalse(
+            elastic_db_dump.run_program(self.args, self.func_names))
 
     def test_create_repo(self):
 
@@ -159,7 +158,7 @@ class UnitTest(unittest.TestCase):
             ca_cert=self.cfg.ssl_client_ca, scheme=self.cfg.scheme)
         self.elr.connect()
 
-        self.assertTrue(self.cfg.repo_name in self.elr.repo_dict)
+        self.assertIn(self.cfg.repo_name, self.elr.repo_dict)
 
     def test_list_dumps(self):
 

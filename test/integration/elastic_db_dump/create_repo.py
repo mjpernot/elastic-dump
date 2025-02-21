@@ -12,7 +12,6 @@
 """
 
 # Libraries and Global Variables
-from __future__ import print_function
 
 # Standard
 import sys
@@ -159,7 +158,7 @@ class UnitTest(unittest.TestCase):
             scheme=self.cfg.scheme)
         self.elr.connect()
 
-        self.assertTrue(self.cfg.repo_name in self.elr.repo_dict)
+        self.assertIn(self.cfg.repo_name, self.elr.repo_dict)
 
     def tearDown(self):
 
