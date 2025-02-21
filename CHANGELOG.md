@@ -3,6 +3,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
+
+## [2.0.0] - 2025-02-21
+Breaking Changes
+
+- Updated elasticsearch==8.11.1
+- Updated python-lib==4.0.0
+- Updated elastic-lib==4.1.0
+- Updated certifi==2024.12.14
+- Updated urllib3==1.26.20
+
+### Changed
+- Converted strings to f-strings.
+- Documentation changes.
+
+
 ## [1.2.5] - 2024-11-22
 - Updated certifi==2024.6.2 for Python 3.
 - Updated distro==1.9.0 for Python 3.

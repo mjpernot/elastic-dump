@@ -23,10 +23,10 @@ import mock
 
 # Local
 sys.path.append(os.getcwd())
-import elastic_db_dump
-import lib.gen_libs as gen_libs
-import elastic_lib.elastic_class as elastic_class
-import version
+import elastic_db_dump                          # pylint:disable=E0401,C0413
+import lib.gen_libs as gen_libs             # pylint:disable=E0401,C0413,R0402
+import elastic_lib.elastic_class as ecls    # pylint:disable=E0401,C0413,R0402
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
 
@@ -71,7 +71,7 @@ class UnitTest(unittest.TestCase):
             "-R": elastic_db_dump.list_repos}
         self.args = {"-c": "elastic", "-d": self.config_path}
 
-        elr = elastic_class.ElasticSearchRepo(
+        elr = ecls.ElasticSearchRepo(
             self.cfg.host, port=self.cfg.port, user=self.cfg.user,
             japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
             scheme=self.cfg.scheme)
@@ -94,7 +94,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        els = elastic_class.ElasticSearchDump(
+        els = ecls.ElasticSearchDump(
             self.cfg.host, port=self.cfg.port, user=self.cfg.user,
             japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
             scheme=self.cfg.scheme)
@@ -105,7 +105,7 @@ class UnitTest(unittest.TestCase):
                     for x in els.els.cat.indices().splitlines()][0][2])]
         self.args["-D"] = self.cfg.repo_name
         self.args["-i"] = dbs
-        self.elr = elastic_class.ElasticSearchRepo(
+        self.elr = ecls.ElasticSearchRepo(
             self.cfg.host, port=self.cfg.port, user=self.cfg.user,
             japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
             scheme=self.cfg.scheme)
@@ -114,8 +114,8 @@ class UnitTest(unittest.TestCase):
             self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
                                              self.cfg.repo_name))
         elastic_db_dump.run_program(self.args, self.func_names)
-        dir_path = os.path.join(self.cfg.phy_repo_dir, self.cfg.repo_name,
-                                "indices")
+        dir_path = os.path.join(
+            self.cfg.phy_repo_dir, self.cfg.repo_name, "indices")
 
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
@@ -153,7 +153,7 @@ class UnitTest(unittest.TestCase):
         self.args["-C"] = self.cfg.repo_name
         self.args["-l"] = self.cfg.phy_repo_dir
         elastic_db_dump.run_program(self.args, self.func_names)
-        self.elr = elastic_class.ElasticSearchRepo(
+        self.elr = ecls.ElasticSearchRepo(
             self.cfg.host, port=self.cfg.port, repo=self.cfg.repo_name,
             user=self.cfg.user, japd=self.cfg.japd,
             ca_cert=self.cfg.ssl_client_ca, scheme=self.cfg.scheme)
@@ -172,18 +172,18 @@ class UnitTest(unittest.TestCase):
         """
 
         self.args["-L"] = self.cfg.repo_name
-        self.elr = elastic_class.ElasticSearchRepo(
+        self.elr = ecls.ElasticSearchRepo(
             self.cfg.host, port=self.cfg.port, user=self.cfg.user,
             japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
             scheme=self.cfg.scheme)
         self.elr.connect()
         _, _ = self.elr.create_repo(
-            self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
-                                             self.cfg.repo_name))
+            self.cfg.repo_name, os.path.join(
+                self.cfg.phy_repo_dir, self.cfg.repo_name))
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.run_program(self.args,
-                                                         self.func_names))
+            self.assertFalse(
+                elastic_db_dump.run_program(self.args, self.func_names))
 
     def test_list_repos(self):
 
@@ -196,18 +196,18 @@ class UnitTest(unittest.TestCase):
         """
 
         self.args["-R"] = True
-        self.elr = elastic_class.ElasticSearchRepo(
+        self.elr = ecls.ElasticSearchRepo(
             self.cfg.host, port=self.cfg.port, user=self.cfg.user,
             japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
             scheme=self.cfg.scheme)
         self.elr.connect()
         _, _ = self.elr.create_repo(
-            self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
-                                             self.cfg.repo_name))
+            self.cfg.repo_name, os.path.join(
+                self.cfg.phy_repo_dir, self.cfg.repo_name))
 
         with gen_libs.no_std_out():
-            self.assertFalse(elastic_db_dump.run_program(self.args,
-                                                         self.func_names))
+            self.assertFalse(
+                elastic_db_dump.run_program(self.args, self.func_names))
 
     def test_initate_dump(self):
 
@@ -220,7 +220,7 @@ class UnitTest(unittest.TestCase):
         """
 
         self.args["-D"] = self.cfg.repo_name
-        self.elr = elastic_class.ElasticSearchRepo(
+        self.elr = ecls.ElasticSearchRepo(
             self.cfg.host, port=self.cfg.port, user=self.cfg.user,
             japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
             scheme=self.cfg.scheme)
@@ -229,7 +229,7 @@ class UnitTest(unittest.TestCase):
             self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
                                              self.cfg.repo_name))
         elastic_db_dump.run_program(self.args, self.func_names)
-        els = elastic_class.ElasticSearchDump(
+        els = ecls.ElasticSearchDump(
             self.cfg.host, port=self.cfg.port, repo=self.cfg.repo_name,
             user=self.cfg.user, japd=self.cfg.japd,
             ca_cert=self.cfg.ssl_client_ca, scheme=self.cfg.scheme)
@@ -252,9 +252,9 @@ class UnitTest(unittest.TestCase):
             err_flag, status_msg = self.elr.delete_repo(self.cfg.repo_name)
 
             if err_flag:
-                print("Error: Failed to remove repository '%s'"
-                      % self.cfg.repo_name)
-                print("Reason: '%s'" % (status_msg))
+                print(f"Error: Failed to remove repository"
+                      f" {self.cfg.repo_name}")
+                print(f"Reason: {status_msg}")
 
             if os.path.isdir(self.phy_repo_dir):
                 shutil.rmtree(self.phy_repo_dir)

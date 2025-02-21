@@ -22,15 +22,15 @@ import unittest
 
 # Local
 sys.path.append(os.getcwd())
-import elastic_db_dump
-import lib.gen_libs as gen_libs
-import elastic_lib.elastic_class as elastic_class
-import version
+import elastic_db_dump                          # pylint:disable=E0401,C0413
+import lib.gen_libs as gen_libs             # pylint:disable=E0401,C0413,R0402
+import elastic_lib.elastic_class as ecls    # pylint:disable=E0401,C0413,R0402
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
 
 
-class ArgParser(object):
+class ArgParser():
 
     """Class:  ArgParser
 
@@ -53,7 +53,7 @@ class ArgParser(object):
 
         """
 
-        self.args_array = dict()
+        self.args_array = {}
 
     def arg_exist(self, arg):
 
@@ -65,7 +65,7 @@ class ArgParser(object):
 
         """
 
-        return True if arg in self.args_array else False
+        return arg in self.args_array
 
     def get_val(self, skey, def_val=None):
 
@@ -114,7 +114,7 @@ class UnitTest(unittest.TestCase):
         self.args = ArgParser()
         self.phy_repo_dir = os.path.join(self.cfg.phy_repo_dir,
                                          self.cfg.repo_name)
-        self.elr = elastic_class.ElasticSearchRepo(
+        self.elr = ecls.ElasticSearchRepo(
             self.cfg.host, port=self.cfg.port, user=self.cfg.user,
             japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
             scheme=self.cfg.scheme)
@@ -129,7 +129,7 @@ class UnitTest(unittest.TestCase):
                 self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
                                                  self.cfg.repo_name))
 
-            self.els = elastic_class.ElasticSearchDump(
+            self.els = ecls.ElasticSearchDump(
                 self.cfg.host, port=self.cfg.port, repo=self.cfg.repo_name,
                 user=self.cfg.user, japd=self.cfg.japd,
                 ca_cert=self.cfg.ssl_client_ca, scheme=self.cfg.scheme)
@@ -247,9 +247,8 @@ class UnitTest(unittest.TestCase):
         err_flag, status_msg = self.elr.delete_repo(self.cfg.repo_name)
 
         if err_flag:
-            print("Error: Failed to remove repository '%s'"
-                  % self.cfg.repo_name)
-            print("Reason: '%s'" % (status_msg))
+            print(f"Error: Failed to remove repository {self.cfg.repo_name}")
+            print(f"Reason: {status_msg}")
 
         if os.path.isdir(self.phy_repo_dir):
             shutil.rmtree(self.phy_repo_dir)

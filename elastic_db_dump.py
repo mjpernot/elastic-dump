@@ -7,10 +7,8 @@
 
     Usage:
         elastic_db_dump.py -c file -d path
-            {-C repo_name -l base_path |
-             -D [repo_name] [-i index1 {index2 ...}] |
-             -L [repo_name] |
-             -R}
+            {-C repo_name -l base_path | -L [repo_name] | -R |
+             -D [repo_name] [-i index1 {index2 ...}]}
             [-v | -h]
 
     Arguments:
@@ -65,8 +63,6 @@
 """
 
 # Libraries and Global Variables
-from __future__ import print_function
-from __future__ import absolute_import
 
 # Standard
 import sys
@@ -81,10 +77,10 @@ try:
     from . import version
 
 except (ValueError, ImportError) as err:
-    import lib.gen_libs as gen_libs
-    import lib.gen_class as gen_class
-    import elastic_lib.elastic_class as elastic_class
-    import elastic_lib.elastic_libs as elastic_libs
+    import lib.gen_libs as gen_libs                     # pylint:disable=R0402
+    import lib.gen_class as gen_class                   # pylint:disable=R0402
+    import elastic_lib.elastic_class as elastic_class   # pylint:disable=R0402
+    import elastic_lib.elastic_libs as elastic_libs     # pylint:disable=R0402
     import version
 
 __version__ = version.__version__
@@ -127,17 +123,17 @@ def create_repo(els, **kwargs):
 
     if elr.is_connected:
         if repo_name in elr.repo_dict:
-            print("ERROR:  '%s' repository already exists at: '%s'"
-                  % (repo_name, repo_dir))
+            print(f"ERROR:  {repo_name} repository already exists at:"
+                  f" {repo_dir}")
 
         else:
             err_flag, msg = elr.create_repo(
                 repo_name, os.path.join(repo_dir, repo_name))
 
             if err_flag:
-                print("Error detected for Repository: '%s' at '%s'"
-                      % (repo_name, repo_dir))
-                print("Reason: '%s'" % (msg))
+                print(f"Error detected for Repository: {repo_name} at"
+                      f" {repo_dir}")
+                print(f"Reason: {msg}")
 
     else:
         print("Error: create_repo: Failed to connect to Elasticsearch")
@@ -154,8 +150,8 @@ def print_failures(els):
 
     """
 
-    print("Failed to dump on %s shards" % (els.failed_shards))
-    print("Detected failures: %s" % (els.failures))
+    print(f"Failed to dump on {els.failed_shards} shards")
+    print(f"Detected failures: {els.failures}")
 
 
 def initate_dump(els, dbs_list=None, **kwargs):
@@ -173,7 +169,6 @@ def initate_dump(els, dbs_list=None, **kwargs):
 
     """
 
-    prt_template = "Message:  %s"
     args = kwargs.get("args")
 
     if args.arg_exist("-i"):
@@ -183,30 +178,30 @@ def initate_dump(els, dbs_list=None, **kwargs):
 
     # Failed to execute dump
     if err_flag:
-        print("Failed to execute dump on Cluster: %s" % (els.cluster_name))
-        print(prt_template % (status_msg))
+        print(f"Failed to execute dump on Cluster: {els.cluster_name}")
+        print(f"Message:  {status_msg}")
 
     # Check dump if anything other than success
     elif els.dump_status != "SUCCESS":
 
         if els.dump_status == "FAILED":
-            print("Dump failed to finish on %s" % (els.cluster_name))
-            print(prt_template % (status_msg))
+            print(f"Dump failed to finish on {els.cluster_name}")
+            print(f"Message:  {status_msg}")
 
         elif els.dump_status == "PARTIAL":
-            print("Partial dump completed on %s" % (els.cluster_name))
+            print(f"Partial dump completed on {els.cluster_name}")
             print_failures(els)
 
         elif els.dump_status == "INCOMPATIBLE":
-            print("Older version of Elasticsearch in repo detected %s"
-                  % (els.cluster_name))
+            print(f"Older version of Elasticsearch in repo detected"
+                  f" {els.cluster_name}")
 
         else:
-            print("Unknown error detected on %s" % (els.cluster_name))
-            print(prt_template % (status_msg))
+            print(f"Unknown error detected on {els.cluster_name}")
+            print(f"Message:  {status_msg}")
 
 
-def list_dumps(els, **kwargs):
+def list_dumps(els, **kwargs):                          # pylint:disable=W0613
 
     """Function:  list_dumps
 
@@ -226,7 +221,7 @@ def list_dumps(els, **kwargs):
         print("WARNING:  Repository name not found or not passed.")
 
 
-def list_repos(els, **kwargs):
+def list_repos(els, **kwargs):                          # pylint:disable=W0613
 
     """Function:  list_repos
 
@@ -290,7 +285,7 @@ def run_program(args, func_dict):
         del prog_lock
 
     except gen_class.SingleInstanceException:
-        print("WARNING:  elastic_db_dump lock in place for: %s" % (flavorid))
+        print(f"WARNING:  elastic_db_dump lock in place for: {flavorid}")
 
 
 def main():
