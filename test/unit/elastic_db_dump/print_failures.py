@@ -20,11 +20,36 @@ import unittest
 
 # Local
 sys.path.append(os.getcwd())
-import elastic_db_dump
-import lib.gen_libs as gen_libs
-import version
+import elastic_db_dump                          # pylint:disable=E0401,C0413
+import lib.gen_libs as gen_libs             # pylint:disable=E0401,C0413,R0402
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
+
+
+class ElasticSearchDump():                              # pylint:disable=R0903
+
+    """Class:  ElasticSearchDump
+
+    Description:  Class representation of the ElasticSearchDump class.
+
+    Methods:
+        __init__
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Initialization instance of the class.
+
+        Arguments:
+
+        """
+
+        self.failed_shards = 2
+        self.failures = ["Test_Shard_1", "Test_Shard_2"]
 
 
 class UnitTest(unittest.TestCase):
@@ -48,30 +73,6 @@ class UnitTest(unittest.TestCase):
         Arguments:
 
         """
-
-        class ElasticSearchDump(object):
-
-            """Class:  ElasticSearchDump
-
-            Description:  Class representation of the ElasticSearchDump class.
-
-            Methods:
-                __init__
-
-            """
-
-            def __init__(self):
-
-                """Method:  __init__
-
-                Description:  Initialization instance of the class.
-
-                Arguments:
-
-                """
-
-                self.failed_shards = 2
-                self.failures = ["Test_Shard_1", "Test_Shard_2"]
 
         self.els = ElasticSearchDump()
 

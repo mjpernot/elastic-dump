@@ -20,10 +20,10 @@ import unittest
 
 # Local
 sys.path.append(os.getcwd())
-import elastic_db_dump
-import lib.gen_libs as gen_libs
-import elastic_lib.elastic_class as elastic_class
-import version
+import elastic_db_dump                          # pylint:disable=E0401,C0413
+import lib.gen_libs as gen_libs             # pylint:disable=E0401,C0413,R0402
+import elastic_lib.elastic_class as ecls    # pylint:disable=E0401,C0413,R0402
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
 
@@ -54,7 +54,7 @@ class UnitTest(unittest.TestCase):
         self.test_path = os.path.join(os.getcwd(), self.base_dir)
         self.config_path = os.path.join(self.test_path, "config")
         self.cfg = gen_libs.load_module("elastic", self.config_path)
-        self.els = elastic_class.ElasticSearchDump(
+        self.els = ecls.ElasticSearchDump(
             self.cfg.host, port=self.cfg.port, user=self.cfg.user,
             japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
             scheme=self.cfg.scheme)

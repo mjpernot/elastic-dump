@@ -21,14 +21,14 @@ import mock
 
 # Local
 sys.path.append(os.getcwd())
-import elastic_db_dump
-import lib.gen_libs as gen_libs
-import version
+import elastic_db_dump                          # pylint:disable=E0401,C0413
+import lib.gen_libs as gen_libs             # pylint:disable=E0401,C0413,R0402
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
 
 
-class ElasticSearchDump(object):
+class ElasticSearchDump():                              # pylint:disable=R0903
 
     """Class:  ElasticSearchDump
 
@@ -57,7 +57,7 @@ class ElasticSearchDump(object):
         self.scheme = "https"
 
 
-class ElasticSearchRepo(object):
+class ElasticSearchRepo():                              # pylint:disable=R0903
 
     """Class:  ElasticSearchRepo
 

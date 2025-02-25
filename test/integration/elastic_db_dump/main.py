@@ -12,7 +12,6 @@
 """
 
 # Libraries and Global Variables
-from __future__ import print_function
 
 # Standard
 import sys
@@ -22,10 +21,10 @@ import unittest
 
 # Local
 sys.path.append(os.getcwd())
-import elastic_db_dump
-import lib.gen_libs as gen_libs
-import elastic_lib.elastic_class as elastic_class
-import version
+import elastic_db_dump                          # pylint:disable=E0401,C0413
+import lib.gen_libs as gen_libs             # pylint:disable=E0401,C0413,R0402
+import elastic_lib.elastic_class as ecls    # pylint:disable=E0401,C0413,R0402
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
 
@@ -69,7 +68,7 @@ class UnitTest(unittest.TestCase):
                                          self.cfg.repo_name)
         self.argv_list = [os.path.join(self.base_dir, "main.py"),
                           "-c", "elastic", "-d", self.config_path]
-        elr = elastic_class.ElasticSearchRepo(
+        elr = ecls.ElasticSearchRepo(
             self.cfg.host, port=self.cfg.port, user=self.cfg.user,
             japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
             scheme=self.cfg.scheme)
@@ -93,7 +92,7 @@ class UnitTest(unittest.TestCase):
         """
 
         cmdline = gen_libs.get_inst(sys)
-        els = elastic_class.ElasticSearchDump(
+        els = ecls.ElasticSearchDump(
             self.cfg.host, port=self.cfg.port, user=self.cfg.user,
             japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
             scheme=self.cfg.scheme)
@@ -104,23 +103,23 @@ class UnitTest(unittest.TestCase):
         self.argv_list.append(
             str([x.split() for x in els.els.cat.indices().splitlines()][0][2]))
         cmdline.argv = self.argv_list
-        self.elr = elastic_class.ElasticSearchRepo(
+        self.elr = ecls.ElasticSearchRepo(
             self.cfg.host, port=self.cfg.port, user=self.cfg.user,
             japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
             scheme=self.cfg.scheme)
         self.elr.connect()
         _, _ = self.elr.create_repo(
-            self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
-                                             self.cfg.repo_name))
+            self.cfg.repo_name, os.path.join(
+                self.cfg.phy_repo_dir, self.cfg.repo_name))
         elastic_db_dump.main()
-        dir_path = os.path.join(self.cfg.phy_repo_dir, self.cfg.repo_name,
-                                "indices")
+        dir_path = os.path.join(
+            self.cfg.phy_repo_dir, self.cfg.repo_name, "indices")
 
         # Count number of databases/indices dumped to repository.
         cnt = len([name for name in os.listdir(dir_path)
                    if os.path.isdir(os.path.join(dir_path, name))])
 
-        self.assertTrue(cnt >= 1)
+        self.assertGreaterEqual(cnt, 1)
 
     def test_help_func(self):
 
@@ -230,13 +229,13 @@ class UnitTest(unittest.TestCase):
 
         elastic_db_dump.main()
 
-        self.elr = elastic_class.ElasticSearchRepo(
+        self.elr = ecls.ElasticSearchRepo(
             self.cfg.host, self.cfg.port, repo=self.cfg.repo_name,
             user=self.cfg.user, japd=self.cfg.japd,
             ca_cert=self.cfg.ssl_client_ca, scheme=self.cfg.scheme)
         self.elr.connect()
 
-        self.assertTrue(self.cfg.repo_name in self.elr.repo_dict)
+        self.assertIn(self.cfg.repo_name, self.elr.repo_dict)
 
     def test_list_dumps(self):
 
@@ -252,7 +251,7 @@ class UnitTest(unittest.TestCase):
         self.argv_list.append("-L")
         self.argv_list.append(self.cfg.repo_name)
         cmdline.argv = self.argv_list
-        self.elr = elastic_class.ElasticSearchRepo(
+        self.elr = ecls.ElasticSearchRepo(
             self.cfg.host, port=self.cfg.port, user=self.cfg.user,
             japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
             scheme=self.cfg.scheme)
@@ -277,7 +276,7 @@ class UnitTest(unittest.TestCase):
         cmdline = gen_libs.get_inst(sys)
         self.argv_list.append("-R")
         cmdline.argv = self.argv_list
-        self.elr = elastic_class.ElasticSearchRepo(
+        self.elr = ecls.ElasticSearchRepo(
             self.cfg.host, port=self.cfg.port, user=self.cfg.user,
             japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
             scheme=self.cfg.scheme)
@@ -303,7 +302,7 @@ class UnitTest(unittest.TestCase):
         self.argv_list.append("-D")
         self.argv_list.append(self.cfg.repo_name)
         cmdline.argv = self.argv_list
-        self.elr = elastic_class.ElasticSearchRepo(
+        self.elr = ecls.ElasticSearchRepo(
             self.cfg.host, port=self.cfg.port, user=self.cfg.user,
             japd=self.cfg.japd, ca_cert=self.cfg.ssl_client_ca,
             scheme=self.cfg.scheme)
@@ -312,7 +311,7 @@ class UnitTest(unittest.TestCase):
             self.cfg.repo_name, os.path.join(self.cfg.phy_repo_dir,
                                              self.cfg.repo_name))
         elastic_db_dump.main()
-        els = elastic_class.ElasticSearchDump(
+        els = ecls.ElasticSearchDump(
             self.cfg.host, self.cfg.port, repo=self.cfg.repo_name,
             user=self.cfg.user, japd=self.cfg.japd,
             ca_cert=self.cfg.ssl_client_ca, scheme=self.cfg.scheme)
@@ -336,9 +335,9 @@ class UnitTest(unittest.TestCase):
             err_flag, status_msg = self.elr.delete_repo(self.cfg.repo_name)
 
             if err_flag:
-                print("Error: Failed to remove repository '%s'"
-                      % self.cfg.repo_name)
-                print("Reason: '%s'" % (status_msg))
+                print(f"Error: Failed to remove repository"
+                      f" {self.cfg.repo_name}")
+                print(f"Reason: {status_msg}")
 
             if os.path.isdir(self.phy_repo_dir):
                 shutil.rmtree(self.phy_repo_dir)
