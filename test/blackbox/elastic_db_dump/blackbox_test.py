@@ -22,10 +22,10 @@ import shutil
 
 # Local
 sys.path.append(os.getcwd())
-import lib.gen_libs as gen_libs
-import lib.arg_parser as arg_parser
-import elastic_lib.elastic_class as elastic_class
-import version
+import lib.arg_parser as arg_parser         # pylint:disable=E0401,C0413,R0402
+import lib.gen_libs as gen_libs             # pylint:disable=E0401,C0413,R0402
+import elastic_lib.elastic_class as ecls    # pylint:disable=E0401,C0413,R0402
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
 
@@ -106,8 +106,8 @@ def remove_repo(elr, repo_name, dump_loc):
     if err_flag:
         status = False
 
-        print("Error: Failed to remove repo '%s'" % repo_name)
-        print("Reason: '%s'" % (msg))
+        print(f"Error: Failed to remove repo {repo_name}")
+        print(f"Reason: {msg}")
 
     if os.path.isdir(dump_loc):
         shutil.rmtree(dump_loc)
@@ -137,7 +137,7 @@ def main():
     cfg = load_cfg(args_array)
 
     if "-C" in args_array:
-        elr = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
+        elr = create_es_instance(cfg, ecls.ElasticSearchRepo,
                                  args_array["-C"])
         elr.connect()
 
@@ -150,14 +150,12 @@ def main():
         _ = remove_repo(elr, args_array["-C"], args_array["-P"])
 
     elif "-R" in args_array:
-        elr = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
-                                 args_array["-R"])
+        elr = create_es_instance(cfg, ecls.ElasticSearchRepo, args_array["-R"])
         elr.connect()
         _ = remove_repo(elr, args_array["-R"], args_array["-P"])
 
     elif "-i" in args_array and "-D" in args_array:
-        elr = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
-                                 args_array["-D"])
+        elr = create_es_instance(cfg, ecls.ElasticSearchRepo, args_array["-D"])
         elr.connect()
         dir_path = os.path.join(args_array["-P"], args_array["-D"], "indices")
 
@@ -173,11 +171,9 @@ def main():
         _ = remove_repo(elr, args_array["-D"], args_array["-P"])
 
     elif "-D" in args_array:
-        els = create_es_instance(cfg, elastic_class.ElasticSearchDump,
-                                 args_array["-D"])
+        els = create_es_instance(cfg, ecls.ElasticSearchDump, args_array["-D"])
         els.connect()
-        elr = create_es_instance(cfg, elastic_class.ElasticSearchRepo,
-                                 args_array["-D"])
+        elr = create_es_instance(cfg, ecls.ElasticSearchRepo, args_array["-D"])
         elr.connect()
 
         if els.dump_list:
@@ -189,7 +185,7 @@ def main():
         _ = remove_repo(elr, args_array["-D"], args_array["-P"])
 
     elif "-I" in args_array:
-        els = create_es_instance(cfg, elastic_class.ElasticSearchDump)
+        els = create_es_instance(cfg, ecls.ElasticSearchDump)
         els.connect()
 
         print(str(
