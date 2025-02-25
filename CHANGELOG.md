@@ -7,6 +7,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 ## [2.0.0] - 2025-02-21
 Breaking Changes
 
+- Removed support for Python 2.7.
 - Updated elasticsearch==8.11.1
 - Updated python-lib==4.0.0
 - Updated elastic-lib==4.1.0
