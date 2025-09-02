@@ -8,12 +8,12 @@
     Usage:
         elastic_db_dump.py -c file -d path
             {-C repo_name -l base_path | -L [repo_name] | -R |
-             -D [repo_name] [-i index1 {index2 ...}]}
+             -D [repo_name] [-i index1 {index2 ...}] [-o]}
             [-v | -h]
 
     Arguments:
-        -c file => Elasticsearch configuration file.  Required argument.
-        -d dir path => Directory path for option '-c'.  Required argument.
+        -c file => Elasticsearch configuration file.
+        -d dir path => Directory path for option '-c'.
 
         -C repo_name => Create new repository name.
             -l base_path => Base directory path name for repository.
@@ -24,6 +24,7 @@
                 if the -i option is used.
             -i index1 {index2 ...} => One or more indices to dump.
                 Note: Can use wildcard searches in the index name.
+            -o => Override the master check and dump from local node.
 
         -L [repo_name] => List of database dumps for an Elasticsearch
             repository.
@@ -44,7 +45,6 @@
 
             # Elasticsearch configuration file
             host = ["https://HOST_NAME1:9200", "https://HOST_NAME2:9200"]
-            port = 9200
 
             # Login credentials
             user = None
@@ -52,7 +52,6 @@
 
             # SSL connection
             ssl_client_ca = None
-            scheme = "https"
 
         Configuration modules -> Name is runtime dependent as it can be used to
         connect to different databases with different names.
@@ -171,6 +170,9 @@ def initate_dump(els, dbs_list=None, **kwargs):
 
     args = kwargs.get("args")
 
+    if els.master != els.node_connected_to and not args.arg_exist("-o"):
+        return
+ 
     if args.arg_exist("-i"):
         dbs_list = ','.join(args.get_val("-i"))
 
