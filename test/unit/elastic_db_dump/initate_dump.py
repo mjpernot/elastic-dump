@@ -104,6 +104,8 @@ class ElasticSearchDump():                              # pylint:disable=R0903
         self.cluster_name = "Test_Cluster_Name"
         self.dump_status = "SUCCESS"
         self.dbs = None
+        self.master = "localhost"
+        self.node_connected_to = "localhost"
 
     def dump_db(self, **kwargs):
 
@@ -134,6 +136,10 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
+        test_master_nooption
+        test_master_option
+        test_nonmaster_nooption
+        test_nonmaster_option
         test_with_option
         test_no_i_option
         test_err_flag_true
@@ -158,6 +164,65 @@ class UnitTest(unittest.TestCase):
 
         self.els = ElasticSearchDump()
         self.args = ArgParser()
+
+    def test_master_nooption(self):
+
+        """Function:  test_master_nooption
+
+        Description:  Test dump with master and no -o option.
+
+        Arguments:
+
+        """
+
+        self.assertFalse(
+            elastic_db_dump.initate_dump(self.els, args=self.args))
+
+    def test_master_option(self):
+
+        """Function:  test_master_option
+
+        Description:  Test dump with master and -o option.
+
+        Arguments:
+
+        """
+
+        self.args.args_array["-o"] = True
+
+        self.assertFalse(
+            elastic_db_dump.initate_dump(self.els, args=self.args))
+
+    def test_nonmaster_nooption(self):
+
+        """Function:  test_nonmaster_nooption
+
+        Description:  Test dump with non-master and no -o option.
+
+        Arguments:
+
+        """
+
+        self.els.master = "remotehost"
+
+        self.assertFalse(
+            elastic_db_dump.initate_dump(self.els, args=self.args))
+
+    def test_nonmaster_option(self):
+
+        """Function:  test_nonmaster_option
+
+        Description:  Test dump with non-master and -o option.
+
+        Arguments:
+
+        """
+
+        self.els.master = "remotehost"
+        self.args.args_array["-o"] = True
+
+        self.assertFalse(
+            elastic_db_dump.initate_dump(self.els, args=self.args))
 
     def test_with_option(self):
 

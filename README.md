@@ -70,12 +70,9 @@ Make the appropriate changes to the Elasticsearch environment.
   * If SSL connections are being used:
     - ssl_client_ca = None
 
-  * Change these entries only if required and you know what you are doing:
-    - port = 9200
-    - scheme = "https"
-
 ```
 cp config/elastic.py.TEMPLATE config/elastic.py
+chmod 600 config/elastic.py
 vim config/elastic.py
 sudo chown elasticsearch:elasticsearch config/elastic.py
 ```
@@ -125,10 +122,6 @@ Make the appropriate changes to the Elasticsearch environment.
   * If SSL connections are being used:
     - ssl_client_ca = None
 
-  * Change these entries only if required and you know what you are doing:
-    - port = 9200
-    - scheme = "https"
-
   * In addition to the normal configuration entries, modify these entries for this testing section.
     Note 1:  **LOGICAL_DIR_PATH** is the logical directory path to the share file system.
     Note 2:  **phy_repo_dir** is the physical directory path to the share file system.
@@ -138,6 +131,7 @@ Make the appropriate changes to the Elasticsearch environment.
 
 ```
 cp test/integration/elastic_db_dump/config/elastic.py.TEMPLATE test/integration/elastic_db_dump/config/elastic.py
+chmod 600 test/integration/elastic_db_dump/config/elastic.py
 vim test/integration/elastic_db_dump/config/elastic.py
 sudo chown elasticsearch:elasticsearch test/integration/elastic_db_dump/config/elastic.py
 ```
@@ -188,12 +182,9 @@ Make the appropriate changes to the Elasticsearch environment.
   * If SSL connections are being used:
     - ssl_client_ca = None
 
-  * Change these entries only if required and you know what you are doing:
-    - port = 9200
-    - scheme = "https"
-
 ```
 cp config/elastic.py.TEMPLATE test/blackbox/elastic_db_dump/config/elastic.py
+chmod 600 test/blackbox/elastic_db_dump/config/elastic.py
 vim test/blackbox/elastic_db_dump/config/elastic.py
 sudo chown elasticsearch:elasticsearch test/blackbox/elastic_db_dump/config/elastic.py
 ```
