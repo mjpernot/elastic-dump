@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [2.1.0] - 2025-09-02
+- Updated python-lib v4.0.3
+- Updated elastic-lib v4.2.0
+- Add check to see if the local node is the master node for dumping indexes.
+- Add -o option to override the master node check.
+
+### Changed
+- initate_dump: Added check to see if the local node is the master node or if the override option (-o) was detected to dump indexes.
+- config/elastic.py.TEMPLATE: Removed "port" and "scheme" entries.
+- Documentation changes.
+
+### Deprecated
+- Support for Elasticsearch v7.4, v7.12 and v7.17
+
+### Removed
+- Support for Elasticsearch v6.4
+
+
 ## [2.0.0] - 2025-02-21
 Breaking Changes
 
