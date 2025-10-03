@@ -12,9 +12,11 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated elastic-lib to v5.0.1
 - Removed support ElasticSearch v7.4, v7.12, v7.17
 
-### Changed
+### Fixed
 - run_program: Removed port and scheme arguments from elastic_class.ElasticSearchDump call and scheme from the config file call.
 - create_repo, list_repos: Removed port and scheme arguments from elastic_class.ElasticSearchRepo call.
+
+### Changed
 - Documentation changes.
 
 
