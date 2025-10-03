@@ -116,8 +116,7 @@ def create_repo(els, **kwargs):
     repo_name = args.get_val("-C")
     repo_dir = args.get_val("-l")
     elr = elastic_class.ElasticSearchRepo(
-        els.hosts, port=els.port, user=els.user, japd=els.japd,
-        ca_cert=els.ca_cert, scheme=els.scheme)
+        els.hosts, user=els.user, japd=els.japd, ca_cert=els.ca_cert)
     elr.connect()
 
     if elr.is_connected:
@@ -237,8 +236,7 @@ def list_repos(els, **kwargs):                          # pylint:disable=W0613
     """
 
     elr = elastic_class.ElasticSearchRepo(
-        els.hosts, port=els.port, user=els.user, japd=els.japd,
-        ca_cert=els.ca_cert, scheme=els.scheme)
+        els.hosts, user=els.user, japd=els.japd, ca_cert=els.ca_cert)
     elr.connect()
 
     if elr.is_connected:
@@ -266,7 +264,6 @@ def run_program(args, func_dict):
     user = cfg.user if hasattr(cfg, "user") else None
     japd = cfg.japd if hasattr(cfg, "japd") else None
     ca_cert = cfg.ssl_client_ca if hasattr(cfg, "ssl_client_ca") else None
-    scheme = cfg.scheme if hasattr(cfg, "scheme") else "https"
     flavorid = "elasticdump"
 
     try:
@@ -274,8 +271,8 @@ def run_program(args, func_dict):
 
         for opt in set(args.get_args_keys()) & set(func_dict.keys()):
             els = elastic_class.ElasticSearchDump(
-                cfg.host, port=cfg.port, repo=args.get_val(opt, def_val=None),
-                user=user, japd=japd, ca_cert=ca_cert, scheme=scheme)
+                cfg.host, repo=args.get_val(opt, def_val=None), user=user,
+                japd=japd, ca_cert=ca_cert)
             els.connect()
 
             if els.is_connected:
