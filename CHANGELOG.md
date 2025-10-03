@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [2.2.0] - 2025-10-03
+- Updated simplejson=3.19.2
+- Added support for Python 3.13
+- Updated mock==5.2.0
+- Updated python-lib to v4.1.0
+- Updated elastic-lib to v5.0.1
+- Removed support ElasticSearch v7.4, v7.12, v7.17
+
+### Fixed
+- run_program: Removed port and scheme arguments from elastic_class.ElasticSearchDump call and scheme from the config file call.
+- create_repo, list_repos: Removed port and scheme arguments from elastic_class.ElasticSearchRepo call.
+
+### Changed
+- Documentation changes.
+
+
+Recalled Version
 ## [2.1.0] - 2025-09-02
 - Updated python-lib v4.0.3
 - Updated elastic-lib v4.2.0
